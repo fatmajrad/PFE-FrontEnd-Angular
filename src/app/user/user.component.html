@@ -1,0 +1,53 @@
+<main>
+    <section class="section section-shaped section-lg">
+      <div class="shape shape-style-1 bg-gradient-default">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="container">
+          <h3 class="h4 text-danger font-weight-bold mb-4">List of registrations request</h3>
+        <div class="card shadow m-6">
+          <div class="card-body">
+            <div class="table-responsive">
+            <table class="table table-striped">
+              <tr>
+                
+                <th>Nom</th>
+                <th>Email</th>
+                <th>Fonction</th>
+                <th>Date Demande</th>
+                <th>Statut Validation</th>
+                <th>Date Validation</th>
+                <th>Accepter Demande</th>
+                <th>Refuser Demande</th>
+              </tr>
+              <tbody *ngFor="let user of users">
+                <tr>
+  
+                  <td>{{ user.nomUser }}</td>
+                  <td>{{ user.email }}</td>
+                  <td>{{ user.userFonction }}</td>
+                  <td>{{user.demandedAt}}</td>
+                  <td>{{user.statutValidation}}</td>
+                  <td>{{user. validatedAt}}</td>
+                  <td>
+                    <button type="button" class="btn btn-secondary btn-lg" (click)="validerUser(user)">Accepter</button>
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-secondary btn-lg" (click)="supprimerUser(user)">Refuser</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
