@@ -22,7 +22,7 @@ import { TopicsListComponent } from './topics-list/topics-list.component';
 import { MatCardModule} from '@angular/material/card';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
-import { FlexLayoutModule } from '@angular/flex-layout';
+//import { FlexLayoutModule } from '@angular/flex-layout';
 
 
 @NgModule({
@@ -49,7 +49,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MatCardModule,
     MatToolbarModule,
     MatButtonModule,
-    FlexLayoutModule,
+   // FlexLayoutModule,
    
   ],
   providers: [],
