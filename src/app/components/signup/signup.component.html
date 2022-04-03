@@ -14,28 +14,9 @@
       <div class="row justify-content-center">
         <div class="col-lg-5">
           <div class="card bg-secondary shadow border-0">
-            <div class="card-header bg-white pb-5">
-              <div class="text-muted text-center mb-3">
-                <small>Sign up with</small>
-              </div>
-              <div class="text-center">
-                <a href="javascript:void(0)" class="btn btn-neutral btn-icon mr-4">
-                  <span class="btn-inner--icon">
-                    <img src="./assets/img/icons/common/github.svg">
-                  </span>
-                  <span class="btn-inner--text">Github</span>
-                </a>
-                <a href="javascript:void(0)" class="btn btn-neutral btn-icon">
-                  <span class="btn-inner--icon">
-                    <img src="./assets/img/icons/common/google.svg">
-                  </span>
-                  <span class="btn-inner--text">Google</span>
-                </a>
-              </div>
-            </div>
             <div class="card-body px-lg-5 py-lg-5">
               <div class="text-center text-muted mb-4">
-                <small>Or sign up with credentials</small>
+                <strong>Inscription</strong>
               </div>
               <form role="form">
                 <div class="form-group" [ngClass]="{'focused':focus===true}">
@@ -46,15 +27,15 @@
                     <input class="form-control" placeholder="Name" type="text" (focus)="focus=true" (blur)="focus=false" name="nomUser" [(ngModel)]="newUser.nomUser"  required>
                   </div>
                   <div class="invalid-feedback">
-                    Please choose a username.
+                   Login
                   </div>
                 </div>
                 <div class="form-group">
                   <select class="form-control" id="exampleFormControlSelect1" placeholder="Fonction" required name="fonction" [(ngModel)]="newUser.userFonction">
-                    <option>Student</option>
-                    <option>Teacher</option>
-                    <option>Developer</option>
-                    <option>Others</option>
+                    <option>etudiant</option>
+                    <option>professeur</option>
+                    <option>Developpeur</option>
+                    <option>autres</option>
                   </select>
                 </div>
                 <div class="form-group" [ngClass]="{'focused':focus1===true}">
@@ -70,7 +51,7 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
                     </div>
-                    <input class="form-control" placeholder="Password" type="password" name="password" (focus)="focus2=true" (blur)="focus2=false" required name="password" [(ngModel)]="newUser.password">
+                    <input class="form-control" placeholder="Mot de passe" type="password" name="password" (focus)="focus2=true" (blur)="focus2=false" required name="password" [(ngModel)]="newUser.password">
                   </div>
                 </div>
                 <div class="form-group" [ngClass]="{'focused':focus2===true}">
@@ -78,23 +59,12 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
                     </div>
-                    <input class="form-control" placeholder="Confirm Password" name="confirmPassword" type="password" (focus)="focus2=true" (blur)="focus2=false" required>
+                    <input class="form-control" placeholder="Confirmer Mot de passe" name="confirmPassword" type="password" (focus)="focus2=true" (blur)="focus2=false" required>
                   </div>
                 </div>
-                <div class="row my-4">
-                  <div class="col-12">
-                    <div class="custom-control custom-control-alternative custom-checkbox">
-                      <input class="custom-control-input" id="customCheckRegister" type="checkbox">
-                      <label class="custom-control-label" for="customCheckRegister">
-                        <span>I agree with the
-                          <a href="javascript:void(0)">Privacy Policy</a>
-                        </span>
-                      </label>
-                    </div>
-                  </div>
-                </div>
+    
                 <div class="text-center">
-                  <button type="button" class="btn btn-primary mt-4" (click)="signUpUser()">Create account</button>
+                  <button type="button" class="btn btn-primary mt-4" (click)="signUpUser()">Inscription</button>
                 </div>
               </form>
             </div>

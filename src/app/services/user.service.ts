@@ -15,6 +15,7 @@ const httpOptions = {
 })
 export class UserService {
   apiURL: string = "http://localhost:8000/api/users";
+  api:string = "http://localhost:8000";
   constructor(private http: HttpClient, private router: Router) {}
   emtyBody: any;
 
@@ -40,5 +41,11 @@ export class UserService {
     const url = `${this.apiURL}/${id}` + "/decline";
     this.emtyBody = {};
     return this.http.put(url, this.emtyBody, httpOptions);
+  }
+
+  getUserById(id:number){
+    const url = `${this.api}${id}`;
+    console.log(url);    
+    return this.http.get(url, httpOptions);
   }
 }

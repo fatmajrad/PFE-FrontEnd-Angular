@@ -1,3 +1,3 @@
 export class Role{
-    role:string ;
+    role:string;
     }

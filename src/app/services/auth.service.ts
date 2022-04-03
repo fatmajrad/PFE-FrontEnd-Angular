@@ -18,6 +18,7 @@ export class AuthService {
   public roles: Role[];
   token: string;
   private helper = new JwtHelperService();
+  statutUser : boolean;
 
   constructor(private router: Router, private http: HttpClient) {}
   login(user: User) {
@@ -40,7 +41,7 @@ export class AuthService {
     
     this.roles = decodedToken.roles;
     this.loggedUser = decodedToken.email;
-    localStorage.setItem("loggedUser", decodedToken.email);
+   // localStorage.setItem("loggedUser", decodedToken.email);
     localStorage.setItem("isloggedIn", String(this.isloggedIn));
   
   }
@@ -55,7 +56,7 @@ export class AuthService {
 
   logout() {
     this.loggedUser = undefined;
-    console.log( this.loggedUser,"testtt");
+  
     this.roles = undefined;
     this.token= undefined;
     this.isloggedIn = false;
@@ -69,6 +70,7 @@ export class AuthService {
    
     this.isloggedIn = true;
     this.roles = user.roles;
+
     localStorage.setItem("loggedUser", this.loggedUser);
     localStorage.setItem("isloggedIn", String(this.isloggedIn));
   }
@@ -87,9 +89,18 @@ export class AuthService {
     this.isloggedIn = true;
     this.getUserRoles(login);
   }
+  
   getUserRoles(email: string) {
     this.getUserFromDB(email).subscribe((user: User) => {
       this.roles = user.roles;
     });
   }
+
+  /*isAdmin():Boolean{
+    if (!this.roles)
+    return false;
+   return this.roles.indexOf('ADMIN') >=0;
+  }*/
+    
+
 }

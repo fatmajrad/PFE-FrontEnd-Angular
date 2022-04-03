@@ -1,5 +1,5 @@
-<nav id="navbar-main" class="navbar navbar-main navbar-expand-lg navbar-transparent navbar-light headroom headroom--top headroom--pinned">
-  <div class="container">
+<nav id="navbar-main" class="navbar fixed-top navbar-expand-lg navbar-dark bg-default" >
+  <div class="container" style="width: left 250%;">
     <a class="navbar-brand mr-lg-5" [routerLink]="['/home']">
       <img src="./assets/img/brand/logo.png" style="width: 60px;height: 60px;" class="img-fluid">
     </a>
@@ -28,7 +28,7 @@
         <li class="nav-item dropdown">
           <a class="nav-link no-caret" data-toggle="dropdown" role="button">
             <i class="ni ni-ui-04 d-lg-none"></i>
-            <span class="nav-link-inner--text">knowledge</span>
+            <span class="nav-link-inner--text">Connaissances</span>
           </a>
           <div class="dropdown-menu-xl dropdown-menu" >
             <div class="dropdown-menu-inner">
@@ -37,8 +37,7 @@
                   <i class="ni ni-spaceship"></i>
                 </div>
                 <div class="media-body ml-3">
-                  <h6 class="heading text-primary mb-md-1">Getting started</h6>
-                  <p class="description d-none d-md-inline-block mb-0">Learn how to use Argon compiling Scss, change brand colors and more.</p>
+                  <h6 class="heading text-primary mb-md-1">Liste des Connaissances</h6>
                 </div>
               </a>
               <a routerLinkActive="active" [routerLink]="['documentation/colors']" class="media d-flex align-items-center">
@@ -46,17 +45,12 @@
                   <i class="ni ni-palette"></i>
                 </div>
                 <div class="media-body ml-3">
-                  <h6 class="heading text-primary mb-md-1">Foundation</h6>
-                  <p class="description d-none d-md-inline-block mb-0">Learn more about colors, typography, icons and the grid system we used for Argon.</p>
-                </div>
+                  <h6 class="heading text-primary mb-md-1">Ajouter une Connaissance</h6>
+                 </div>
               </a>
               <a routerLinkActive="active" [routerLink]="['documentation/alerts']" class="media d-flex align-items-center">
                 <div class="icon icon-shape bg-gradient-warning rounded-circle text-white">
                   <i class="ni ni-ui-04"></i>
-                </div>
-                <div class="media-body ml-3">
-                  <h5 class="heading text-warning mb-md-1">Components</h5>
-                  <p class="description d-none d-md-inline-block mb-0">Browse our 50 beautiful handcrafted components offered in the Free version.</p>
                 </div>
               </a>
             </div>
@@ -74,7 +68,7 @@
                   <i class="ni ni-spaceship"></i>
                 </div>
                 <div class="media-body ml-3">
-                  <h6 class="heading text-primary mb-md-1">List of questions</h6>
+                  <h6 class="heading text-primary mb-md-1">Liste des questions</h6>
                 </div>
               </a>
               <a routerLinkActive="active" [routerLink]="['documentation/colors']" class="media d-flex align-items-center">
@@ -82,31 +76,26 @@
                   <i class="ni ni-palette"></i>
                 </div>
                 <div class="media-body ml-3">
-                  <h6 class="heading text-primary mb-md-1">Foundation</h6>
-                  <p class="description d-none d-md-inline-block mb-0">Learn more about colors, typography, icons and the grid system we used for Argon.</p>
+                  <h6 class="heading text-primary mb-md-1">Ajouter une question</h6>
                 </div>
               </a>
               <a routerLinkActive="active" [routerLink]="['documentation/alerts']" class="media d-flex align-items-center">
                 <div class="icon icon-shape bg-gradient-warning rounded-circle text-white">
                   <i class="ni ni-ui-04"></i>
                 </div>
-                <div class="media-body ml-3">
-                  <h5 class="heading text-warning mb-md-1">Components</h5>
-                  <p class="description d-none d-md-inline-block mb-0">Browse our 50 beautiful handcrafted components offered in the Free version.</p>
-                </div>
               </a>
             </div>
           </div>
         </li>
         <li class="nav-item">
-          <a [routerLink]="['/topics-list']" class="nav-link no-caret" role="button">
+          <a [routerLink]="['/sujets-list']" class="nav-link no-caret" role="button">
             <i class="ni ni-collection d-lg-none"></i>
-            <span class="nav-link-inner--text">Topics</span>
+            <span class="nav-link-inner--text">Sujets</span>
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link no-caret" [routerLink]="['/users-validation']" role="button">
-            <span class="nav-link-inner--text">Community</span>
+            <span class="nav-link-inner--text">Communauté</span>
           </a>
         </li>
       </ul>
@@ -116,7 +105,7 @@
             <span class="btn-inner--icon">
               <i class="fa fa-sign-in mr-2"></i>
             </span>
-            <span class="nav-link-inner--text">Sign Up</span>
+            <span class="nav-link-inner--text">Se connecter</span>
           </a>
         </li>
         <li class="nav-item d-none d-lg-block">
@@ -124,7 +113,7 @@
             <span class="btn-inner--icon">
               <i class="fa fa-user mr-2"></i>
             </span>
-            <span class="nav-link-inner--text">Sign in</span>
+            <span class="nav-link-inner--text">S'inscrire</span>
           </a>
         </li>
         <li class="nav-item d-none d-lg-block">
@@ -132,7 +121,7 @@
             <span class="btn-inner--icon">
               <i class="fa fa-user mr-2"></i>
             </span>
-            <span class="nav-link-inner--text">Sign out</span>
+            <span class="nav-link-inner--text">Deconnexion</span>
           </a>
         </li>
       </ul>

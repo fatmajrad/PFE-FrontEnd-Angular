@@ -3,14 +3,14 @@ import { CommonModule, } from '@angular/common';
 import { BrowserModule  } from '@angular/platform-browser';
 import { Routes, RouterModule } from '@angular/router';
 
-import { HomeComponent } from './home/home.component';
-import { ProfileComponent } from './profile/profile.component';
-import { SignupComponent } from './signup/signup.component';
-import { LandingComponent } from './landing/landing.component';
-import { LoginComponent } from './login/login.component';
-import { UserComponent } from './user/user.component';
-import { QuestionsListComponent } from './questions-list/questions-list.component';
-import { TopicsListComponent } from './topics-list/topics-list.component';
+import { HomeComponent } from './components/home/home.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { SignupComponent } from './components/signup/signup.component';
+import { LandingComponent } from './components/landing/landing.component';
+import { LoginComponent } from './components/login/login.component';
+import { UserComponent } from './components/user/user.component';
+import { QuestionsListComponent } from './components/questions-list/questions-list.component';
+import { SujetsListComponent } from './components/sujets-list/sujets-list.component';
 
 const routes: Routes =[
     { path: 'home',             component: HomeComponent },
@@ -21,7 +21,7 @@ const routes: Routes =[
     { path: '', redirectTo: 'home', pathMatch: 'full' },
     { path: 'users-validation',          component: UserComponent },
     { path: 'questions-list',          component: QuestionsListComponent },
-    { path: 'topics-list',          component: TopicsListComponent }
+    { path: 'sujets-list',          component: SujetsListComponent }
 ];
 
 @NgModule({

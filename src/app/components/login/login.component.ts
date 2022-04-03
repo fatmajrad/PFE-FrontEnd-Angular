@@ -1,10 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { User } from "src/app/models/user.model";
-import { AuthService } from "../services/auth.service";
+
 import { Router } from "@angular/router";
 import { Token } from "@angular/compiler";
 import { tokenize } from "@angular/compiler/src/ml_parser/lexer";
-
+import { AuthService } from "src/app/services/auth.service";
 @Component({
   selector: "app-login",
   templateUrl: "./login.component.html",

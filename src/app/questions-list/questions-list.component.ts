@@ -11,5 +11,5 @@ export class QuestionsListComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
+  
 }

@@ -1,0 +1,61 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css"
+  integrity="sha256-46r060N2LrChLLb5zowXQ72/iKKNiw/lAmygmHExk/o=" crossorigin="anonymous" />
+<section class="section section-shaped section-lg  " style="background-color: white;">
+  <div class="shape shape-style-1 bg-gradient-default"></div>
+    <h3 style="margin-left: 80px; margin-right:80px; margin-top: 50px; color:#838383;">
+      List of registrations request
+    </h3>
+    <div class="card shadow m-6" style="margin-left: 80px; margin-right:80px; background-color: #eef2ff;">
+      <div class="card-body" >
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <tr>
+              <th>Nom</th>
+              <th>Email</th>
+              <th>Fonction</th>
+              <th>Inscription</th>
+              <th>Statut</th>
+              <th>Date Validation</th>
+              <th>Actions</th>
+            </tr>
+            <tbody *ngFor="let user of users">
+              <tr>
+                <td style="padding:auto">{{ user.nomUser }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.userFonction }}</td>
+                <td>{{ user.demandedAt | date: "dd/MM/yyyy" }}</td>
+                <td>{{ user.statutValidation }}</td>
+                <td>{{ user.validatedAt | date: "dd/MM/yyyy" }}</td>
+                <td>
+                  <button type="button" class="btn btn-icon btn btn-sm btn-success" placement="top"  ngbTooltip="Valiser demande User"(click)="validerUser(user)">
+                    <i class="fa fa-check" aria-hidden="true"></i>
+                  </button>
+                  <button type="button" class="btn btn-icon btn btn-sm btn-warning" placement="top"  ngbTooltip="Refuser Demande User" (click)="refuserUser(user)">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                  </button>
+                  <button type="button" class="btn btn-icon btn btn-sm btn-danger" placement="top"   ngbTooltip="Supprimer User"(click)="open(content,user)">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <ng-template #content let-c="close" let-d="dismiss">    
+      <div class="modal-header">    
+          <h4 class="modal-title" id="modal-basic-title">Confirmation</h4>    
+          <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">    
+              <span aria-hidden="true">×</span>    
+          </button>    
+      </div>    
+      <div class="modal-body">    
+          <p>Are you sure to delete this?</p>    
+      </div>    
+      <div class="modal-footer">    
+          <button type="button" class="btn btn-outline-dark" (click)="d('Cross click')">Cancel</button>    
+          <button type="button" class="btn btn-outline-dark" (click)="c('yes')">Yes</button>    
+      </div>    
+  </ng-template>   
+</section>
