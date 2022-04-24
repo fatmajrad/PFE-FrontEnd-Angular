@@ -3,8 +3,6 @@ import { User } from "../models/user.model";
 import { Observable } from "rxjs";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Router } from "@angular/router";
-import { NG_ASYNC_VALIDATORS } from "@angular/forms";
-import { analyzeAndValidateNgModules } from "@angular/compiler";
 
 const httpOptions = {
   headers: new HttpHeaders({ "Content-Type": "application/json" }),
@@ -27,24 +25,24 @@ export class UserService {
     return this.http.post<User>(this.apiURL, user, httpOptions);
   }
 
-  supprimerDemandeUser(id: number) {
+  supprimerDemandeUser(id: Number) {
     const url = `${this.apiURL}/${id}`;
     return this.http.delete(url, httpOptions);
   }
 
-  validerDemandeUser(id: number) {
+  validerDemandeUser(id: Number) {
     const url = `${this.apiURL}/${id}` + "/validate";
     this.emtyBody = {};
     return this.http.put(url, this.emtyBody, httpOptions);
   }
-  refuserDemandeUser(id: number) {
+  refuserDemandeUser(id: Number) {
     const url = `${this.apiURL}/${id}` + "/decline";
     this.emtyBody = {};
     return this.http.put(url, this.emtyBody, httpOptions);
   }
 
-  getUserById(id:number){
-    const url = `${this.api}${id}`;
+  getUserById(id:Number){
+    const url = `${this.apiURL}${id}`;
     console.log(url);    
     return this.http.get(url, httpOptions);
   }

@@ -3,8 +3,13 @@ import { User } from "../models/user.model";
 import { Router } from "@angular/router";
 import { Observable } from "rxjs";
 import { Role } from "../models/role.model";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { JwtHelperService } from "@auth0/angular-jwt";
+
+
+const httpOptions = {
+  headers: new HttpHeaders({ "Content-Type": "application/json" }),
+}
 
 @Injectable({
   providedIn: "root",
@@ -19,6 +24,7 @@ export class AuthService {
   token: string;
   private helper = new JwtHelperService();
   statutUser : boolean;
+  id:Number = null;
 
   constructor(private router: Router, private http: HttpClient) {}
   login(user: User) {
@@ -38,11 +44,14 @@ export class AuthService {
   decodeJWT() {
     if (this.token == undefined) return;
     const decodedToken = this.helper.decodeToken(this.token);
-    
-    this.roles = decodedToken.roles;
-    this.loggedUser = decodedToken.email;
-   // localStorage.setItem("loggedUser", decodedToken.email);
-    localStorage.setItem("isloggedIn", String(this.isloggedIn));
+    this.statutUser=decodedToken.statutValidation;
+    if(this.statutUser){
+      this.roles = decodedToken.roles;
+      this.loggedUser = decodedToken.email;
+      this.id=decodedToken.id;
+      localStorage.setItem("isloggedIn", String(this.isloggedIn));
+    }
+  
   
   }
   loadToken() {
@@ -56,7 +65,7 @@ export class AuthService {
 
   logout() {
     this.loggedUser = undefined;
-  
+    this.id=null;
     this.roles = undefined;
     this.token= undefined;
     this.isloggedIn = false;
@@ -66,20 +75,22 @@ export class AuthService {
     this.router.navigate(['/login']);    
   }
   signIn(user: User) {
+    
     this.loggedUser = user.email;
-   
     this.isloggedIn = true;
     this.roles = user.roles;
-
+    
     localStorage.setItem("loggedUser", this.loggedUser);
     localStorage.setItem("isloggedIn", String(this.isloggedIn));
-  }
-  /*isAdmin():Boolean{
-    if (!this.roles)
-    return false;
-   return this.roles.indexOf('ADMIN') >=0;
-   }*/
-
+}
+  isAdmin():Boolean{
+    let admin: Boolean = false;
+    if (this.loggedUser=="admin@gmail.com"){
+      admin = true
+    }
+    return admin
+    }
+    
   getLoggedUser() {
     return localStorage.getItem("loggedUser");
   }
@@ -96,11 +107,18 @@ export class AuthService {
     });
   }
 
-  /*isAdmin():Boolean{
-    if (!this.roles)
-    return false;
-   return this.roles.indexOf('ADMIN') >=0;
-  }*/
-    
-
+  getCurrentUserId():Number{
+    return this.id;
+  }
+  
+    isValid(){
+      let valid:Boolean = false;
+      if(this.statutUser){
+        valid= true
+      }else{
+        valid=false
+      }
+      return valid;
+    }
+  
 }

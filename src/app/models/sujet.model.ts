@@ -5,4 +5,5 @@ export class Sujet{
     descriptionSujet:Text;
     imageSujet : Blob;
     questions:Question[];
+
 }

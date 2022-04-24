@@ -32,7 +32,7 @@
           </a>
           <div class="dropdown-menu-xl dropdown-menu" >
             <div class="dropdown-menu-inner">
-              <a routerLinkActive="active" [routerLink]="['documentation/tutorial']" class="media d-flex align-items-center">
+              <a routerLinkActive="active" [routerLink]="['questions-list']" class="media d-flex align-items-center">
                 <div class="icon icon-shape bg-gradient-primary rounded-circle text-white">
                   <i class="ni ni-spaceship"></i>
                 </div>
@@ -40,7 +40,7 @@
                   <h6 class="heading text-primary mb-md-1">Liste des Connaissances</h6>
                 </div>
               </a>
-              <a routerLinkActive="active" [routerLink]="['documentation/colors']" class="media d-flex align-items-center">
+              <a routerLinkActive="active" [routerLink]="['connaissances-list']" class="media d-flex align-items-center">
                 <div class="icon icon-shape bg-gradient-success rounded-circle text-white">
                   <i class="ni ni-palette"></i>
                 </div>
@@ -71,7 +71,7 @@
                   <h6 class="heading text-primary mb-md-1">Liste des questions</h6>
                 </div>
               </a>
-              <a routerLinkActive="active" [routerLink]="['documentation/colors']" class="media d-flex align-items-center">
+              <a *ngIf="authService.isloggedIn" routerLinkActive="active" [routerLink]="['/add-question']" class="media d-flex align-items-center">
                 <div class="icon icon-shape bg-gradient-success rounded-circle text-white">
                   <i class="ni ni-palette"></i>
                 </div>
@@ -79,9 +79,20 @@
                   <h6 class="heading text-primary mb-md-1">Ajouter une question</h6>
                 </div>
               </a>
-              <a routerLinkActive="active" [routerLink]="['documentation/alerts']" class="media d-flex align-items-center">
-                <div class="icon icon-shape bg-gradient-warning rounded-circle text-white">
-                  <i class="ni ni-ui-04"></i>
+              <a *ngIf="authService.isloggedIn" routerLinkActive="active" [routerLink]="['/mes-questions']" class="media d-flex align-items-center">
+                <div class="icon icon-shape bg-gradient-success rounded-circle text-white">
+                  <i class="ni ni-palette"></i>
+                </div>
+                <div class="media-body ml-3">
+                  <h6 class="heading text-primary mb-md-1">Mes Questions</h6>
+                </div>
+              </a>
+              <a *ngIf="authService.isAdmin()" routerLinkActive="active" [routerLink]="['/validation-questions']" class="media d-flex align-items-center">
+                <div class="icon icon-shape bg-gradient-success rounded-circle text-white">
+                <i class="ni ni-palette"></i>
+                </div>
+                <div class="media-body ml-3">
+                  <h6 class="heading text-primary mb-md-1">Demandes Questions</h6>
                 </div>
               </a>
             </div>
@@ -94,14 +105,14 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link no-caret" [routerLink]="['/users-validation']" role="button">
+          <a *ngIf="authService.isAdmin()" class="nav-link no-caret" [routerLink]="['/users-validation']" role="button">
             <span class="nav-link-inner--text">Communauté</span>
           </a>
         </li>
       </ul>
       <ul class="navbar-nav align-items-lg-center ml-lg-auto">
         <li class="nav-item">
-          <a *ngIf="!authService.isloggedIn"  [routerLink]="['/register']" class="nav-link no-caret" role="button">
+          <a *ngIf="!authService.isloggedIn"  [routerLink]="['/login']" class="nav-link no-caret" role="button">
             <span class="btn-inner--icon">
               <i class="fa fa-sign-in mr-2"></i>
             </span>
@@ -109,7 +120,7 @@
           </a>
         </li>
         <li class="nav-item d-none d-lg-block">
-          <a *ngIf="!authService.isloggedIn"  (click)="router.navigate(['/login']);" target="_blank" class="btn btn-neutral btn-icon">
+          <a *ngIf="!authService.isloggedIn"  (click)="router.navigate(['/register']);" target="_blank" class="btn btn-neutral btn-icon">
             <span class="btn-inner--icon">
               <i class="fa fa-user mr-2"></i>
             </span>

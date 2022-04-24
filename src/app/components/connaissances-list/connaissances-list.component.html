@@ -1,0 +1,82 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css"
+    integrity="sha256-46r060N2LrChLLb5zowXQ72/iKKNiw/lAmygmHExk/o=" crossorigin="anonymous" />
+
+<main>
+    <section class="section section-shaped section-lg" style="background-color: white;">
+        <div class="shape shape-style-1 bg-gradient-default"></div>
+        <div class="container">
+            <div class="main-body p-0">
+                <div class="inner-sidebar">
+                    <!-- Inner sidebar header -->
+                    <div class="inner-sidebar-header">
+                        <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#threadModal">
+                            <i class="fa fa-plus"></i>
+                            Poser une question
+                        </button>
+                        <select class="custom-select custom-select-sm w-auto mr-1" style="margin-top: 30px;">
+                            <option selected="">Latest</option>
+                            <option value="1">les plus populaires</option>
+                            <option value="3">Résolues</option>
+                            <option value="3">Unsolved</option>
+                            <option value="3">Sans réponse</option>
+                        </select>
+                    </div>
+                    <!-- /Inner sidebar header -->
+                </div>
+                <div class="inner-main">
+                    <!-- Inner main header -->
+                    <div class="inner-main-header" style="margin-top: 30px;">
+                        <a class="nav-link nav-icon rounded-circle nav-link-faded mr-3 d-md-none" href="#"
+                            data-toggle="inner-sidebar"><i class="material-icons">arrow_forward_ios</i></a>
+
+                        <span class="input-icon input-icon-sm ml-auto w-auto" style="margin-top: 50px;">
+                            <input type="text"
+                                class="form-control form-control-sm bg-gray-200 border-gray-200 shadow-none mb-4 mt-4"
+                                placeholder="Search forum" />
+                        </span>
+                    </div>
+                    <!-- /Inner main header -->
+                    <a [routerLink]="['/replies']">
+                        <div class="card mb-2" *ngFor="let question of questions" style="margin-top: 30px;">
+                            <div class="card-body p-2 p-sm-3">
+                                <div class="media forum-item">
+                                    <a href="#" data-toggle="collapse" data-target=".forum-content"><img
+                                            src="https://bootdey.com/img/Content/avatar/avatar1.png"
+                                            class="mr-3 rounded-circle" width="50" alt="User" /></a>
+                                    <div class="media-body">
+                                        <h6><a href="#" data-toggle="collapse" data-target=".forum-content"
+                                                class="text-body font-weight-bold">{{question.intituleQuestion}}</a>
+                                        </h6>
+                                        <div *ngFor="let tag of toArray(question.tag)">
+                                        <span class="badge badge-pill badge-info text-uppercase">{{tag.nom}}</span>
+                                        </div>
+                                        <p>
+                                            {{question.descriptionQuestion}}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-row-reverse" style="margin-left:50px;">
+                                    <span class="d-none d-sm-inline-block"><i class="fa fa-heart" aria-hidden="true"style="color: red;"> </i> 3 <pre></pre></span>
+                                    <span class="d-none d-sm-inline-block"><i class="far fa-comment ml-2"></i> 3</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <ul class="pagination pagination-sm pagination-circle justify-content-center mb-0">
+                        <li class="page-item disabled">
+                            <span class="page-link has-icon"><i class="fa fa-angle-left"></i></span>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="javascript:void(0)">1</a></li>
+                        <li class="page-item active"><span class="page-link">2</span></li>
+                        <li class="page-item"><a class="page-link" href="javascript:void(0)">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link has-icon" href="javascript:void(0)"><i
+                                    class="fa fa-angle-right"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

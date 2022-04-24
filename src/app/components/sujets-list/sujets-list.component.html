@@ -1,27 +1,155 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css" integrity="sha256-46r060N2LrChLLb5zowXQ72/iKKNiw/lAmygmHExk/o=" crossorigin="anonymous" />
-<section class="section section-shaped section-lg"  style="background-color: white;">
-     <div class="shape shape-style-1 bg-gradient-default"></div>
-     <div class="content" >
-       <div fxLayout="row wrap" fxLayoutGap="16px grid" >
-         <div fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="33%" *ngFor="let sujet  of sujets" style="margin: left 100px;">
-           <mat-card class="mat-elevation-z4" style="background-color: #eef2ff;" >
-             <mat-card-header>
-               <mat-card-title> <h4 class="mb-0">{{ sujet.nom }}</h4></mat-card-title>
-             </mat-card-header>
-               <h1></h1>
-             <mat-card-content>
-              <div class="col-sm-9">
-                <p>
-                  {{ sujet.descriptionSujet }}
-                 </p>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css"
+  integrity="sha256-46r060N2LrChLLb5zowXQ72/iKKNiw/lAmygmHExk/o=" crossorigin="anonymous" />
+<section class="section section-shaped section-lg" style="background-color: white;">
+  <div class="shape shape-style-1 bg-gradient-default"></div>
+  <div class="content">
+    <div style="display:inline-bloc;"> 
+    <h1 class="mb-0" style="margin-top: 30px;">Liste Des Sujets</h1>
+  </div>
+  <div  style="display:inline-bloc;"> 
+   <button *ngIf="authService.isAdmin()" class="btn btn-1 btn-primary" type="button" (click)="open(content3,'ajouterSujet',sujet)" style="float: right;">Ajouter Sujet</button>
+    <button class="btn btn-1 btn-neutral" type="button" (click)="getSujetbyNom(nomSujet)" style="float: right;">chercher Sujet</button>
+    <div class="mb-0" style="margin-top: 40px; margin-right:25%;">
+      <div class="form-group" [ngClass]="{'focused':focus1===true}">
+        <div class="input-group input-group-alternative mb-2">
+          <div class="input-group-prepend">
+            <span class="input-group-text" style=" background-color: #eef2ff; "><i
+                class="ni ni-zoom-split-in"></i></span>
+          </div>
+          <input class="form-control" placeholder="Taper le nom du sujet" type="text" (focus)="focus1=true"
+            (blur)="focus1=false" style=" background-color: #eef2ff;" name="nom" [(ngModel)]="nomSujet">
+        </div>
+      </div>
+    </div>
+  </div>
+    <div fxLayout="row wrap" fxLayoutGap="15px grid">
+      <div fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="33%" *ngFor="let sujet  of sujets" style="margin: left 100px">
+        <mat-card class="mat-elevation-z4" style="background-color: #eef2ff;" (click)="open(content4,'ajouterSujet',sujet)">
+          <mat-card-header>
+            <li  *ngIf="(authService.isAdmin() && authService.isloggedIn)" class="nav-item" ngbDropdown placement="bottom-right" style="float: right">
+              <a class="nav-link nav-link-icon no-caret" ngbDropdownToggle id="nav-inner-success_dropdown_1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                <span class="nav-link-inner--text d-lg-none">Settings</span>
+              </a>
+              <div>
+              <div class="dropdown-menu-right" aria-labelledby="nav-inner-success_dropdown_1" ngbDropdownMenu>
+              <a  class="dropdown-item" (click)="open(content2,'modificationSujet',sujet)">Modifier</a>
+              <a  class="dropdown-item" (click)="open(content,'confirmationDelete',sujet)">Supprimer</a> 
               </div>
+              </div>
+          </li>
+        
+            <mat-card-title style="display: flex;" >
+              <h4>{{ sujet.nom }}</h4>
+             
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+          </mat-card-content>
+          <mat-card-actions style="float:inline-end;" class="col-md-12 text-center">
+            <button class="btn btn-sm btn-primary" type="button">Questions</button>
+            <button class="btn btn-sm btn-default" type="button">Connaissances</button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+  </div>
 
-             </mat-card-content>
-             <mat-card-actions>
-              <button class="btn btn-sm btn-primary" type="button">Questions</button>
-              <button class="btn btn-sm btn-default" type="button">Connaissances</button>
-             </mat-card-actions>
-           </mat-card>
-         </div>
-       </div>
-       </div>
+  
+<!------------------------------Modal One--------------------------------------------------------->
+  <div class="row">
+    <div class="modal fade">
+      <button class="btn btn-block btn-primary mb-3" (click)="open(classic,'' , '')">
+       Ajouter Sujet
+      </button>
+   
+      <ng-template #content let-c="close" let-d="dismiss" aria-labelledby="confirmation_delete_modal">    
+        <div class="modal-header">    
+            <h4 class="modal-title" id="confirmation_delete_modal">Confirmation</h4>    
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">    
+                <span aria-hidden="true">×</span>    
+            </button>    
+        </div>    
+        <div class="modal-body">    
+            <p>Vous voulez vraiment supprimer ce sujet ? </p>    
+        </div>    
+        <div class="modal-footer">    
+            <button type="button" class="btn btn-outline-primary" (click)="d('Cross click')">Annuler</button>    
+            <button type="button" class="btn btn-success" (click)="c('yes')">Supprimer</button>    
+        </div>    
+    </ng-template> 
+    
+    <!------------------------------Modal two--------------------------------------------------------->
+    <ng-template #content2 let-c="close" let-d="dismiss" aria-labelledby="modify-sujet">    
+      <div class="modal-header">    
+          <h4 class="modal-title" id="modify-sujet">Modifier Sujet</h4>    
+          <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">    
+              <span aria-hidden="true">×</span>    
+          </button>    
+      </div>    
+      <div class="modal-body">    
+        <form>
+          <div class="form-group">
+            <label for="exampleFormControlInput1">Nom du Sujet</label>
+            <input type="text" class="form-control" name="nom" [(ngModel)]="currentSujet.nom"  value="currentSujet.nom">
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlTextarea1">Description du Sujet</label>
+            <textarea class="form-control" name="descriptionSujet" rows="3" [(ngModel)]="currentSujet.descriptionSujet" value="currentSujet.descriptionSujet"></textarea>
+          </div>
+        </form>    
+      </div>    
+      <div class="modal-footer">    
+          <button type="button" class="btn btn-outline-primary" (click)="d('Cross click')">Annuler</button>    
+          <button type="button" class="btn btn-success" (click)="c('yes')">Modifier</button>    
+      </div>    
+  </ng-template>
+  
+  <!------------------------------Modal three--------------------------------------------------------->
+  <ng-template #content3 let-c="close" let-d="dismiss" aria-labelledby="modify-sujet">    
+    <div class="modal-header">    
+        <h4 class="modal-title" id="ajouter-sujet">Ajouter un Sujet</h4>    
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">    
+            <span aria-hidden="true">×</span>    
+        </button>    
+    </div>    
+    <div class="modal-body">    
+      <form>
+        <div class="form-group">
+          <label for="exampleFormControlInput1">Nom du Sujet</label>
+          <input type="text" class="form-control" name="nom" [(ngModel)]="newSujet.nom">
+        </div>
+        <div class="form-group">
+          <label for="exampleFormControlTextarea1">Description du Sujet</label>
+          <textarea class="form-control" name="descriptionSujet" rows="3" [(ngModel)]="newSujet.descriptionSujet"></textarea>
+        </div>
+      </form>    
+    </div>    
+    <div class="modal-footer">    
+        <button type="button" class="btn btn-outline-primary" (click)="d('Cross click')">Annuler</button>    
+        <button type="button" class="btn btn-success" (click)="c('yes')">Ajouter</button>    
+    </div>    
+</ng-template>
+
+<!------------------------------Modal four--------------------------------------------------------->
+<div class="row">
+  <div class="modal fade">
+    <button class="btn btn-block btn-primary mb-3" (click)="open(classic,'' , '')">
+     Details Sujet
+    </button>
+ 
+    <ng-template #content4 let-c="close" let-d="dismiss" aria-labelledby="details-sujet">    
+      <div class="modal-header">    
+          <h4 class="modal-title" id="confirmation_delete_modal">{{currentSujet.nom}}</h4>    
+          <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">    
+              <span aria-hidden="true">×</span>    
+          </button>    
+      </div>    
+      <div class="modal-body">    
+          <p>{{currentSujet.descriptionSujet}} </p>    
+      </div>    
+      <div class="modal-footer">    
+          <button type="button" class="btn btn-success" (click)="c('yes')">Fermer</button>    
+      </div>    
+  </ng-template> 
+ </div>

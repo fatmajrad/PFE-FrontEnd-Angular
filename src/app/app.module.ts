@@ -1,7 +1,7 @@
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app.routing';
@@ -24,6 +24,20 @@ import { MatButtonModule } from '@angular/material/button';
 import { FlexModule } from '@angular/flex-layout';
 import { SujetsListComponent } from './components/sujets-list/sujets-list.component';
 import { DeleteConfirmationDialogComponent } from './components/delete-confirmation-dialog/delete-confirmation-dialog.component';
+import { ConnaissancesListComponent } from './components/connaissances-list/connaissances-list.component';
+import { MatIconModule } from '@angular/material/icon';
+import {MatMenuModule} from '@angular/material/menu';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AddQuestionComponent } from './components/add-question/add-question.component';
+import { ListReponseComponent } from './components/list-reponse/list-reponse.component';
+import { QuillModule } from 'ngx-quill';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatChipsModule} from '@angular/material/chips';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MesQuestionsComponent } from './components/mes-questions/mes-questions.component';
+import { UpdateQuestionComponent } from './components/update-question/update-question.component';
+import { ListValidationQuestionsComponent } from './components/list-validation-questions/list-validation-questions.component';
 
 
 @NgModule({
@@ -39,11 +53,19 @@ import { DeleteConfirmationDialogComponent } from './components/delete-confirmat
     QuestionsListComponent,
     SujetsListComponent,
     DeleteConfirmationDialogComponent,
+    ConnaissancesListComponent,
+    AddQuestionComponent,
+    ListReponseComponent,
+    MesQuestionsComponent,
+    UpdateQuestionComponent,
+    ListValidationQuestionsComponent,
+   
   ],
   imports: [
     BrowserModule,
     NgbModule,
     FormsModule,
+    ReactiveFormsModule,
     RouterModule,
     AppRoutingModule,
     HomeModule,
@@ -53,6 +75,15 @@ import { DeleteConfirmationDialogComponent } from './components/delete-confirmat
     MatButtonModule,
     FlexModule,
     NgbModule,
+    MatIconModule,
+    MatMenuModule,
+    BrowserAnimationsModule,
+    QuillModule.forRoot(),
+    MatAutocompleteModule,
+    MatChipsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    
    
   ],
   providers: [],

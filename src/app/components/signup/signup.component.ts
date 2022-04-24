@@ -21,7 +21,8 @@ export class SignupComponent implements OnInit {
   ngOnInit() {}
 
   signUpUser() {
-    this.userService.addDemandeUser(this.newUser).subscribe((user) => {});
-    this.router.navigate(["/"]);
+    console.log(this.newUser);
+    this.userService.addDemandeUser(this.newUser).subscribe((user) => {console.log(user)});
+    this.router.navigate(["/home"]);
   }
 }
