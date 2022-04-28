@@ -1,102 +1,275 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css"
     integrity="sha256-46r060N2LrChLLb5zowXQ72/iKKNiw/lAmygmHExk/o=" crossorigin="anonymous" />
+
 <main>
-    <section class="section section-shaped section-lg" style="background-color: white;">
-        <div class="content">
-            <div class="row" style="display:inline-bloc;margin-top: 30px">
-                <div class="col-4" style="display:inline-bloc;">
-                    <div class="p-3 h-100" data-simplebar="init">
-                        <div class="simplebar-wrapper" style="width:300px">
-                            <div class="simplebar-content-wrapper">
-                                <div class="simplebar-content" style="padding: 16px;">
-                                    <nav class="nav nav-pills nav-gap-y-1 flex-column">
-                                        <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon active">Toutes mes questions
-            </a>
-                                        <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">Publiées
-                                            this week</a>
-                                        <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">En Attente
-                                            all time</a>
-                                        <a href="javascript:void(0)" class="nav-link nav-link-faded has-icon">Brouillons</a>
-                                    </nav>
+    <section class="section section-shaped section-lg" style="background-color: white">
+        <div class="shape shape-style-1 bg-gradient-default"></div>
+        <div class="container">
+            <div class="main-body p-0">
+                <button class="btn btn-1 btn-neutral" type="button" (click)="getSujetbyNom(nomSujet)"
+                    style="float: right;">Ajouter</button>
+                <div class="inner-main">
+
+                    <div style="display:inline-bloc;">
+                        <button class="btn btn-1 btn-neutral" type="button" (click)="getSujetbyNom(nomSujet)"
+                            style="float: right;">chercher Sujet</button>
+                        <div class="mb-0" style="margin-top: 40px;">
+                            <div class="form-group" [ngClass]="{'focused':focus1===true}">
+                                <div class="input-group input-group-alternative mb-2">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style=" background-color: #eef2ff; "><i
+                                                class="ni ni-zoom-split-in"></i></span>
+                                    </div>
+                                    <input class="form-control" placeholder="Taper le nom du sujet" type="text"
+                                        (focus)="focus1=true" (blur)="focus1=false" style=" background-color: #eef2ff;"
+                                        name="nom" [(ngModel)]="nomSujet">
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-8" style="position: absolute; margin-left: 400px;">
-                    <div class="main-body p-0">
-                        <div class="inner-main">
-                            <div style="display:inline-bloc;">
-
-                                <button class="btn btn-1 btn-neutral" type="button" (click)="getSujetbyNom(nomSujet)"
-                                    style="float: right;">chercher</button>
-                                <div class="mb-0">
-                                    <div class="form-group" [ngClass]="{'focused':focus1===true}">
-                                        <div class="input-group input-group-alternative mb-2"
-                                            style="width: 300px;margin-left: 550px;">
-                                            <input class="form-control" placeholder="Taper le nom du sujet" type="text"
-                                                (focus)="focus1=true" (blur)="focus1=false"
-                                                style=" background-color: #eef2ff;" name="nom" [(ngModel)]="nomSujet">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /Inner main header -->
-
-                            <div *ngFor="let question of questions" class="card mb-2">
-
-                                <div class="card-body p-2 p-sm-3" (click)="onSelect(question)">
-                                    <div class="media forum-item">
-                                        <div class="media-body">
-                                            <h5>
-                                                <a href="#" data-toggle="collapse" data-target=".forum-content"
-                                                    class="text-body font-weight-bold">{{
-                                                    question.intituleQuestion}}</a>
-                                            </h5>
-                                            <div *ngFor="let tag of toArray(question.tag)">
-                                                <span
-                                                    class="badge badge-pill badge-info text-uppercase">{{tag.nom}}</span>
+                    <ngb-tabset [justify]="'center'" class="custom-tab-content flex-column flex-md-row" type="pills">
+                        <ngb-tab>
+                            <ng-template ngbTabTitle>
+                                <i class="fa fa-question" aria-hidden="true"></i> Toute mes questions
+                            </ng-template>
+                            <ng-template ngbTabContent>
+                                <div *ngFor="let question of questions" class="card mb-2" style="margin-top: 30px">
+                                    <div class="card-body p-2 p-sm-3" [routerLink]="['/reponse-list',question.id]">
+                                        <div class="media forum-item">
+                                            <div class="media-body">
+                                                <h6>
+                                                    <a href="#" data-toggle="collapse" data-target=".forum-content"
+                                                        class="text-body font-weight-bold" >{{
+                                                        question.intituleQuestion}}</a>
+                                                        <div *ngFor="let tag of toArray(question?.tag)">
+                                                            <span
+                                                                class="badge badge-pill badge-info text-uppercase">{{tag.nom}}</span>
+                                                        </div>
+                                                </h6>
+                                                    Crée le : 21/03/2022
+                                                    <span *ngIf="question.statutValidation==true"
+                                                        class="badge badge-pill badge-success text-uppercase">&ensp;Valide</span>
+                                                    <span *ngIf="question.statutValidation==false"
+                                                        class="badge badge-pill badge-warning text-uppercase">&ensp;Non
+                                                        Valide</span>
+                                                    <span *ngIf="question.statutValidation==null "
+                                                        class="badge badge-pill badge-primary text-uppercase">&ensp;En
+                                                        attente</span>
+                                                
+                                               
                                             </div>
-                                            <span *ngIf="question.statutValidation==true"
-                                                class="badge badge-pill badge-success text-uppercase">Valide</span>
-                                            <span *ngIf="question.statutValidation==false"
-                                                class="badge badge-pill badge-warning text-uppercase">Non Valide</span>
-                                            <span *ngIf="question.statutValidation==null "
-                                                class="badge badge-pill badge-primary text-uppercase">En attente</span>
+                                        </div>
+                                        <div style="float: right">
+                                            <button class="btn btn-sm btn-2 btn-primary" type="button">
+                                                3
+                                                <span class="btn-inner--icon"><i class="fa fa-thumbs-up" aria-hidden="true" (click)="likeReponse()"></i></span>
+                                            </button>
+                                            <button class="btn btn-sm btn-2 btn-danger" type="button">
+                                                3
+                                                <span class="btn-inner--icon"><i class="fa fa-thumbs-down" aria-hidden="true" (click)="dislikeReponse()"></i></span>
+                                            </button>
+                                            <button   class="btn btn-sm btn-2 btn-info" type="button" (click)="showCommentsSection()">
+                                                5
+                                                <span class="btn-inner--icon"><i class="fa fa-comment" aria-hidden="true"></i></span>
+                                            </button>
                                         </div>
                                     </div>
-                                    <div style="float: right">
-                                        <span class="d-none d-sm-inline-block"><i class="fa fa-heart" aria-hidden="true"
-                                                style="color: red">
-                                            </i>
-                                            3
-                                        </span>
-                                        <span class="d-none d-sm-inline-block"><i class="far fa-comment ml-2"></i>
-                                            3</span>
-                                    </div>
-
                                 </div>
-                            </div>
+                            </ng-template>
+                        </ngb-tab>
+                        <ngb-tab>
+                            <ng-template ngbTabTitle>
+                                <i class="fa fa-file-text-o" aria-hidden="true"></i> Brouillons
+                            </ng-template>
+                            <ng-template ngbTabContent>
+                                <div *ngFor="let question of brouillons" class="card mb-2" style="margin-top: 30px">
+                                    <div class="card-body p-2 p-sm-3" [routerLink]="['/reponse-list',question.id]">
+                                        <div class="media forum-item">
+                                            <div class="media-body">
+                                                <h6>
+                                                    <a href="#" data-toggle="collapse" data-target=".forum-content"
+                                                        class="text-body font-weight-bold">{{
+                                                        question.intituleQuestion}}</a>
+                                                </h6>
+                                                <p class="description mt-3">Crée le : 21/03/2022 </p>
+                                                    <div *ngFor="let tag of toArray(question?.tag)">
+
+                                                        <span
+                                                            class="badge badge-pill badge-info text-uppercase">{{tag.nom}}</span>
+                                                    </div>
+                                               
+                                            </div>
+                                        </div>
+                                        <div style="float: right">
+                                            <button class="btn btn-sm btn-2 btn-primary" type="button">
+                                                3
+                                                <span class="btn-inner--icon"><i class="fa fa-thumbs-up" aria-hidden="true" (click)="likeReponse()"></i></span>
+                                            </button>
+                                            <button class="btn btn-sm btn-2 btn-danger" type="button">
+                                                3
+                                                <span class="btn-inner--icon"><i class="fa fa-thumbs-down" aria-hidden="true" (click)="dislikeReponse()"></i></span>
+                                            </button>
+                                            <button   class="btn btn-sm btn-2 btn-info" type="button" (click)="showCommentsSection()">
+                                                5
+                                                <span class="btn-inner--icon"><i class="fa fa-comment" aria-hidden="true"></i></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ngb-tab>
+                        <ngb-tab>
+                            <ng-template ngbTabTitle><i class="fa fa-check" aria-hidden="true"></i>Publiées
+                            </ng-template>
+                            <ng-template ngbTabContent>
+                                <div *ngFor="let question of published" class="card mb-2" style="margin-top: 30px">
+                                    <div class="card-body p-2 p-sm-3" [routerLink]="['/reponse-list',question.id]">
+
+                                        <div class="media forum-item">
+
+                                            <div class="media-body">
+
+                                                <h6>
+                                                    <a href="#" data-toggle="collapse" data-target=".forum-content"
+                                                        class="text-body font-weight-bold">{{
+                                                        question.intituleQuestion}}</a>
+                                                </h6>
 
 
-                            <ul class="pagination pagination-sm pagination-circle justify-content-center mb-0">
-                                <li class="page-item disabled">
-                                    <span class="page-link has-icon"><i class="fa fa-angle-left"></i></span>
-                                </li>
-                                <li class="page-item">
-                                    <a class="page-link" href="javascript:void(0)">1</a>
-                                </li>
-                                <li class="page-item active"><span class="page-link">2</span></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="javascript:void(0)">3</a>
-                                </li>
-                                <li class="page-item">
-                                    <a class="page-link has-icon" href="javascript:void(0)"><i
-                                            class="fa fa-angle-right"></i></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+                                                <div *ngFor="let tag of toArray(question?.tag)">
+                                                    <span
+                                                        class="badge badge-pill badge-info text-uppercase">{{tag.nom}}</span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div style="float: right">
+                                            <button class="btn btn-sm btn-2 btn-primary" type="button">
+                                                3
+                                                <span class="btn-inner--icon"><i class="fa fa-thumbs-up" aria-hidden="true" (click)="likeReponse()"></i></span>
+                                            </button>
+                                            <button class="btn btn-sm btn-2 btn-danger" type="button">
+                                                3
+                                                <span class="btn-inner--icon"><i class="fa fa-thumbs-down" aria-hidden="true" (click)="dislikeReponse()"></i></span>
+                                            </button>
+                                            <button   class="btn btn-sm btn-2 btn-info" type="button" (click)="showCommentsSection()">
+                                                5
+                                                <span class="btn-inner--icon"><i class="fa fa-comment" aria-hidden="true"></i></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ngb-tab>
+                        <ngb-tab>
+                            <ng-template ngbTabTitle> <i class="fa fa-times" aria-hidden="true"></i> Refusées
+                            </ng-template>
+                            <ng-template ngbTabContent>
+                                <h1 *ngIf="invalidQ==null">Aucune question pour le moment</h1>
+                                <div *ngFor="let question of invalidQ" class="card mb-2" style="margin-top: 30px">
+                                    <div class="card-body p-2 p-sm-3" [routerLink]="['/reponse-list',question.id]">
+
+                                        <div class="media forum-item">
+
+                                            <div class="media-body">
+
+                                                <h6>
+                                                    <a href="#" data-toggle="collapse" data-target=".forum-content"
+                                                        class="text-body font-weight-bold">{{
+                                                        question.intituleQuestion}}</a>
+                                                </h6>
+
+
+                                                <div *ngFor="let tag of toArray(question?.tag)">
+                                                    <span
+                                                        class="badge badge-pill badge-info text-uppercase">{{tag.nom}}</span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div style="float: right">
+                                            <button class="btn btn-sm btn-2 btn-primary" type="button">
+                                                3
+                                                <span class="btn-inner--icon"><i class="fa fa-thumbs-up" aria-hidden="true" (click)="likeReponse()"></i></span>
+                                            </button>
+                                            <button class="btn btn-sm btn-2 btn-danger" type="button">
+                                                3
+                                                <span class="btn-inner--icon"><i class="fa fa-thumbs-down" aria-hidden="true" (click)="dislikeReponse()"></i></span>
+                                            </button>
+                                            <button   class="btn btn-sm btn-2 btn-info" type="button" (click)="showCommentsSection()">
+                                                5
+                                                <span class="btn-inner--icon"><i class="fa fa-comment" aria-hidden="true"></i></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ngb-tab>
+                        <ngb-tab>
+                            <ng-template ngbTabTitle> En attente
+                            </ng-template>
+                            <ng-template ngbTabContent>
+                                <div *ngFor="let question of requests" class="card mb-2" style="margin-top: 30px">
+                                    <div class="card-body p-2 p-sm-3" [routerLink]="['/reponse-list',question.id]">
+
+                                        <div class="media forum-item">
+                                            <a href="#" data-toggle="collapse" data-target=".forum-content"><img
+                                                    src="https://bootdey.com/img/Content/avatar/avatar1.png"
+                                                    class="mr-3 rounded-circle" width="50" alt="User" /></a>
+                                            <div class="media-body">
+
+                                                <h6>
+                                                    <a href="#" data-toggle="collapse" data-target=".forum-content"
+                                                        class="text-body font-weight-bold">{{
+                                                        question.intituleQuestion}}</a>
+                                                </h6>
+                                                {{question.user.nomUser}}
+
+                                                <div *ngFor="let tag of toArray(question?.tag)">
+                                                    <span
+                                                        class="badge badge-pill badge-info text-uppercase">{{tag.nom}}</span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div style="float: right">
+                                            <button class="btn btn-sm btn-2 btn-primary" type="button">
+                                                3
+                                                <span class="btn-inner--icon"><i class="fa fa-thumbs-up" aria-hidden="true" (click)="likeReponse()"></i></span>
+                                            </button>
+                                            <button class="btn btn-sm btn-2 btn-danger" type="button">
+                                                3
+                                                <span class="btn-inner--icon"><i class="fa fa-thumbs-down" aria-hidden="true" (click)="dislikeReponse()"></i></span>
+                                            </button>
+                                            <button   class="btn btn-sm btn-2 btn-info" type="button" (click)="showCommentsSection()">
+                                                5
+                                                <span class="btn-inner--icon"><i class="fa fa-comment" aria-hidden="true"></i></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ngb-tab>
+
+                    </ngb-tabset>
+
+
+                    <ul class="pagination pagination-sm pagination-circle justify-content-center mb-0">
+                        <li class="page-item disabled">
+                            <span class="page-link has-icon"><i class="fa fa-angle-left"></i></span>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="javascript:void(0)">1</a>
+                        </li>
+                        <li class="page-item active"><span class="page-link">2</span></li>
+                        <li class="page-item">
+                            <a class="page-link" href="javascript:void(0)">3</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link has-icon" href="javascript:void(0)"><i
+                                    class="fa fa-angle-right"></i></a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>

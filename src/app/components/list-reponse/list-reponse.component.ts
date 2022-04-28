@@ -46,6 +46,7 @@ export class ListReponseComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.addReponseCommentaire = this.formBuilder.group({
       reponse: [''],
+      
       commentaire: [''],
     });
     this.getQuestion();

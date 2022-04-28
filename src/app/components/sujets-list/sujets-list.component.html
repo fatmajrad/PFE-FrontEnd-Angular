@@ -24,7 +24,7 @@
   </div>
     <div fxLayout="row wrap" fxLayoutGap="15px grid">
       <div fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="33%" *ngFor="let sujet  of sujets" style="margin: left 100px">
-        <mat-card class="mat-elevation-z4" style="background-color: #eef2ff;" (click)="open(content4,'ajouterSujet',sujet)">
+        <mat-card class="card" style="background-color: #eef2ff;" (click)="open(content4,'ajouterSujet',sujet)">
           <mat-card-header>
             <li  *ngIf="(authService.isAdmin() && authService.isloggedIn)" class="nav-item" ngbDropdown placement="bottom-right" style="float: right">
               <a class="nav-link nav-link-icon no-caret" ngbDropdownToggle id="nav-inner-success_dropdown_1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -41,7 +41,6 @@
         
             <mat-card-title style="display: flex;" >
               <h4>{{ sujet.nom }}</h4>
-             
             </mat-card-title>
           </mat-card-header>
           <mat-card-content>

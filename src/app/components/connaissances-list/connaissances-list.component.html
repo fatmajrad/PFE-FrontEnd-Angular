@@ -2,81 +2,281 @@
     integrity="sha256-46r060N2LrChLLb5zowXQ72/iKKNiw/lAmygmHExk/o=" crossorigin="anonymous" />
 
 <main>
-    <section class="section section-shaped section-lg" style="background-color: white;">
+    <section class="section section-shaped section-lg" style="background-color: white">
         <div class="shape shape-style-1 bg-gradient-default"></div>
-        <div class="container">
-            <div class="main-body p-0">
-                <div class="inner-sidebar">
-                    <!-- Inner sidebar header -->
-                    <div class="inner-sidebar-header">
-                        <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#threadModal">
-                            <i class="fa fa-plus"></i>
-                            Poser une question
+        <div class="container-lg" style="margin-left: 80px; margin-right:100 px; margin-top: 40px;">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="list-group">
+                        <button type="button" class="list-group-item list-group-item-action active">
+                            Toutes les connaissances
                         </button>
-                        <select class="custom-select custom-select-sm w-auto mr-1" style="margin-top: 30px;">
-                            <option selected="">Latest</option>
-                            <option value="1">les plus populaires</option>
-                            <option value="3">Résolues</option>
-                            <option value="3">Unsolved</option>
-                            <option value="3">Sans réponse</option>
-                        </select>
+                        <button type="button" class="list-group-item list-group-item-action">
+                            les plus récentes
+                        </button>
+                        <button type="button" class="list-group-item list-group-item-action">les plus pertinentes</button>
                     </div>
-                    <!-- /Inner sidebar header -->
                 </div>
-                <div class="inner-main">
-                    <!-- Inner main header -->
-                    <div class="inner-main-header" style="margin-top: 30px;">
-                        <a class="nav-link nav-icon rounded-circle nav-link-faded mr-3 d-md-none" href="#"
-                            data-toggle="inner-sidebar"><i class="material-icons">arrow_forward_ios</i></a>
+            
+            <div class="col-sm-8">
+                <div class="panel">
+                    <ul class="panel-activity__list" style="background-color: white">
+                        <form action="" style="width:250px; float:right; margin-bottom:20px; ">
+                            <input matInput type="text" class="form-control"
+                            [matAutocomplete]="auto" placeholder="Sujets" style=" background-color: #eef2ff;" />
+                            <mat-autocomplete #auto="matAutocomplete">
+                            <mat-option *ngFor="let sujet of sujets" [value]="sujet.nom">
+                                {{ sujet.nom }}
+                            </mat-option>
+                        </mat-autocomplete>
+                        
+                        </form>
+                        <form  class="panel-activity__status"
+                            (click)="open(content1, 'addConnaissance', connaissance)">
+                            <textarea name="user_activity" placeholder="Share what you've been up to..."
+                                class="form-control"></textarea>
+                            <div class="actions">
+                                <div class="btn-group">
+                                    <button type="button" class="btn-link" title="" data-toggle="tooltip"
+                                        data-original-title="Post an Image">
+                                        <i class="fa fa-image"></i>
+                                    </button>
+                                    <button type="button" class="btn-link" title="" data-toggle="tooltip"
+                                        data-original-title="Post an Video">
+                                        <i class="fa fa-video-camera"></i>
+                                    </button>
+                                    <button type="button" class="btn-link" title="" data-toggle="tooltip"
+                                        data-original-title="Post an Idea">
+                                        <i class="fa fa-lightbulb-o"></i>
+                                    </button>
+                                    <button type="button" class="btn-link" title="" data-toggle="tooltip"
+                                        data-original-title="Post an Question">
+                                        <i class="fa fa-question-circle-o"></i>
+                                    </button>
+                                </div>
+                                <button type="submit" class="btn btn-sm btn-rounded btn-info">
+                                    Post
+                                </button>
+                            </div>
+                        </form>
 
-                        <span class="input-icon input-icon-sm ml-auto w-auto" style="margin-top: 50px;">
-                            <input type="text"
-                                class="form-control form-control-sm bg-gray-200 border-gray-200 shadow-none mb-4 mt-4"
-                                placeholder="Search forum" />
-                        </span>
-                    </div>
-                    <!-- /Inner main header -->
-                    <a [routerLink]="['/replies']">
-                        <div class="card mb-2" *ngFor="let question of questions" style="margin-top: 30px;">
-                            <div class="card-body p-2 p-sm-3">
-                                <div class="media forum-item">
-                                    <a href="#" data-toggle="collapse" data-target=".forum-content"><img
-                                            src="https://bootdey.com/img/Content/avatar/avatar1.png"
-                                            class="mr-3 rounded-circle" width="50" alt="User" /></a>
-                                    <div class="media-body">
-                                        <h6><a href="#" data-toggle="collapse" data-target=".forum-content"
-                                                class="text-body font-weight-bold">{{question.intituleQuestion}}</a>
-                                        </h6>
-                                        <div *ngFor="let tag of toArray(question.tag)">
-                                        <span class="badge badge-pill badge-info text-uppercase">{{tag.nom}}</span>
+                        <h4>Liste des connaissances:</h4>
+                        <div *ngFor="let connaissance of connaissances">
+                            <div class="card mb-2" style="
+                    margin-top: 20px;
+                    margin-left: 5px;
+                    margin-right: 5px;
+                    background-color: #eef2ff;
+                  ">
+                                <div class="card-body" style="padding-bottom : 0%">
+                                    <li class="nav-item" ngbDropdown placement="bottom-right" style="float: right">
+                                        <a class="nav-link nav-link-icon no-caret" ngbDropdownToggle
+                                            id="nav-inner-success_dropdown_1" role="button" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false">
+                                            <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                                            <span class="nav-link-inner--text d-lg-none">Settings</span>
+                                        </a>
+                                        <div class="dropdown-menu-right" aria-labelledby="nav-inner-success_dropdown_1"
+                                            ngbDropdownMenu>
+                                            <a class="dropdown-item"
+                                                (click)="open(content2, 'updateConnaissance', connaissance) ">Modifier</a>
+                                            <a class="dropdown-item"
+                                                (click)="open(content3, 'deleteConnaissance', connaissance)">Supprimer</a>
                                         </div>
-                                        <p>
-                                            {{question.descriptionQuestion}}
+                                    </li>
+                                    <div class="media forum-item">
+                                        <a href="#" data-toggle="collapse" data-target=".forum-content"><img
+                                                src="https://bootdey.com/img/Content/avatar/avatar1.png"
+                                                class="mr-3 rounded-circle" width="50" alt="User" /></a>
+                                        <div class="media-body">
+                                            <h6>
+                                                <a href="#" data-toggle="collapse" data-target=".forum-content"
+                                                    class="text-body font-weight-bold">{{ connaissance.user.nomUser
+                                                    }}</a>
+                                            </h6>
+                                            <div *ngFor="let sujet of toArray(connaissance?.sujet)">
+                                                <span class="badge badge-pill badge-info text-uppercase">{{ sujet.nom
+                                                    }}</span>
+                                            </div>
+                                            {{ connaissance.createdAt | date: "dd/MM/yyyy" }}
+                                            <p [innerHTML]="connaissance.contenuConnaissance">
+                                                {{ connaissance.contenuConnaissance}}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div style="margin-bottom: 5px; float: right">
+                                        <button class="btn btn-sm btn-2 btn-primary" type="button">
+                                            3
+                                            <span class="btn-inner--icon"><i class="fa fa-thumbs-up" aria-hidden="true"
+                                                    (click)="likeConnaissance()"></i></span>
+                                        </button>
+                                        <button class="btn btn-sm btn-2 btn-danger" type="button">
+                                            3
+                                            <span class="btn-inner--icon"><i class="fa fa-thumbs-down"
+                                                    aria-hidden="true" (click)="dislikeConnaissance()"></i></span>
+                                        </button>
+                                        <button class="btn btn-sm btn-2 btn-info" type="button"
+                                            (click)="showCommentsSection()">
+                                            5
+                                            <span class="btn-inner--icon"><i class="fa fa-comment"
+                                                    aria-hidden="true"></i></span>
+                                        </button>
+                                    </div>
+                                    <hr
+                                        style="height: 0.5px;border: none;background-color: #9b9cdb;border-radius: 0.5px;" />
+                                    <form [formGroup]="addConnaissanceCommentaire" style="margin-top: 0.5px;">
+                                        <div class="d-flex flex-row add-comment-section mt-4 mb-4">
+                                            <input formControlName="commentaire" type="text" class="form-control mr-3"
+                                                placeholder="Taper votre commentaire" />
+                                            <button class="btn btn-sm btn-primary" type="button"
+                                                (click)="addCommentaire(connaissance.id)">
+                                                Commenter
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div *ngIf="showComments">
+                                <div *ngFor="let commentaire of toArray(connaissance.commentaires)" class="card" style="
+                      margin-left: 80px;
+                      background-color: #eef2ff;
+                      margin-top: 20px;
+                    ">
+                                    <div class="card-body">
+                                        <li class="nav-item" ngbDropdown placement="bottom-right" style="float: right">
+                                            <a class="nav-link nav-link-icon no-caret" ngbDropdownToggle
+                                                id="nav-inner-success_dropdown_1" role="button" data-toggle="dropdown"
+                                                aria-haspopup="true" aria-expanded="false">
+                                                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                                                <span class="nav-link-inner--text d-lg-none">Settings</span>
+                                            </a>
+                                            <div class="dropdown-menu-right"
+                                                aria-labelledby="nav-inner-success_dropdown_1" ngbDropdownMenu>
+                                                <a class="dropdown-item">Modifier</a>
+                                                <a class="dropdown-item">Supprimer</a>
+                                            </div>
+                                        </li>
+                                        <h6 class="card-title">
+                                            <img src="https://bootdey.com/img/Content/avatar/avatar1.png"
+                                                class="mr-3 rounded-circle" width="25"
+                                                alt="User" />{{commentaire.user.nomUser}}<small
+                                                class="text-muted ml-2"></small>
+                                        </h6>
+                                        <p style="margin-top: 2px">
+                                            {{commentaire.contenu }}
                                         </p>
                                     </div>
                                 </div>
-                                <div class="d-flex flex-row-reverse" style="margin-left:50px;">
-                                    <span class="d-none d-sm-inline-block"><i class="fa fa-heart" aria-hidden="true"style="color: red;"> </i> 3 <pre></pre></span>
-                                    <span class="d-none d-sm-inline-block"><i class="far fa-comment ml-2"></i> 3</span>
-                                </div>
                             </div>
                         </div>
-                    </a>
-
-                    <ul class="pagination pagination-sm pagination-circle justify-content-center mb-0">
-                        <li class="page-item disabled">
-                            <span class="page-link has-icon"><i class="fa fa-angle-left"></i></span>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="javascript:void(0)">1</a></li>
-                        <li class="page-item active"><span class="page-link">2</span></li>
-                        <li class="page-item"><a class="page-link" href="javascript:void(0)">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link has-icon" href="javascript:void(0)"><i
-                                    class="fa fa-angle-right"></i></a>
-                        </li>
                     </ul>
                 </div>
             </div>
         </div>
+    </div>
+   
+
+        <ng-template #content1 let-c="close" let-d="dismiss" aria-labelledby="add-connaissance">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modify-reponse">
+                    Publier une connaissance
+                </h4>
+                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="addConnaissanceForm">
+                    <div class="form-group">
+                        <h6>Sujets:</h6>
+                        <input formControlName="sujet" matInput type="text" class="form-control"
+                            [matAutocomplete]="auto" placeholder="Sujets" />
+                        <mat-autocomplete #auto="matAutocomplete">
+                            <mat-option *ngFor="let sujet of sujets" [value]="sujet.nom">
+                                {{ sujet.nom }}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <p>
+                            Quelles sont les sujets qui ont un rapport avec votre question
+                        </p>
+                    </div>
+                    <div class="form-group">
+                        <h6>Description:</h6>
+                        <quill-editor formControlName="contenu" [style]="quillEditor" aria-placeholder="Description">
+                        </quill-editor>
+                        <p>Essayez de donner toutes les inforamtions nécessaires</p>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" (click)="d('Cross click')">
+                    Annuler
+                </button>
+                <button type="button" class="btn btn-success" (click)="c('yes')">
+                    Modifier
+                </button>
+            </div>
+        </ng-template>
+
+        <ng-template #content2 let-c="close" let-d="dismiss" aria-labelledby="update-connaissance">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modify-reponse">Modifier Connaissance</h4>
+                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="updateConnaissanceForm">
+                    <div class="form-group">
+                        <h6>Sujets:</h6>
+                        <input formControlName="sujet" matInput type="text" class="form-control"
+                            [matAutocomplete]="auto" placeholder="Sujets" />
+                        <mat-autocomplete #auto="matAutocomplete">
+                            <mat-option *ngFor="let sujet of sujets" [value]="sujet.nom">
+                                {{ sujet.nom }}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <p>
+                            Quelles sont les sujets qui ont un rapport avec votre question
+                        </p>
+                    </div>
+                    <div class="form-group">
+                        <h6>Description:</h6>
+                        <quill-editor formControlName="contenu" [style]="quillEditor" aria-placeholder="Description"
+                            value="currentConnaissance.contenu"></quill-editor>
+                        <p>Essayez de donner toutes les inforamtions nécessaires</p>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" (click)="d('Cross click')">
+                    Annuler
+                </button>
+                <button type="button" class="btn btn-success" (click)="c('yes')">
+                    Modifier
+                </button>
+            </div>
+        </ng-template>
+
+        <ng-template #content3 let-c="close" let-d="dismiss" aria-labelledby="delete-connaissance">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modify-reponse">Supprimer Connaissance</h4>
+                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Veuillez confirmer la suppression de la connaissance</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" (click)="d('Cross click')">
+                    Annuler
+                </button>
+                <button type="button" class="btn btn-success" (click)="c('yes')">
+                    Supprimer
+                </button>
+            </div>
+        </ng-template>
     </section>
 </main>

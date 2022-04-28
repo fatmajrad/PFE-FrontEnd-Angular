@@ -40,6 +40,7 @@ import { UpdateQuestionComponent } from './components/update-question/update-que
 import { ListValidationQuestionsComponent } from './components/list-validation-questions/list-validation-questions.component';
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -59,7 +60,7 @@ import { ListValidationQuestionsComponent } from './components/list-validation-q
     MesQuestionsComponent,
     UpdateQuestionComponent,
     ListValidationQuestionsComponent,
-   
+    
   ],
   imports: [
     BrowserModule,

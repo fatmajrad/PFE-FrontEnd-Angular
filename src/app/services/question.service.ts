@@ -22,16 +22,7 @@ export class QuestionService {
   constructor(private router: Router, private http: HttpClient) { }
 
 
-  listeMesQuestions(id:Number) {
-    const url ="http://localhost:8000/api/questions?page=1&user.id="+id
-    return this.http.get<Question[]>(url);
-  }
-
-  listeMesBrouillons(id:Number) {
-    const url ="http://localhost:8000/api/questions?page=1&brouillon=true&user.id="+id
-    return this.http.get<Question[]>(url);
-  }
-
+  
   listeQuestion(): Observable<Question[]>{
     const url ="http://localhost:8000/api/questions?page=1&brouillon=false"
     return this.http.get<Question[]>(url);
@@ -41,6 +32,40 @@ export class QuestionService {
     const url ="http://localhost:8000/api/questions?statutValidation=true&brouillon=false"
     return this.http.get<Question[]>(url);
   }
+  listeInvalidQuestions():Observable<Question[]>{
+    const url ="http://localhost:8000/api/questions?statutValidation=false&brouillon=false"
+    return this.http.get<Question[]>(url);
+  }
+  
+ 
+  listMyQuestions(id:Number) {
+    const url ="http://localhost:8000/api/questions?page=1&user.id="+id
+    console.log(url);
+    return this.http.get<Question[]>(url);
+  }
+
+  listMyDrafts(id:Number) {
+    const url ="http://localhost:8000/api/questions?page=1&statutValidation=false&brouillon=true&user.id="+id
+    return this.http.get<Question[]>(url);
+  }
+
+  listMyQuestionsRequest(id:Number):Observable<Question[]>{
+    const url ="http://localhost:8000/api/questions?page=1&statutValidation=true&brouillon=false&user.id="+id
+    return this.http.get<Question[]>(url);
+  }
+
+  listeMyPublishedQuestions(id:Number) {
+    const url ="http://localhost:8000/api/questions?page=1&brouillon=false&user.id="+id
+    return this.http.get<Question[]>(url);
+  }
+  
+  listeMyInvalidQuestions(id:Number) {
+    const url ="http://localhost:8000/api/questions?page=1&statutValidation=false&brouillon=false&user.id="+id
+    return this.http.get<Question[]>(url);
+  }
+ 
+  
+  
   
   consulterQuestion(id: number): Observable<Question> {
     const url = `${this.apiURL}/${id}`;

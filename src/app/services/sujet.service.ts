@@ -25,6 +25,10 @@ export class SujetService {
     return this.http.get<Sujet[]>(this.apiURL);
   }
 
+  getSujetAuto(): Observable<Sujet[]>{
+    return this.http.get<Sujet[]>(this.apiURL);
+  }
+
   getSujetById(id:Number): Observable<Sujet[]>{
     const url1 = `${this.api}/${id}`;
     const url = `${this.apiURL}/${id}` + "/validate";

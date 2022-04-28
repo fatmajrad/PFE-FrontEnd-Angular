@@ -17,23 +17,30 @@ import { UserService } from 'src/app/services/user.service';
 export class MesQuestionsComponent implements OnInit {
 
   questions : Question[];
+  published: Question [];
+  requests : Question[];
+  invalidQ:Question[];
+  brouillons:Question[]
+  
   sujets:Sujet[];
   user : User;
   currentUser:Number;
   constructor(private questionService : QuestionService, private userService : UserService, private sujetService: SujetService, private router:Router,private authService:AuthService) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.getCurrentUser();
-    this.questionService.listeMesQuestions(this.currentUser).subscribe(questions => {
-      this.questions = questions;
-      console.log(this.questions);
-      });
+    this.currentUser= await this.authService.getCurrentUserId();
+    this.questions = await this.questionService.listMyQuestions(this.currentUser).toPromise();
+    this.getMyDrafts();
+    this.getMyInvalidQuestions();
+    this.getMyPublished();
+    this.getMyQuestionqRequests();
   }
   
   toArray(answers: object) {
     return Object.keys(answers).map(key => answers[key])
   }
-  getUserName(id : number){
+  getUser(id : number){
     return this.userService.getUserById(id);
   }
 
@@ -44,18 +51,34 @@ export class MesQuestionsComponent implements OnInit {
   onSelect(question){
     console.log(question);
     this.router.navigate(['reponse-list/'+question.id]);
-    //this.router.navigateByUrl('reponse-list/'+question.id);
   }
 
   getCurrentUser(){
-    this.currentUser=this.authService.getCurrentUserId();
+     this.authService.getCurrentUserId();
+    console.log(this.currentUser);
   }
 
+  
   getMyDrafts(){
-    this.questionService.listeMesBrouillons(this.currentUser);
+    this.questionService.listMyDrafts(this.currentUser).subscribe(questions => {
+      this.brouillons = questions;});
   }
+  
 
   getMyPublished(){
-    this.questionService.listeMesQuestions(this.currentUser);
+    this.questionService.listeMyPublishedQuestions(this.currentUser).subscribe(questions => {
+      this.published = questions;});
   }
+
+  getMyQuestionqRequests(){
+    this.questionService.listMyQuestionsRequest(this.currentUser).subscribe(questions => {
+      this.requests = questions;});
+  }
+
+  getMyInvalidQuestions(){
+    this.questionService.listeMyInvalidQuestions(this.currentUser).subscribe(questions => {
+      this.invalidQ = questions;});
+      console.log(this.invalidQ);
+  }
+
 }

@@ -45,14 +45,11 @@ export class AuthService {
     if (this.token == undefined) return;
     const decodedToken = this.helper.decodeToken(this.token);
     this.statutUser=decodedToken.statutValidation;
-    if(this.statutUser){
+  
       this.roles = decodedToken.roles;
       this.loggedUser = decodedToken.email;
       this.id=decodedToken.id;
       localStorage.setItem("isloggedIn", String(this.isloggedIn));
-    }
-  
-  
   }
   loadToken() {
     this.token = localStorage.getItem("jwt");
