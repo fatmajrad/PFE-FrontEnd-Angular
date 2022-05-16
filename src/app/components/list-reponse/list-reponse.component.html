@@ -11,19 +11,17 @@
         margin-right: auto;
         margin-top: 20px;
       ">    
-            <li *ngIf="canEditQuestion()" class="nav-item" ngbDropdown placement="bottom-right" style="float: right;">
+            <li  class="nav-item" ngbDropdown placement="bottom-right" style="float: right;">
                 <a  class="nav-link nav-link-icon no-caret" ngbDropdownToggle id="nav-inner-success_dropdown_1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                   <span class="nav-link-inner--text d-lg-none">Settings</span>
                 </a>
                 <div class="dropdown-menu-right" aria-labelledby="nav-inner-success_dropdown_1" ngbDropdownMenu>
                 <a  class="dropdown-item" [routerLink]="['/update-question',currentQuestion.id]"> Modifier</a>
-                <a class="dropdown-item" >Supprimer</a>
-                <a *ngIf="currentQuestion.brouillon" class="dropdown-item" (click)="publier(currentQuestion.id)">Publier</a>   
+                <a class="dropdown-item" >Supprimer</a>   
                 </div>
             </li>
             <h4 class="display-4 mb-0">{{ currentQuestion.intituleQuestion }}</h4>
-            
             <p>
                 <img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="mr-3 rounded-circle" width="30"/>{{ currentQuestion.user.nomUser}}
             </p>
@@ -32,21 +30,7 @@
                     tag.nom
                     }}</span>
             </div>
-            
-            <div style="margin-top: 5px;">
-                <button class="btn btn-sm btn-2 btn-primary" type="button">
-                    3
-                    <span class="btn-inner--icon"><i class="fa fa-thumbs-up" aria-hidden="true" (click)="likeQuestion()"></i></span>
-                </button>
-                <button class="btn btn-sm btn-2 btn-danger" type="button">
-                    3
-                    <span class="btn-inner--icon"><i class="fa fa-thumbs-down" aria-hidden="true" (click)="dislikeQuestion()"></i></span>
-                </button>
-                <button class="btn btn-sm btn-2 btn-info" type="button">
-                    5
-                    <span class="btn-inner--icon"><i class="fa fa-comment" aria-hidden="true"></i></span>
-                </button>
-            </div>
+            {{currentQuestion.createdAt | date: "shortDate"}}
             <hr style="
              height: 2px;
              border: none;
@@ -89,7 +73,7 @@
                                         <h6>
                                             <img src="https://bootdey.com/img/Content/avatar/avatar1.png"
                                                 class="mr-3 rounded-circle" width="25" alt="User" />{{reponse.user.nomUser}}
-                                                <small class="text-muted ml-2">1 hour ago</small>
+                                                <small class="text-muted ml-2">{{reponse.createdAt | date: "shortDate"}}</small>
                                         </h6>
                                         <p [innerHTML]="reponse.contenu"></p>
                                         <button class="btn btn-sm btn-2 btn-primary" type="button">
@@ -109,17 +93,17 @@
                             </div>
                         </div>
                         <div  class="d-flex flex-row add-comment-section mt-4 mb-4" >
-                            <input *ngIf="authService.isloggedIn"  type="text" class="form-control mr-3"
+                            <input formControlName="commentaire" *ngIf="authService.isloggedIn"  type="text" class="form-control mr-3"
                                 placeholder="Taper votre commentaire" />
-                            <button *ngIf="authService.isloggedIn" class="btn btn-sm btn-outline-primary" type="button" >
+                            <button *ngIf="authService.isloggedIn" class="btn btn-sm btn-outline-primary" type="button" (click)="addCommentaire(reponse.id)" >
                                 Commenter
                             </button>
                         </div>
-                       <div *ngIf="showComments">
+                       <div *ngIf="showComments==true">
                         <div  *ngFor="let commentaire of toArray(reponse.commentaires)" class="card"
                         style="margin-left: 80px; background-color: #eef2ff ; margin-top: 20px;">
                         <div class="card-body">
-                            <li *ngIf="canEditComment()" class="nav-item" ngbDropdown placement="bottom-right" style="float: right;">
+                            <li class="nav-item" ngbDropdown placement="bottom-right" style="float: right;">
                                 <a class="nav-link nav-link-icon no-caret" ngbDropdownToggle id="nav-inner-success_dropdown_1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                                   <span class="nav-link-inner--text d-lg-none">Settings</span>
@@ -131,8 +115,8 @@
                             </li>
                             <h6 class="card-title">
                                 <img src="https://bootdey.com/img/Content/avatar/avatar1.png"
-                                    class="mr-3 rounded-circle" width="25" alt="User" />Helmi<small
-                                    class="text-muted ml-2">1 hour ago</small>
+                                    class="mr-3 rounded-circle" width="25" alt="User" />{{commentaire.user.nomUser}}<small
+                                    class="text-muted ml-2">{{commentaire.createdAt | date: "shortDate"}}</small>
                             </h6>
                             <p [innerHTML]="commentaire.contenu" style="margin-top: 2px">
                                 {{ commentaire.contenu }}

@@ -8,4 +8,5 @@ export class Reponse{
     user:User;
     question:Question;
     commentaire: Commentaire[];
+    
 }

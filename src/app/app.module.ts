@@ -38,6 +38,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MesQuestionsComponent } from './components/mes-questions/mes-questions.component';
 import { UpdateQuestionComponent } from './components/update-question/update-question.component';
 import { ListValidationQuestionsComponent } from './components/list-validation-questions/list-validation-questions.component';
+import { PublishQuestionComponent } from './components/publish-question/publish-question.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { ChartsModule } from 'ng2-charts';
+import { ForbiddenComponent } from './forbidden/forbidden.component';
+
 
 
 
@@ -60,6 +65,10 @@ import { ListValidationQuestionsComponent } from './components/list-validation-q
     MesQuestionsComponent,
     UpdateQuestionComponent,
     ListValidationQuestionsComponent,
+    PublishQuestionComponent,
+    DashboardComponent,
+    ForbiddenComponent,
+ 
     
   ],
   imports: [
@@ -84,6 +93,7 @@ import { ListValidationQuestionsComponent } from './components/list-validation-q
     MatChipsModule,
     MatFormFieldModule,
     MatInputModule,
+    ChartsModule,
     
    
   ],

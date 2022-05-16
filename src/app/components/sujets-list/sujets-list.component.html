@@ -19,12 +19,13 @@
           <input class="form-control" placeholder="Taper le nom du sujet" type="text" (focus)="focus1=true"
             (blur)="focus1=false" style=" background-color: #eef2ff;" name="nom" [(ngModel)]="nomSujet">
         </div>
+
       </div>
     </div>
   </div>
     <div fxLayout="row wrap" fxLayoutGap="15px grid">
       <div fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="33%" *ngFor="let sujet  of sujets" style="margin: left 100px">
-        <mat-card class="card" style="background-color: #eef2ff;" (click)="open(content4,'ajouterSujet',sujet)">
+        <mat-card class="card" style="background-color: #eef2ff;" >
           <mat-card-header>
             <li  *ngIf="(authService.isAdmin() && authService.isloggedIn)" class="nav-item" ngbDropdown placement="bottom-right" style="float: right">
               <a class="nav-link nav-link-icon no-caret" ngbDropdownToggle id="nav-inner-success_dropdown_1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -43,7 +44,7 @@
               <h4>{{ sujet.nom }}</h4>
             </mat-card-title>
           </mat-card-header>
-          <mat-card-content>
+          <mat-card-content (click)="open(content4,'ajouterSujet',sujet)">
           </mat-card-content>
           <mat-card-actions style="float:inline-end;" class="col-md-12 text-center">
             <button class="btn btn-sm btn-primary" type="button">Questions</button>
@@ -62,7 +63,7 @@
        Ajouter Sujet
       </button>
    
-      <ng-template #content let-c="close" let-d="dismiss" aria-labelledby="confirmation_delete_modal">    
+      <ng-template #content let-c="close" let-d="dismiss" aria-labelledby="modal-basic-title">    
         <div class="modal-header">    
             <h4 class="modal-title" id="confirmation_delete_modal">Confirmation</h4>    
             <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">    

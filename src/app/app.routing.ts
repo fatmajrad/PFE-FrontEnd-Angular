@@ -1,3 +1,4 @@
+import { LoginGuard } from './gards/login.guard';
 import { NgModule } from '@angular/core';
 import { CommonModule, } from '@angular/common';
 import { BrowserModule  } from '@angular/platform-browser';
@@ -17,13 +18,15 @@ import { ListReponseComponent } from './components/list-reponse/list-reponse.com
 import { MesQuestionsComponent } from './components/mes-questions/mes-questions.component';
 import { UpdateQuestionComponent } from './components/update-question/update-question.component';
 import { ListValidationQuestionsComponent } from './components/list-validation-questions/list-validation-questions.component';
+import { PublishQuestionComponent } from './components/publish-question/publish-question.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 const routes: Routes =[
     { path: 'home',             component: HomeComponent },
-    { path: 'user-profile',     component: ProfileComponent },
+    { path: 'user-profile/:id',     component: ProfileComponent },
     { path: 'register',           component: SignupComponent },
     { path: 'landing',          component: LandingComponent },
-    { path: 'login',          component: LoginComponent },
+    { path: 'login',          component: LoginComponent},
   //  { path: '', redirectTo: 'reponse-li', pathMatch: 'full' },
     { path: 'users-validation',          component: UserComponent },
     { path: 'questions-list',          component: QuestionsListComponent },
@@ -34,7 +37,8 @@ const routes: Routes =[
     { path: 'update-question/:id',          component: UpdateQuestionComponent},
     { path: 'validation-questions',          component: ListValidationQuestionsComponent},
     { path: 'mes-questions',          component: MesQuestionsComponent},
-    
+    { path: 'publish-question/:id',          component: PublishQuestionComponent},
+    { path: 'dashboard',          component: DashboardComponent},
 ];
 
 @NgModule({

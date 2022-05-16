@@ -1,4 +1,3 @@
-
 import { QuestionService } from './../../services/question.service';
 import { SujetService } from './../../services/sujet.service';
 import {  OnInit } from '@angular/core';
@@ -69,26 +68,21 @@ export class AddQuestionComponent implements OnInit {
 
    /*add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
-
     // Add our fruit
     if (value) {
       this.sujets.push({nom:value,id:null,descriptionSujet:''});
     }
-
     // Clear the input value
     event.chipInput!.clear();
-
     this.sujetCtrl.setValue(null);
   }
   /*add(event: MatChipInputEvent): void {
     const input = event.input;
     const value = event.value;
-
     // Add our fruit
     if ((value || '').trim()) {
       this.sujets.push({nom:value,id:null,descriptionSujet:''});
     }
-
     // Reset the input value
     if (input) {
       input.value = '';
@@ -145,15 +139,15 @@ export class AddQuestionComponent implements OnInit {
       "intituleQuestion": this.addQuestionForm.get('intituleQuestion').value,
       "descriptionQuestion": this.addQuestionForm.get('descriptionQuestion').value,
       "tag": [
-        "/api/sujets/9"
+        "/api/sujets/16"
       ],
       "user": "/api/users/"+this.authService.getCurrentUserId(),
-      "brouillon": false,
-      "statutValidation": false
+      "statut": "onHold"
     }
     console.log(question);
     this.questionService.addQuestion(question).subscribe((response) => {console.log(response)});
-    this.router.navigate(['mes-questions']);}
+    this.router.navigate(['mes-questions']);
+  }
 
   close() {
     this.showAlertsucces=false;
@@ -169,8 +163,7 @@ export class AddQuestionComponent implements OnInit {
         "/api/sujets/9"
       ],
       "user": "/api/users/"+this.authService.getCurrentUserId(),
-      "brouillon": true,
-      "statutValidation": false
+      "statut":"draft"
     }
     console.log(question);
     this.questionService.addQuestion(question).subscribe((response) => {console.log(response)});
@@ -181,10 +174,11 @@ export class AddQuestionComponent implements OnInit {
     if (this.addQuestionForm.get('intituleQuestion').value === null ||
       this.addQuestionForm.get('descriptionQuestion').value === null||
       this.addQuestionForm.get('sujet').value === null) {
-        this.open(content);
+       
+        this.router.navigate(["/mes-questions"]);
     }
     else {
-      this.router.navigate(["/mes-questions"]);
+      this.open(content);
     }
   }
 

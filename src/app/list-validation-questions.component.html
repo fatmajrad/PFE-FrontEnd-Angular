@@ -9,6 +9,9 @@
   style="background-color: white"
 >
   <div class="shape shape-style-1 bg-gradient-default"></div>
+  
+    
+   
   <h3>
     <ngb-alert
       *ngIf="showAlertsucces"
@@ -36,9 +39,9 @@
     </ngb-alert>
   </h3>
 
-  <div class="row" style="margin-left: 75px ; margin-top: 30px;">
+  <div class="row" style="margin-left: 75px; margin-top: 30px">
     <div class="col-6 col-md-3">
-      <form [formGroup]="searchForm">
+        <form [formGroup]="searchForm">
         <div class="input-group input-group-alternative mb-2">
           <input
             class="form-control"
@@ -48,14 +51,25 @@
             (blur)="focus1 = false"
             style="background-color: #eef2ff"
             name="nom"
-            formControlName="userNom"
+            formControlName="intitule"
           />
-          <button  class="btn btn-outline-primary" (click)="getUserByNom()" style="margin-left: 5px;">Chercher</button>
+          <button
+            class="btn btn-outline-primary"
+            (click)="getQuestionIntitule()"
+            style="margin-left: 5px"
+          >
+            Chercher
+          </button>
         </div>
       </form>
+
     </div>
-    <div class="col-6 col-sm-3" >
-      <select class="form-control" (change)="onEditClick($event.target.value)" style="background-color: #eef2ff ;">
+    <div class="col-6 col-sm-3">
+      <select
+        class="form-control"
+        (change)="onEditClick($event.target.value)"
+        style="background-color: #eef2ff"
+      >
         <option>Tous</option>
         <option>Valide</option>
         <option>Invalide</option>
@@ -71,35 +85,33 @@
     <div class="card-body">
       <div class="table-responsive">
         <table class="table table-striped">
-          <tr>
-            <th>Nom</th>
-            <th>Email</th>
-            <th>Fonction</th>
-            <th>Inscription</th>
-            <th>Date Validation</th>
-            <th>Statut</th>
-            <th>Actions</th>
-          </tr>
-          <tbody *ngFor="let user of users" >
+          <thead>
             <tr>
-              <td style="padding: auto">{{ user.nomUser }}</td>
-              <td>{{ user.email }}</td>
-              <td>{{ user.userFonction }}</td>
-              <td>{{ user.createdAt  }}</td>
-              <td>{{ user.validatedAt | date: "dd/MM/yyyy" }}</td>
+              <th>Nom User</th>
+              <th>Date création</th>
+              <th>Question</th>
+              <th>Statut</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let question of questions">
+            <tr>
+              <td style="padding: auto">{{ question.user?.nomUser }}</td>
+              <td>date</td>
+              <td>{{ question.intituleQuestion }}</td>
               <td>
                 <span
-                  *ngIf="user.statut == 'valide'"
+                  *ngIf="question.statut == 'valide'"
                   class="badge badge-pill badge-success text-uppercase"
                   >Valide</span
                 >
                 <span
-                  *ngIf="user.statut == 'invalide'"
+                  *ngIf="question.statut == 'invalide'"
                   class="badge badge-pill badge-warning text-uppercase"
                   >Non Valide</span
                 >
                 <span
-                  *ngIf="user.statut == 'onHold'"
+                  *ngIf="question.statut == 'onHold'"
                   class="badge badge-pill badge-primary text-uppercase"
                   >En attente</span
                 >
@@ -107,42 +119,47 @@
 
               <td>
                 <button
-                  *ngIf="user.statut == 'invalide' || user.statut == 'onHold'"
+                  type="button"
+                  class="btn btn-icon btn btn-sm btn-info"
+                  placement="top"
+                  ngbTooltip="Consulter details "
+                  (click)="open(content4, detailsQuestion, question)"
+                >
+                  <i class="fa fa-eye" aria-hidden="true"></i>
+                </button>
+                <button
+                  *ngIf="
+                    question.statut == 'invalide' || question.statut == 'onHold'
+                  "
                   type="button"
                   class="btn btn-icon btn btn-sm btn-success"
                   placement="top"
-                  ngbTooltip="Valiser demande User"
-                  (click)="open(content2, 'acceptQuestion', user)"
+                  ngbTooltip="Valider  Question"
+                  (click)="open(content2, acceptQuestion, question)"
                 >
                   <i class="fa fa-check" aria-hidden="true"></i>
                 </button>
                 <button
-                  *ngIf="user.statut == 'valide' || user.statut == 'onHold'"
+                  *ngIf="
+                    question.statut == 'valide' || question.statut == 'onHold'
+                  "
                   type="button"
                   class="btn btn-icon btn btn-sm btn-warning"
                   placement="top"
-                  ngbTooltip="Refuser Demande User"
-                  (click)="open(content1, 'rejectQuestion', user)"
+                  ngbTooltip="Refuser  Question"
+                  (click)="open(content1, rejectQuestion, question)"
                 >
                   <i class="fa fa-times" aria-hidden="true"></i>
                 </button>
+
                 <button
                   type="button"
                   class="btn btn-icon btn btn-sm btn-danger"
                   placement="top"
-                  ngbTooltip="Supprimer User"
-                  (click)="open(content, 'delete-question', user)"
+                  ngbTooltip="Supprimer Question"
+                  (click)="open(content, delete - question, question)"
                 >
                   <i class="fa fa-trash" aria-hidden="true"></i>
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-icon btn btn-sm btn-info"
-                  placement="top"
-                  ngbTooltip="Supprimer User"
-                  (click)="open(content4, 'view-question', user)"
-                >
-                  <i class="fa fa-eye" aria-hidden="true"></i>
                 </button>
               </td>
             </tr>
@@ -151,6 +168,7 @@
       </div>
     </div>
   </div>
+
   <div class="row">
     <div class="modal fade" style="width: 700px">
       <button
@@ -211,7 +229,7 @@
         #content1
         let-c="close"
         let-d="dismiss"
-        aria-labelledby="confirm-rejection"
+        aria-labelledby="confirm-delete"
       >
         <div class="modal-header">
           <h4 class="modal-title" id="confirmation_delete_modal">
@@ -227,22 +245,11 @@
           </button>
         </div>
         <div class="modal-body">
-          <form [formGroup]="declineUserForm">
+          <form [formGroup]="declineQuestionForm">
             <div class="form-group">
-              <label for="recipient-name" class="col-form-label"
-                >Recipient:</label
-              >
-              <input
-                formControlName="email"
-                type="text"
-                class="form-control"
-                id="recipient-name"
-              />
-            </div>
-            <div class="form-group">
-              <label for="message-text" class="col-form-label">Message:</label>
+              <label for="message-text" class="col-form-label">Remarque:</label>
               <textarea
-                formControlName="contenuMail"
+                formControlName="remarqueQuestion"
                 class="form-control"
                 id="message-text"
               ></textarea>
@@ -329,7 +336,7 @@
       >
         <div class="modal-header">
           <h4 class="modal-title" id="confirmation_delete_modal">
-           {{currentUser.nomUser}}
+            {{ currentQuestion?.intituleQuestion }}
           </h4>
           <button
             type="button"
@@ -341,11 +348,13 @@
           </button>
         </div>
         <div class="modal-body">
-          <p >
-            <span class="badge badge-pill badge-info text-uppercase">Remarques</span>
+          <p *ngFor="let tag of toArray(currentQuestion.tag)">
+            <span class="badge badge-pill badge-info text-uppercase">{{
+              tag.nom
+            }}</span>
           </p>
-          <p >
-            {{currentUser.remarque}}
+          <p [innerHTML]="currentQuestion.descriptionQuestion">
+            {{ currentQuestion?.descriptionQuestion }}
           </p>
         </div>
         <div class="modal-footer">
@@ -361,3 +370,4 @@
     </div>
   </div>
 </section>
+<!-------------------------------------------------------------------------------------------------------------------------->

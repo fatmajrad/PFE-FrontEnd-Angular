@@ -1,9 +1,12 @@
+import { QuestionService } from './../../services/question.service';
 import { User } from "src/app/models/user.model";
 
-import { Component, OnInit, EventEmitter, Output } from "@angular/core";
+import { Component, OnInit, EventEmitter, Output, HostListener } from "@angular/core";
 import { Router } from "@angular/router";
 import { UserService } from "../../services/user.service";
 import { ModalDismissReasons, NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+
 @Component({
   selector: "app-user",
   templateUrl: "./user.component.html",
@@ -18,15 +21,40 @@ export class UserComponent implements OnInit {
   type: string;
   strong: string;
   message: string;
+  declineUserForm : FormGroup;
+  searchForm : FormGroup
    
   constructor(
     private userService: UserService,
     private router: Router,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private formBuilder: FormBuilder
   ) {}
 
   ngOnInit(): void {
     this.getAllUsers();
+    this.initSearchForm();
+  }
+  
+  initSearchForm() {
+    this.searchForm= this.formBuilder.group({
+      userNom: ['',Validators.required],
+    });
+  }
+  
+  initDeclineForm(user : User){
+    let adressmail: string = this.currentUser.email;
+    let remarque : String = this.currentUser.remarque;
+    
+    this.declineUserForm = this.formBuilder.group({
+     email: [adressmail],
+     contenuMail:[remarque]
+    });
+  }
+  getUserByNom(){
+    console.log(this.searchForm.get('userNom').value);
+    
+    this.getUsersByName(this.searchForm.get('userNom').value);
   }
 
   getAllUsers(){
@@ -75,12 +103,14 @@ export class UserComponent implements OnInit {
         }
     });
   }
-  refuserUser(u: User) {
-    this.userService.refuserDemandeUser(u.id).subscribe({
+  refuserUser(u: User, body) {
+    console.log(body);
+    this.userService.updateUser(u,body).subscribe({
       next:(res)=>{ 
         this.type="success";
         this.message="user est réfusée";
         this.showAlertsucces=true;
+        this.userService.refuserDemandeUser(u.id).subscribe((response)=>{console.log(response)});
         this.getAllUsers();
        
        },
@@ -88,29 +118,50 @@ export class UserComponent implements OnInit {
            this.showAlerterror=true;
            this.type="error";
            this.message="Probleme avec le refus";
-         }
-     });
+     }});
+   }
+  
+   getUserBystatus(statut){
+     console.log(statut);
+     
+     this.userService.getUsersByStaut(statut).subscribe((users)=>{
+       this.users=users
+       console.log(this.users,statut);
+       
+     })
    }
 
+   getUsersByName(userName){
+    this.userService.getUsersByUserName(userName).subscribe((users)=>{
+      this.users=users
+    })
+   }
 
- /* open(content, user) {
-    this.modalService
-      .open(content, { ariaLabelledBy: "modal-basic-title" })
-      .result.then(
-        (result) => {
-          this.closeResult = `Closed with: ${result}`;
-          if (result === "yes") {
-            this.supprimerUser(user);
-          }
-        },
-        (reason) => {
-          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-        }
-      );
-  }*/
+   onEditClick(statut: any) {
+   if(statut=='Invalide'){
+      console.log(statut);
+     
+      this.getUserBystatus('invalide');
+   }else if(statut=='Valide'){
+    console.log(statut);
+      this.getUserBystatus('valide');
+   }else if(statut=='En attente'){
+    console.log(statut);
+      this.getUserBystatus('onHold');
+   }else{
+    console.log(statut);
+      this.getAllUsers();
+   }
+   
+}
 
+isPair(id){
+  console.log(id,!(id % 2))
+  return !(id % 2)
+}
   open(content, type,user) {
     this.currentUser = user;
+    this.initDeclineForm(user);
      if (type === 'delete-question') {
       this.modalService
       .open(content, { ariaLabelledBy: "confirm-delete" })
@@ -134,24 +185,39 @@ export class UserComponent implements OnInit {
           this.closeResult = `Closed with: ${result}`;
           if (result === "yes") { 
             console.log("reject")
-          this.refuserUser(user);
+           
+            let body={
+              "remarque": this.declineUserForm.get("contenuMail").value
+            }
+            this.refuserUser(user,body);
+           
           }
         },
         (reason) => {
           this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
         }
       );
-    }else{
-        console.log("gggggggggg")
+    }else if(type=='acceptQuestion'){
+        
        this.modalService
         .open(content, { ariaLabelledBy: "confirm-accaptance" })
         .result.then(
           (result) => {
             this.closeResult = `Closed with: ${result}`;
             if (result === "yes") { 
-             console.log("validtae")
              this.validerUser(user);
             }
+          },
+          (reason) => {
+            this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+          }
+        );
+    }else{
+      this.modalService
+        .open(content, { ariaLabelledBy: "details-question" })
+        .result.then(
+          (result) => {
+            this.closeResult = `Closed with: ${result}`;
           },
           (reason) => {
             this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;

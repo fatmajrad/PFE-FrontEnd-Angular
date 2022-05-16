@@ -46,19 +46,18 @@ export class ListReponseComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.addReponseCommentaire = this.formBuilder.group({
       reponse: [''],
-      
       commentaire: [''],
     });
     this.getQuestion();
   }
 
 
-async getQuestion(){
-  this.currentQuestion = await this.questionService.consulterQuestion(this.activatedRoute.snapshot.params.id).toPromise();
-   this.currentReponses=this.currentQuestion.reponses;
-   this.currentReponses.forEach(element => {
-     console.log(element.user.id)
-   });
+getQuestion(){
+   this.questionService.consulterQuestion(this.activatedRoute.snapshot.params.id).subscribe((response)=>{
+    this.currentQuestion=response;
+    this.currentReponses=this.currentQuestion.reponses;
+   }
+   )
 }
 
   canEditQuestion() {
@@ -120,28 +119,27 @@ async getQuestion(){
   }
   updateReponse(reponse: Reponse) {
 
-    this.reponseService.updateReponse(reponse, reponse.id).subscribe((response) => console.log(response));
+    this.reponseService.updateReponse(reponse, reponse.id).subscribe((response) => {this.getQuestion()});
   }
 
   deleteReponse(reponse: Reponse) {
 
-    this.reponseService.deleteReponse(reponse.id).subscribe(() => console.log("user deleted"));
+    this.reponseService.deleteReponse(reponse.id).subscribe((response)=>{this.getQuestion()});
 
   }
 
 
   addCommentaire(id: Number) {
-    console.log(id);
-
     let commentaire =
     {
       "contenu": this.addReponseCommentaire.get('commentaire').value,
       "user": "/api/users/" + this.authService.getCurrentUserId(),
-      "repsonse": "/api/reponses/" + id,
-      "connaissance": null
+      "reponse": "/api/reponses/" + id
     }
     
-    this.commentaireService.addCommentaire(commentaire).subscribe((response) => console.log(response));
+    this.commentaireService.addCommentaire(commentaire).subscribe((response) => {
+      this.getQuestion()
+    });
   }
 
   showCommentsSection(){
@@ -155,6 +153,12 @@ async getQuestion(){
   publier(id:Number){
     this.questionService.publishQuestion(id).subscribe((response) => console.log(response));
   }
+  
+  deleteQuestions(id:Number){
+    this.questionService.deleteQuestion(id).subscribe((questions)=>{console.log("mes questions");
+   }) 
+   } 
+
   open(content, type, reponse, commentaire) {
     this.currentReponse = reponse;
     this.currentCommentaire = commentaire;
@@ -313,6 +317,7 @@ async getQuestion(){
     }
   }
 
+ 
 }
 
 

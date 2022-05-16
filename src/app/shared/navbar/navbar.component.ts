@@ -1,19 +1,21 @@
 import { AuthService } from './../../services/auth.service';
 import { Component, OnInit } from '@angular/core';
-import { Router, NavigationEnd, NavigationStart } from '@angular/router';
+import { Router, NavigationEnd, NavigationStart, ActivatedRoute } from '@angular/router';
 import { Location, PopStateEvent } from '@angular/common';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
     selector: 'app-navbar',
     templateUrl: './navbar.component.html',
-    styleUrls: ['./navbar.component.scss']
+    styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
     public isCollapsed = true;
     private lastPoppedUrl: string;
     private yScrollStack: number[] = [];
 
-    constructor(public location: Location, private router: Router, public authService: AuthService) {
+    constructor(public location: Location, private router: Router, public authService: AuthService,public userService : UserService, private activatedRoute: ActivatedRoute) {
+       
     }
 
     ngOnInit() {
@@ -56,5 +58,14 @@ export class NavbarComponent implements OnInit {
         else {
             return false;
         }
+    }
+
+    getUserName(){
+    this.authService.getUserName() 
+    }
+
+    redrirectProfile(){
+        let id = this.authService.getCurrentUserId();
+        this.router.navigate(['/user-profile/'+id])
     }
 }

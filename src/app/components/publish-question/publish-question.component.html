@@ -2,17 +2,9 @@
     <section class="section section-shaped section-lg" style="background-color: white;">
       <div class="shape shape-style-1 bg-gradient-default">
       </div>
+      <h1 class="mb-0" style="margin-top: 10px; margin-left: 80px;">Modifier brouillon</h1>
       
-      
-      <h1 class="mb-0" style="margin-top: 10px; margin-left: 80px;">Modifier la question</h1>
-     
         <form [formGroup]="updateQuestionForm" class="form-container" style="margin-top: 20px; margin-left: 80px; margin-right: 80px;">
-          <div *ngIf="currentQuestion.statut=='invalide'" class="card" style="background-color:#FFF8DC;">
-            <div class="card-body">
-              <p  class="text-warning mb-0">
-                {{currentQuestion.remarque}}</p>
-            </div>
-          </div>
             <div class="form-group" [ngClass]="{'focused':focus5===true}">
                 
                 <input hidden formControlName="test" matInput type="text" class="form-control"[matAutocomplete]="auto">
@@ -42,7 +34,7 @@
         
           <div style="float: right;">
           <button (click)="Annuler(content)" class="btn btn-primary">Annuler</button>
-          <button (click)="updateQuestion()" class="btn btn-outline-success">Modifier</button>
+          <button (click)=" publishBrouillon()" class="btn btn-outline-success">Publier</button>
          </div>
         </form>
         <ng-template #content let-c="close" let-d="dismiss">    
@@ -53,11 +45,11 @@
               </button>    
           </div>    
           <div class="modal-body">    
-              <p>vous voulez vraiment abondonner votre question?</p>    
+              <p>Voulez vous sauvegarder les modifications</p>    
           </div>    
           <div class="modal-footer">    
-              <button type="button" class="btn btn-outline-primary" (click)="d('Cross click')">Cancel</button>    
-              <button type="button" class="btn btn-outline-success" (click)="c('yes')">Yes</button>    
+              <button type="button" class="btn btn-outline-primary" (click)="d('Cross click')">Annuler</button>    
+              <button type="button" class="btn btn-outline-success" (click)="c('yes')">Enregistrer</button>    
           </div>    
       </ng-template>
   </section>

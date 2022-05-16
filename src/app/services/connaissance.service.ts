@@ -12,6 +12,9 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class ConnaissanceService {
+  getUsersByDateIntervall(formattedminDate: string, formattedmaxDate: string) {
+    throw new Error('Method not implemented.');
+  }
 
   apiURL: string = 'http://localhost:8000/api/connaissances';
   constructor(private router: Router, private http: HttpClient) { }
@@ -20,7 +23,7 @@ export class ConnaissanceService {
     return this.http.get<Connaissance[]>(this.apiURL);
   }
 
-  addQuestion(connaissance:any){
+  addConnaissance(connaissance:any){
     console.log("connaissance f service",connaissance);
     return this.http.post<any>(this.apiURL, connaissance, httpOptions);
   }
@@ -28,5 +31,17 @@ export class ConnaissanceService {
   updateConnaissance(connaissance: any,id:Number) {
     const url = `${this.apiURL}/${id}`;
     return this.http.put<any>(url, connaissance, httpOptions)
+  }
+
+  getConnaissancesByDateIntervall(minDate , maxDate){
+    const url = "http://localhost:8000/api/connaissances/valide/"+minDate+"/"+maxDate+"/countdate";
+    console.log(url);
+    
+    return this.http.get<Connaissance[]>(url);
+  }
+
+  countAllConnaissances(){
+    const url = "http://localhost:8000/api/connaissances/valide/count"
+    return this.http.get<Connaissance[]>(url);
   }
 }

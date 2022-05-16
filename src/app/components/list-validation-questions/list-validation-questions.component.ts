@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Question } from 'src/app/models/question.model';
@@ -21,18 +22,21 @@ export class ListValidationQuestionsComponent implements OnInit {
   sujets:Sujet[];
   user : User;
   currentQuestion :Question;
- 
+  declineQuestionForm : FormGroup;
+  searchForm : FormGroup
     type: string;
     strong: string;
     message: string;
     closeResult: string;
   public alert: IAlert;
-  constructor(private modalService: NgbModal, private questionService : QuestionService, private userService : UserService, private sujetService: SujetService, private router:Router) {
+  constructor( private formBuilder: FormBuilder,private modalService: NgbModal, private questionService : QuestionService, private userService : UserService, private sujetService: SujetService, private router:Router) {
     
   }
 
   ngOnInit(): void {
     this.getAllquestions();
+    this.initSearchForm();
+    this.initDeclineForm();
   }
 
   getAllquestions(){
@@ -40,7 +44,53 @@ export class ListValidationQuestionsComponent implements OnInit {
       this.questions = questions;    
     });
   }
+  getQuestionsBystatus(statut){
+    console.log(statut);
+    
+    this.questionService.getQuestionsByStatut(statut).subscribe((questions)=>{
+      this.questions=questions
+      console.log(this.questions,statut);
+      
+    })
+  }
+  initSearchForm() {
+    this.searchForm= this.formBuilder.group({
+      intitule: ['',Validators.required],
+    });
+  }
   
+  initDeclineForm(){
+    //let remarqueQuestion : String = this.currentQuestion.remarque;
+    this.declineQuestionForm = this.formBuilder.group({
+      remarqueQuestion:['']
+    });
+  }
+
+  getQuestionIntitule(){
+    this.getQuestionsByIntitule(this.searchForm.get('intitule').value);
+  }
+  getQuestionsByIntitule(intitule){
+   this.questionService.getQuestionsByIntitule(intitule).subscribe((questions)=>{
+     this.questions=questions
+   })
+  }
+
+  onEditClick(statut: any) {
+    if(statut=='Invalide'){
+       console.log(statut);
+      
+       this.getQuestionsBystatus('invalide');
+    }else if(statut=='Valide'){
+     console.log(statut);
+       this.getQuestionsBystatus('valide');
+    }else if(statut=='En attente'){
+     console.log(statut);
+       this.getQuestionsBystatus('onHold');
+    }else{
+     console.log(statut);
+       this.getAllquestions();
+    }
+  }
   toArray(answers: object) {
     return Object.keys(answers).map(key => answers[key])
   }
@@ -71,13 +121,18 @@ export class ListValidationQuestionsComponent implements OnInit {
  
 
   declineQuestion(q: Question) {
-    this.questionService.declineQuestion(q.id).subscribe({
+   let body={
+     "remarque":this.declineQuestionForm.get('remarqueQuestion').value
+   }
+   this.questionService.declineQuestion(q.id).subscribe({
       next:(res)=>{ 
-        this.type="success";
-        this.message="La question est réfusée";
-        this.showAlertsucces=true;
-        this.getAllquestions();
-       
+        this.questionService.updateQuestion(body,q.id).subscribe({next:(res)=>{
+          this.type="success";
+          this.message="La question est réfusée";
+          this.showAlertsucces=true;
+          this.getAllquestions();
+        }
+        }); 
        },
          error:()=>{
            this.showAlerterror=true;
@@ -123,6 +178,9 @@ export class ListValidationQuestionsComponent implements OnInit {
         }
       );
     }else if (type == 'rejectQuestion') {
+      console.log(type);
+      
+      this.initDeclineForm();
       this.modalService
       .open(content, { ariaLabelledBy: "confirm-rejection" })
       .result.then(

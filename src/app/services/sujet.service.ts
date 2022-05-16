@@ -36,9 +36,7 @@ export class SujetService {
   }
 
   supprimerSujet(id: number) {
-    
     const url = `${this.apiURL}/${id}`;
-   
     return this.http.delete(url, httpOptions);
   }
 

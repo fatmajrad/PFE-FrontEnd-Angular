@@ -5,20 +5,29 @@
     <section class="section section-shaped section-lg" style="background-color: white">
         <div class="shape shape-style-1 bg-gradient-default"></div>
       
-            <div class="container-lg" style="margin-left: 80px; margin-right:100 px; margin-top: 40px;">
-                <div class="row">
+            <div class="container-xxl" style="margin-left: 80px; margin-right:5 px; margin-top: 40px;">
+                <div class="row" style="margin-right: 5px;">
                     <div class="col-sm-3">
                         <div class="list-group">
-                        <button type="button" class="list-group-item list-group-item-action active">
-                          Cras justo odio
-                        </button>
-                        <button type="button" class="list-group-item list-group-item-action">Dapibus ac facilisis in</button>
-                        <button type="button" class="list-group-item list-group-item-action">Morbi leo risus</button>
-                        <button type="button" class="list-group-item list-group-item-action">Porta ac consectetur ac</button>
-                        <button type="button" class="list-group-item list-group-item-action" disabled>Vestibulum at eros</button>
-                      </div></div>
-                    <div class="col-sm-8">
-                        <div *ngFor="let question of questions" class="card mb-2"  >
+                            <button type="button" class="list-group-item list-group-item-action active">
+                                Toutes les questions
+                            </button>
+                            <button type="button" class="list-group-item list-group-item-action" (click)="getRecentQuestions()">
+                                les plus récentes
+                            </button>
+                            <button type="button" class="list-group-item list-group-item-action">les plus pertinentes</button>
+                        </div>
+                    </div>
+                    <div class="col-sm-8" >
+                        <form [formGroup]="sujetForm" action="" style="float: right">
+                            <input formControlName="sujet" matInput type="text" class="form-control"[matAutocomplete]="auto" placeholder="Sujets"  [formControl]="formControl">
+                            <mat-autocomplete #auto="matAutocomplete">
+                              <mat-option *ngFor="let sujet of filteredOptions  | async" [value]="sujet.nom">
+                                {{sujet.nom}}
+                              </mat-option>
+                            </mat-autocomplete>
+                        </form>
+                        <div *ngFor="let question of questions" class="card mb-4 "  >
                             <div class="card-body p-2 p-sm-3" [routerLink]="['/reponse-list',question.id]">
                                 <div class="media forum-item">
                                     <a href="#" data-toggle="collapse" data-target=".forum-content"><img
@@ -31,23 +40,15 @@
                                                 class="text-body font-weight-bold">{{ question.intituleQuestion}}</a>
                                         </h6>
                                         {{question.user.nomUser}}
+                                        Crée le : {{question.createdAt| date:'shortDate'}}
                                         <div *ngFor="let tag of toArray(question?.tag)">
                                             <span class="badge badge-pill badge-info text-uppercase">{{tag.nom}}</span>
                                         </div>
+
                                       
                                     </div>
                                 </div>
                                 <div style="margin-bottom: 5px; float: right">
-                                    <button class="btn btn-sm btn-2 btn-primary" type="button">
-                                        3
-                                        <span class="btn-inner--icon"><i class="fa fa-thumbs-up" aria-hidden="true"
-                                                (click)="likeConnaissance()"></i></span>
-                                    </button>
-                                    <button class="btn btn-sm btn-2 btn-danger" type="button">
-                                        3
-                                        <span class="btn-inner--icon"><i class="fa fa-thumbs-down" aria-hidden="true"
-                                                (click)="dislikeConnaissance()"></i></span>
-                                    </button>
                                     <button class="btn btn-sm btn-2 btn-info" type="button"
                                         (click)="showCommentsSection()">
                                         5

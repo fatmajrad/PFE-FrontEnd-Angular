@@ -14,6 +14,14 @@ const httpOptions = {
 
 
 export class QuestionService {
+  getQuestionsByIntitule(intitule: any) {
+    const url = "http://localhost:8000/api/questions?page=1&intituleQuestion="+intitule
+    return this.http.get<Question[]>(url);
+  }
+  getQuestionsByStatut(statut){
+    const url = "http://localhost:8000/api/questions?page=1&statut="+statut
+    return this.http.get<Question[]>(url);
+  }
  
   questions : Question[];
   emtyBody:any;
@@ -21,49 +29,43 @@ export class QuestionService {
  
   constructor(private router: Router, private http: HttpClient) { }
 
-
+  listeValidatedQuestions(){
+    const url ="http://localhost:8000/api/questions?page=1&statut=valide"
+    return this.http.get<Question[]>(url);
+  }
   
   listeQuestion(): Observable<Question[]>{
     const url ="http://localhost:8000/api/questions?page=1&brouillon=false"
     return this.http.get<Question[]>(url);
   }
 
-  listeValidatedQuestions():Observable<Question[]>{
-    const url ="http://localhost:8000/api/questions?statutValidation=true&brouillon=false"
-    return this.http.get<Question[]>(url);
-  }
-  listeInvalidQuestions():Observable<Question[]>{
-    const url ="http://localhost:8000/api/questions?statutValidation=false&brouillon=false"
-    return this.http.get<Question[]>(url);
-  }
-  
- 
+
   listMyQuestions(id:Number) {
     const url ="http://localhost:8000/api/questions?page=1&user.id="+id
     console.log(url);
     return this.http.get<Question[]>(url);
   }
 
-  listMyDrafts(id:Number) {
-    const url ="http://localhost:8000/api/questions?page=1&statutValidation=false&brouillon=true&user.id="+id
+  getMyQuestionsByStatut(statut,id){
+    const url = "http://localhost:8000/api/questions?page=1&user.id="+id+"&statut="+statut
     return this.http.get<Question[]>(url);
   }
 
-  listMyQuestionsRequest(id:Number):Observable<Question[]>{
-    const url ="http://localhost:8000/api/questions?page=1&statutValidation=true&brouillon=false&user.id="+id
-    return this.http.get<Question[]>(url);
-  }
-
-  listeMyPublishedQuestions(id:Number) {
-    const url ="http://localhost:8000/api/questions?page=1&brouillon=false&user.id="+id
+  getMyQuestionsByIntitule(intitule,id){
+    const url = "http://localhost:8000/api/questions?page=1&user.id="+id+"&intituleQuestion="+intitule
     return this.http.get<Question[]>(url);
   }
   
-  listeMyInvalidQuestions(id:Number) {
-    const url ="http://localhost:8000/api/questions?page=1&statutValidation=false&brouillon=false&user.id="+id
+ 
+  getQuestionsByDateIntervall(minDate , maxDate){
+    const url = "http://localhost:8000/api/questions/valide/"+minDate+"/"+maxDate+"/countdate"
     return this.http.get<Question[]>(url);
   }
  
+  getRecentQuestions(){
+    const url = "http://localhost:8000/api/questions/recent"
+    return this.http.get<Question[]>(url);
+  }
   
   
   
@@ -81,6 +83,7 @@ export class QuestionService {
     const url = `${this.apiURL}/${id}`;
     return this.http.put<any>(url, question, httpOptions)
   }
+  
 
   validateQuestion(id: Number) {
     const url = `${this.apiURL}/${id}` + "/validate";
@@ -98,4 +101,16 @@ export class QuestionService {
     this.emtyBody = {};
     return this.http.put(url, this.emtyBody, httpOptions);
   }
+
+  deleteQuestion(id:Number){
+    const url = `${this.apiURL}/${id}`;
+    return this.http.delete(url, httpOptions);
+  }
+
+  countAllQuestions(){
+    const url = "http://localhost:8000/api/questions/valide/count"
+    return this.http.get<Question[]>(url);
+  }
+
+  
 }

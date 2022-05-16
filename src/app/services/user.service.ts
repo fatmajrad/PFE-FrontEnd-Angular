@@ -12,29 +12,38 @@ const httpOptions = {
   providedIn: "root",
 })
 export class UserService {
+  
   apiURL: string = "http://localhost:8000/api/users";
   api:string = "http://localhost:8000";
   constructor(private http: HttpClient, private router: Router) {}
   emtyBody: any;
 
   listeUser(): Observable<User[]> {
-    return this.http.get<User[]>(this.apiURL);
+    const url="http://localhost:8000/api/users/allUsers"
+    return this.http.get<User[]>(url);
   }
 
-  addDemandeUser(user: User): Observable<User> {
-    return this.http.post<User>(this.apiURL, user, httpOptions);
+  addDemandeUser(user:any): Observable<any> {
+    return this.http.post<any>(this.apiURL, user, httpOptions);
+  }
+
+  updateUser(user:User,body){
+    const url = `${this.apiURL}/${user.id}`
+    return this.http.put(url,body,httpOptions);
   }
 
   supprimerDemandeUser(id: Number) {
     const url = `${this.apiURL}/${id}`;
     return this.http.delete(url, httpOptions);
   }
-
+ 
+  
   validerDemandeUser(id: Number) {
     const url = `${this.apiURL}/${id}` + "/validate";
     this.emtyBody = {};
     return this.http.put(url, this.emtyBody, httpOptions);
   }
+  
   refuserDemandeUser(id: Number) {
     const url = `${this.apiURL}/${id}` + "/decline";
     this.emtyBody = {};
@@ -42,8 +51,36 @@ export class UserService {
   }
 
   getUserById(id:Number){
-    const url = `${this.apiURL}${id}`;
+    const url = "http://localhost:8000/api/users?page=1&id="+id;
     console.log(url);    
     return this.http.get(url, httpOptions);
+  }
+
+  getUsersByDateIntervall(minDate , maxDate){
+    const url = "http://localhost:8000/api/users/valide/"+minDate+"/"+maxDate+"/countdate"
+    return this.http.get<User[]>(url);
+  }
+
+  countAllUsers(){
+    const url = "http://localhost:8000/api/users/valide/count"
+    return this.http.get<User[]>(url);
+  }
+
+  countUsersByStaut(statut){
+    const url = "http://localhost:8000/api/users/"+statut+"/count"
+    return this.http.get<User[]>(url);
+  }
+
+  getUsersByStaut(statut){
+    console.log(statut);
+    const url = "http://localhost:8000/api/users?page=1&statut="+statut
+    console.log(url);
+    
+    return this.http.get<User[]>(url);
+  }
+
+  getUsersByUserName(name){
+    const url="http://localhost:8000/api/users?page=1&nomUser="+name
+    return this.http.get<User[]>(url);
   }
 }

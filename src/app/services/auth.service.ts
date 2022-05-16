@@ -6,25 +6,24 @@ import { Role } from "../models/role.model";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { JwtHelperService } from "@auth0/angular-jwt";
 
-
 const httpOptions = {
   headers: new HttpHeaders({ "Content-Type": "application/json" }),
-}
+};
 
 @Injectable({
   providedIn: "root",
 })
 export class AuthService {
-  
   apiURL: string = "http://localhost:8000/api";
 
   public loggedUser: string;
   public isloggedIn: Boolean = false;
   public roles: Role[];
+  public userName: string; 
   token: string;
   private helper = new JwtHelperService();
-  statutUser : boolean;
-  id:Number = null;
+  statutUser: boolean;
+  id: Number = null;
 
   constructor(private router: Router, private http: HttpClient) {}
   login(user: User) {
@@ -38,18 +37,22 @@ export class AuthService {
   saveToken(jwt: string) {
     localStorage.setItem("jwt", jwt);
     this.token = jwt;
-    this.isloggedIn = true;
+    //
     this.decodeJWT();
   }
   decodeJWT() {
     if (this.token == undefined) return;
     const decodedToken = this.helper.decodeToken(this.token);
-    this.statutUser=decodedToken.statutValidation;
-  
-      this.roles = decodedToken.roles;
-      this.loggedUser = decodedToken.email;
-      this.id=decodedToken.id;
+    this.userName=decodedToken.name;
+    this.roles = decodedToken.roles;
+    this.loggedUser = decodedToken.email;
+    this.id = decodedToken.id;
+    if(this.isValid()|| this.isAdmin()){
+      this.isloggedIn = true;
+      localStorage.setItem("isloggedIn",String( this.isloggedIn));
+      localStorage.setItem("roles", String(this.roles));
       localStorage.setItem("isloggedIn", String(this.isloggedIn));
+    } 
   }
   loadToken() {
     this.token = localStorage.getItem("jwt");
@@ -62,32 +65,51 @@ export class AuthService {
 
   logout() {
     this.loggedUser = undefined;
-    this.id=null;
+    this.id = null;
     this.roles = undefined;
-    this.token= undefined;
+    this.token = undefined;
     this.isloggedIn = false;
-    localStorage.removeItem('jwt');
-    localStorage.removeItem('loggedUser');
-    localStorage.removeItem('isloggedIn');
-    this.router.navigate(['/login']);    
+    localStorage.removeItem("jwt");
+    localStorage.removeItem("loggedUser");
+    localStorage.removeItem("isloggedIn");
+    localStorage.removeItem("roles");
+    this.router.navigate(["/login"]);
   }
   signIn(user: User) {
-    
     this.loggedUser = user.email;
     this.isloggedIn = true;
     this.roles = user.roles;
+    if(this.isValid()){
+      localStorage.setItem("loggedUser", this.loggedUser);
+      localStorage.setItem("isloggedIn", String(this.isloggedIn));
+    }
     
-    localStorage.setItem("loggedUser", this.loggedUser);
-    localStorage.setItem("isloggedIn", String(this.isloggedIn));
-}
-  isAdmin():Boolean{
+  }
+  isAdmin(): Boolean {
     let admin: Boolean = false;
-    if (this.loggedUser=="admin@gmail.com"){
-      admin = true
+    if (this.loggedUser == "admin@gmail.com") {
+      admin = true;
     }
-    return admin
+    return admin;
+  }
+
+  isValid(): Boolean {
+    let valid: Boolean;
+    let x = 0;
+    this.roles.forEach((element) => {
+      if (String(element) === "ROLE_EDITOR") {
+        x = x + 1;
+      }
+    });
+    if (x === 0) {
+      valid = false;
+    } else {
+      valid = true;
+      x = 0;
     }
-    
+    return valid;
+  }
+
   getLoggedUser() {
     return localStorage.getItem("loggedUser");
   }
@@ -97,25 +119,17 @@ export class AuthService {
     this.isloggedIn = true;
     this.getUserRoles(login);
   }
-  
+
   getUserRoles(email: string) {
     this.getUserFromDB(email).subscribe((user: User) => {
       this.roles = user.roles;
     });
   }
 
-  getCurrentUserId():Number{
+  getCurrentUserId(): Number {
     return this.id;
   }
-  
-    isValid(){
-      let valid:Boolean = false;
-      if(this.statutUser){
-        valid= true
-      }else{
-        valid=false
-      }
-      return valid;
-    }
-  
+  getUserName(){
+      return this.userName;
+  }
 }

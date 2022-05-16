@@ -1,159 +1,378 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css"
-  integrity="sha256-46r060N2LrChLLb5zowXQ72/iKKNiw/lAmygmHExk/o=" crossorigin="anonymous" />
-<section class="section section-shaped section-lg  " style="background-color: white;">
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css"
+  integrity="sha256-46r060N2LrChLLb5zowXQ72/iKKNiw/lAmygmHExk/o="
+  crossorigin="anonymous"
+/>
+<section
+  class="section section-shaped section-lg"
+  style="background-color: white"
+>
   <div class="shape shape-style-1 bg-gradient-default"></div>
-  <h3><ngb-alert *ngIf="showAlertsucces" type="success" dismissible="true"  (close)="close()" style="margin-bottom: 5px;margin-left: 800px; margin-right:80px;" >
-    <span class="alert-inner--text"><strong>{{strong}}</strong>{{message}}</span>
-</ngb-alert>
-<ngb-alert *ngIf="showAlerterror" type="error" dismissible="true"  (close)="close()" style="margin-bottom: 5px;margin-left: 800px; margin-right:80px;" >
-    <span class="alert-inner--text"><strong>{{strong}}</strong>{{message}}</span>
-</ngb-alert>
-</h3> 
-    <h3 style="margin-left: 80px; margin-right:80px; margin-top: 50px; color:#838383;">
-      Liste des demande des questions
-    </h3>
+  
+    
    
-    <div class="card shadow m-6" style="margin-left: 80px; margin-right:80px; background-color: #eef2ff;">
-      
-      <div class="card-body" >
-        <div class="table-responsive">
-          <table class="table table-striped">
-            <thead>
-              <tr>
+  <h3>
+    <ngb-alert
+      *ngIf="showAlertsucces"
+      type="success"
+      dismissible="true"
+      (close)="close()"
+      style="margin-bottom: 5px; margin-left: 800px; margin-right: 80px"
+    >
+      <span class="alert-inner--text"
+        ><strong>{{ strong }}</strong
+        >{{ message }}</span
+      >
+    </ngb-alert>
+    <ngb-alert
+      *ngIf="showAlerterror"
+      type="error"
+      dismissible="true"
+      (close)="close()"
+      style="margin-bottom: 5px; margin-left: 800px; margin-right: 80px"
+    >
+      <span class="alert-inner--text"
+        ><strong>{{ strong }}</strong
+        >{{ message }}</span
+      >
+    </ngb-alert>
+  </h3>
+
+  <div class="row" style="margin-left: 75px; margin-top: 30px">
+    <div class="col-6 col-md-3">
+        <form [formGroup]="searchForm">
+        <div class="input-group input-group-alternative mb-2">
+          <input
+            class="form-control"
+            placeholder="Taper le nom du sujet"
+            type="text"
+            (focus)="focus1 = true"
+            (blur)="focus1 = false"
+            style="background-color: #eef2ff"
+            name="nom"
+            formControlName="intitule"
+          />
+          <button
+            class="btn btn-outline-primary"
+            (click)="getQuestionIntitule()"
+            style="margin-left: 5px"
+          >
+            Chercher
+          </button>
+        </div>
+      </form>
+
+    </div>
+    <div class="col-6 col-sm-3">
+      <select
+        class="form-control"
+        (change)="onEditClick($event.target.value)"
+        style="background-color: #eef2ff"
+      >
+        <option>Tous</option>
+        <option>Valide</option>
+        <option>Invalide</option>
+        <option>En attente</option>
+      </select>
+    </div>
+  </div>
+
+  <div
+    class="card shadow m-6"
+    style="margin-left: 80px; margin-right: 80px; background-color: white"
+  >
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
               <th>Nom User</th>
               <th>Date création</th>
               <th>Question</th>
               <th>Statut</th>
+              <th>Date Validation</th>
               <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody *ngFor="let question of questions">
-              <tr>
-                <td style="padding:auto">{{question.user?.nomUser}}</td>
-                <td>date</td>
-                <td>{{question.intituleQuestion}}</td>
-                <td><span *ngIf="question.statutValidation==true" class="badge badge-pill badge-success text-uppercase">Valide</span>
-                    <span *ngIf="question.statutValidation==false" class="badge badge-pill badge-warning text-uppercase">Non Valide</span>
-                    <span *ngIf="question.statutValidation==null " class="badge badge-pill badge-primary text-uppercase">En attente</span></td>
-                <td>
-                  <button type="button" class="btn btn-icon btn btn-sm btn-info" placement="top"   ngbTooltip="Consulter details "(click)="open(content4,detailsQuestion,question)">
-                        <i class="fa fa-eye" aria-hidden="true"></i>
-                  </button>
-                  <button  *ngIf="(question.statutValidation==false || question.statutValidation==null)" type="button" class="btn btn-icon btn btn-sm btn-success" placement="top" 
-                   ngbTooltip="Valider  Question" (click)="open(content2,acceptQuestion,question)">
-                    <i class="fa fa-check" aria-hidden="true"></i>
-                  </button>
-                  <button  *ngIf="(question.statutValidation==true || question.statutValidation==null)" type="button" class="btn btn-icon btn btn-sm btn-warning" placement="top"  
-                  ngbTooltip="Refuser  Question" (click)="open(content1,rejectQuestion,question)">
-                    <i class="fa fa-times" aria-hidden="true"></i>
-                  </button>
-                  
-                  <button type="button" class="btn btn-icon btn btn-sm btn-danger" placement="top"   ngbTooltip="Supprimer Question" (click)="open(content,delete-question,question)">
-                    <i class="fa fa-trash" aria-hidden="true"></i>
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+            </tr>
+          </thead>
+          <tbody *ngFor="let question of questions">
+            <tr>
+              <td style="padding: auto">{{ question.user?.nomUser }}</td>
+              <td>{{ question.createdAt }}</td>
+              <td>{{ question.intituleQuestion }}</td>
+              <td>
+                <span
+                  *ngIf="question.statut == 'valide'"
+                  class="badge badge-pill badge-success text-uppercase"
+                  >Valide</span
+                >
+                <span
+                  *ngIf="question.statut == 'invalide'"
+                  class="badge badge-pill badge-warning text-uppercase"
+                  >Non Valide</span
+                >
+                <span
+                  *ngIf="question.statut == 'onHold'"
+                  class="badge badge-pill badge-primary text-uppercase"
+                  >En attente</span
+                >
+              </td>
+              <td>validation date</td>
+              <td>
+                <button
+                  type="button"
+                  class="btn btn-icon btn btn-sm btn-info"
+                  placement="top"
+                  ngbTooltip="Consulter"
+                  (click)="open(content4, 'detailsQuestion', question)"
+                >
+                  <i class="fa fa-eye" aria-hidden="true"></i>
+                </button>
+                <button
+                  *ngIf="
+                    question.statut == 'invalide' || question.statut == 'onHold'
+                  "
+                  type="button"
+                  class="btn btn-icon btn btn-sm btn-success"
+                  placement="top"
+                  ngbTooltip="Valider"
+                  (click)="open(content2, 'acceptQuestion', question)"
+                >
+                  <i class="fa fa-check" aria-hidden="true"></i>
+                </button>
+                <button
+                  *ngIf="
+                    question.statut == 'valide' || question.statut == 'onHold'
+                  "
+                  type="button"
+                  class="btn btn-icon btn btn-sm btn-warning"
+                  placement="top"
+                  ngbTooltip="Refuser"
+                  (click)="open(content1, 'rejectQuestion', question)"
+                >
+                  <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+
+                <button
+                  type="button"
+                  class="btn btn-icon btn btn-sm btn-danger"
+                  placement="top"
+                  ngbTooltip="Supprimer"
+                  (click)="open(content, 'delete-question', question)"
+                >
+                  <i class="fa fa-trash" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
-    
-    <div class="row" >
-        <div class="modal fade" style="width: 700px;">
-          <button class="btn btn-block btn-primary mb-3" (click)="open(classic,'' , '')">
-           Confirmation
-          </button>
-<!------------------------------------------------------------------------------------------------------------------------------------------------->
-          <ng-template #content let-c="close" let-d="dismiss" aria-labelledby="confirm-delete">    
-            <div class="modal-header">    
-                <h4 class="modal-title" id="confirmation_delete_modal">Confirmation</h4>    
-                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">    
-                    <span aria-hidden="true">×</span>    
-                </button>    
-            </div>    
-            <div class="modal-body">    
-                 <p>Vous voulez vraiment supprimer la question?</p>
-            </div>    
-            <div class="modal-footer">    
-                <button type="button" class="btn btn-outline-primary" (click)="d('Cross click')">Annuler</button>    
-                <button type="button" class="btn btn-success" (click)="c('yes')">Supprimer</button>      
-            </div>    
-        </ng-template> 
-       </div>
-      </div>
+  </div>
 
-      <div class="row" >
-        <div class="modal fade" style="width: 700px;">
-          <button class="btn btn-block btn-primary mb-3" (click)="open(classic,'' , '')">
-           Confirmation
-          </button>
-<!-------------------------------------------------------------------------------------------------------------------------------------->     
-          <ng-template #content1 let-c="close" let-d="dismiss" aria-labelledby="confirm-rejection">    
-            <div class="modal-header">    
-                <h4 class="modal-title" id="confirmation_delete_modal">Confirmation</h4>    
-                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">    
-                    <span aria-hidden="true">×</span>    
-                </button>    
-            </div>    
-            <div class="modal-body">    
-                 <p>Vous voulez vraiment refuser la question?</p>
-            </div>    
-            <div class="modal-footer">    
-                <button type="button" class="btn btn-outline-primary" (click)="d('Cross click')">Annuler</button>    
-                <button type="button" class="btn btn-success" (click)="c('yes')">Refuser</button>      
-            </div>    
-        </ng-template> 
-       </div>
-      </div>
-
-
-  
-  <!-------------------------------------------------------------------------------------------------------------------------------------->     
-  <div class="row" >
-    <div class="modal fade" style="width: 700px;">
-      <button class="btn btn-block btn-primary mb-3" (click)="open(classic,'' , '')">
-       Confirmation
+  <div class="row">
+    <div class="modal fade" style="width: 700px">
+      <button
+        class="btn btn-block btn-primary mb-3"
+        (click)="open(classic, '', '')"
+      >
+        Confirmation
       </button>
-  <ng-template #content2 let-c="close" let-d="dismiss" aria-labelledby="confirm-accaptance">    
-    <div class="modal-header">    
-        <h4 class="modal-title" id="confirmation_delete_modal">Confirmation</h4>    
-        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">    
-            <span aria-hidden="true">×</span>    
-        </button>    
-    </div>    
-    <div class="modal-body">    
-         <p>Vous voulez vraiment valider la question?</p>
-    </div>    
-    <div class="modal-footer">    
-        <button type="button" class="btn btn-outline-primary" (click)="d('Cross click')">accepter</button>    
-        <button type="button" class="btn btn-success" (click)="c('yes')">Valider</button>      
-    </div>    
-</ng-template> 
-</div>
-</div>
+      <!------------------------------------------------------------------------------------------------------------------------------------------------->
+      <ng-template
+        #content
+        let-c="close"
+        let-d="dismiss"
+        aria-labelledby="confirm-delete"
+      >
+        <div class="modal-header">
+          <h6 class="modal-title" id="confirmation_delete_modal">
+           Confirmation
+          </h6>
+          <button
+            type="button"
+            class="close"
+            aria-label="Close"
+            (click)="d('Cross click')"
+          >
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Vous voulez vraiment supprimer la question?</p>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline-primary"
+            (click)="d('Cross click')"
+          >
+            Annuler
+          </button>
+          <button type="button" class="btn btn-success" (click)="c('yes')">
+            Supprimer
+          </button>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="modal fade" style="width: 700px">
+      <button
+        class="btn btn-block btn-primary mb-3"
+        (click)="open(classic, '', '')"
+      >
+        Confirmation
+      </button>
+      <!-------------------------------------------------------------------------------------------------------------------------------------->
+      <ng-template
+        #content1
+        let-c="close"
+        let-d="dismiss"
+        aria-labelledby="confirm-rejection"
+      >
+        <div class="modal-header">
+          <h6 class="modal-title" id="confirmation_delete_modal">
+            Confirmation
+           </h6>
+          <button
+            type="button"
+            class="close"
+            aria-label="Close"
+            (click)="d('Cross click')"
+          >
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="declineQuestionForm">
+            <div class="form-group">
+              <label for="message-text" class="col-form-label">Remarque:</label>
+              <textarea
+                formControlName="remarqueQuestion"
+                class="form-control"
+                id="message-text"
+              ></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline-primary"
+            (click)="d('Cross click')"
+          >
+            Annuler
+          </button>
+          <button type="button" class="btn btn-success" (click)="c('yes')">
+            Refuser
+          </button>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
   <!-------------------------------------------------------------------------------------------------------------------------------------->
-  <div class="row" >
-    <div class="modal fade" style="width: 700px;">
-      <button class="btn btn-block btn-primary mb-3" (click)="open(classic,'' , '')">
-       Details Questions
+  <div class="row">
+    <div class="modal fade" style="width: 700px">
+      <button
+        class="btn btn-block btn-primary mb-3"
+        (click)="open(classic, '', '')"
+      >
+        Confirmation
       </button>
-   
-      <ng-template #content4 let-c="close" let-d="dismiss" aria-labelledby="details-question">    
-        <div class="modal-header">    
-            <h4 class="modal-title" id="confirmation_delete_modal">{{currentQuestion?.intituleQuestion}}</h4>    
-            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">    
-                <span aria-hidden="true">×</span>    
-            </button>    
-        </div>    
-        <div class="modal-body">    
-            <p *ngFor="let tag of toArray(currentQuestion.tag)"><span class="badge badge-pill badge-info text-uppercase">{{tag.nom}}</span></p>
-            <p [innerHTML]="currentQuestion.descriptionQuestion">{{currentQuestion?.descriptionQuestion}} </p>    
-        </div>    
-        <div class="modal-footer">    
-            <button type="button" class="btn btn-outline-primary" (click)="d('Cross click')">Fermer</button>  
-        </div>    
-    </ng-template> 
-   </div>
+      <ng-template
+        #content2
+        let-c="close"
+        let-d="dismiss"
+        aria-labelledby="confirm-accaptance"
+      >
+        <div class="modal-header">
+          <h6 class="modal-title" id="confirmation_delete_modal">
+            Confirmation
+           </h6>
+          <button
+            type="button"
+            class="close"
+            aria-label="Close"
+            (click)="d('Cross click')"
+          >
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Vous voulez vraiment valider la question?</p>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline-primary"
+            (click)="d('Cross click')"
+          >
+            accepter
+          </button>
+          <button type="button" class="btn btn-success" (click)="c('yes')">
+            Valider
+          </button>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+  <!-------------------------------------------------------------------------------------------------------------------------------------->
+  <div class="row">
+    <div class="modal fade" style="width: 700px">
+      <button
+        class="btn btn-block btn-primary mb-3"
+        (click)="open(classic, '', '')"
+      >
+        Details Questions
+      </button>
+
+      <ng-template
+        #content4
+        let-c="close"
+        let-d="dismiss"
+        aria-labelledby="details-question"
+      >
+        <div class="modal-header">
+          <h4 class="modal-title" id="confirmation_delete_modal">
+            {{ currentQuestion?.intituleQuestion }}
+          </h4>
+          <button
+            type="button"
+            class="close"
+            aria-label="Close"
+            (click)="d('Cross click')"
+          >
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p *ngFor="let tag of toArray(currentQuestion.tag)">
+            <span class="badge badge-pill badge-info text-uppercase">{{
+             remarque
+            }}</span>
+          </p>
+          <div class="alert alert-warning" role="alert">
+            This is a warning alert—check it out!
+          </div>
+          <p [innerHTML]="currentQuestion.descriptionQuestion">
+            {{ currentQuestion?.descriptionQuestion }}
+          </p>
+          
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline-primary"
+            (click)="d('Cross click')"
+          >
+            Fermer
+          </button>
+        </div>
+      </ng-template>
+    </div>
   </div>
 </section>
+<!-------------------------------------------------------------------------------------------------------------------------->

@@ -29,7 +29,7 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="ni ni-email-83"></i></span>
                     </div>
-                    <input class="form-control" placeholder="Email" type="email" name="username" (focus)="focus=true" (blur)="focus=false" [(ngModel)]="user.username" >
+                    <input class="form-control" placeholder="Email" type="email" name="username" (focus)="focus=true" (blur)="focus=false" [(ngModel)]="user.email" >
                   </div>
                 </div>
                 <div class="form-group" [ngClass]="{'focused':focus1===true}">
@@ -64,3 +64,20 @@
     </div>
   </section>
 </main>
+<button hidden id="openModelButton" (click)="open(content)">open</button>
+<ng-template #content let-c="close" let-d="dismiss" aria-labelledby="alert-User">    
+  <div class="modal-header">       
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">    
+          <span aria-hidden="true">×</span>    
+      </button>    
+  </div>    
+  <div class="modal-body">    
+    <p>
+      Votre compte n'a pas été validé. 
+      
+    </p>
+  </div>    
+  <div class="modal-footer">    
+      <button type="button" class="btn btn-outline-primary" (click)="d('Cross click')">ok</button>    
+  </div>    
+</ng-template>

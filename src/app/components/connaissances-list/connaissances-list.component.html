@@ -21,15 +21,13 @@
             <div class="col-sm-8">
                 <div class="panel">
                     <ul class="panel-activity__list" style="background-color: white">
-                        <form action="" style="width:250px; float:right; margin-bottom:20px; ">
-                            <input matInput type="text" class="form-control"
-                            [matAutocomplete]="auto" placeholder="Sujets" style=" background-color: #eef2ff;" />
+                        <form [formGroup]="sujetForm" action="" style="float: right">
+                            <input formControlName="sujet" matInput type="text" class="form-control"[matAutocomplete]="auto" placeholder="Sujets"  [formControl]="formControl" style="backgroundColor:#9b9cdb; margin-bottom: 10px;">
                             <mat-autocomplete #auto="matAutocomplete">
-                            <mat-option *ngFor="let sujet of sujets" [value]="sujet.nom">
-                                {{ sujet.nom }}
-                            </mat-option>
-                        </mat-autocomplete>
-                        
+                              <mat-option *ngFor="let sujet of filteredOptions  | async" [value]="sujet.nom">
+                                {{sujet.nom}}
+                              </mat-option>
+                            </mat-autocomplete>
                         </form>
                         <form  class="panel-activity__status"
                             (click)="open(content1, 'addConnaissance', connaissance)">
@@ -63,11 +61,11 @@
                         <h4>Liste des connaissances:</h4>
                         <div *ngFor="let connaissance of connaissances">
                             <div class="card mb-2" style="
-                    margin-top: 20px;
-                    margin-left: 5px;
-                    margin-right: 5px;
-                    background-color: #eef2ff;
-                  ">
+                          margin-top: 20px;
+                          margin-left: 5px;
+                          margin-right: 5px;
+                          background-color: #eef2ff;
+                           ">
                                 <div class="card-body" style="padding-bottom : 0%">
                                     <li class="nav-item" ngbDropdown placement="bottom-right" style="float: right">
                                         <a class="nav-link nav-link-icon no-caret" ngbDropdownToggle
@@ -163,9 +161,28 @@
                                                 alt="User" />{{commentaire.user.nomUser}}<small
                                                 class="text-muted ml-2"></small>
                                         </h6>
+                                        <p>{{commentaire.createdAt| date: "dd/MM/yyyy"}}</p>
                                         <p style="margin-top: 2px">
                                             {{commentaire.contenu }}
                                         </p>
+                                        <div style="margin-bottom: 5px; float: right">
+                                            <button class="btn btn-sm btn-2 btn-primary" type="button">
+                                                3
+                                                <span class="btn-inner--icon"><i class="fa fa-thumbs-up" aria-hidden="true"
+                                                        (click)="likeConnaissance()"></i></span>
+                                            </button>
+                                            <button class="btn btn-sm btn-2 btn-danger" type="button">
+                                                3
+                                                <span class="btn-inner--icon"><i class="fa fa-thumbs-down"
+                                                        aria-hidden="true" (click)="dislikeConnaissance()"></i></span>
+                                            </button>
+                                            <button class="btn btn-sm btn-2 btn-info" type="button"
+                                                (click)="showCommentsSection()">
+                                                5
+                                                <span class="btn-inner--icon"><i class="fa fa-comment"
+                                                        aria-hidden="true"></i></span>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -214,7 +231,7 @@
                     Annuler
                 </button>
                 <button type="button" class="btn btn-success" (click)="c('yes')">
-                    Modifier
+                    Ajouter
                 </button>
             </div>
         </ng-template>
@@ -231,21 +248,17 @@
                     <div class="form-group">
                         <h6>Sujets:</h6>
                         <input formControlName="sujet" matInput type="text" class="form-control"
-                            [matAutocomplete]="auto" placeholder="Sujets" />
+                            [matAutocomplete]="auto" placeholder="Sujets" value="sujet.nom" />
                         <mat-autocomplete #auto="matAutocomplete">
                             <mat-option *ngFor="let sujet of sujets" [value]="sujet.nom">
                                 {{ sujet.nom }}
                             </mat-option>
                         </mat-autocomplete>
-                        <p>
-                            Quelles sont les sujets qui ont un rapport avec votre question
-                        </p>
                     </div>
                     <div class="form-group">
                         <h6>Description:</h6>
                         <quill-editor formControlName="contenu" [style]="quillEditor" aria-placeholder="Description"
                             value="currentConnaissance.contenu"></quill-editor>
-                        <p>Essayez de donner toutes les inforamtions nécessaires</p>
                     </div>
                 </form>
             </div>

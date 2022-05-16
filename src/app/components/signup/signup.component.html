@@ -4,26 +4,28 @@
     </div>
     <div class="container pt-lg-md" >
       <div class="row justify-content-center">
+        
         <div class="col-lg-5">
           <div class="card bg-secondary shadow border-0" style="background-color:#eef2ff ;">
             <div class="card-body px-lg-5 py-lg-5">
               <div class="text-center text-muted mb-4">
                 <strong>Inscription</strong>
               </div>
-              <form role="form">
+              <form role="form" [formGroup]="signUpForm">
                 <div class="form-group" [ngClass]="{'focused':focus===true}">
                   <div class="input-group input-group-alternative mb-3">
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
                     </div>
-                    <input class="form-control" placeholder="Login" type="text" (focus)="focus=true" (blur)="focus=false" name="nomUser" [(ngModel)]="newUser.nomUser"  required>
+                    
+                    <input formControlName="nomUser" class="form-control" placeholder="Login" type="text" (focus)="focus=true" (blur)="focus=false" name="nomUser"   required>
                   </div>
                   <div class="invalid-feedback">
                    Login
                   </div>
                 </div>
                 <div class="form-group">
-                  <select class="form-control" id="exampleFormControlSelect1" placeholder="Fonction" required name="fonction" [(ngModel)]="newUser.userFonction">
+                  <select formControlName="fonction" class="form-control" id="exampleFormControlSelect1" placeholder="Fonction" required name="fonction" >
                     <option>etudiant</option>
                     <option>professeur</option>
                     <option>Developpeur</option>
@@ -35,7 +37,7 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="ni ni-email-83"></i></span>
                     </div>
-                    <input class="form-control" placeholder="Email" type="email" (focus)="focus1=true" (blur)="focus1=false" required name="email" [(ngModel)]="newUser.email">
+                    <input formControlName="email" class="form-control" placeholder="Email" type="email" (focus)="focus1=true" (blur)="focus1=false" required name="email" >
                   </div>
                 </div>
                 <div class="form-group" [ngClass]="{'focused':focus2===true}">
@@ -43,7 +45,7 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
                     </div>
-                    <input class="form-control" placeholder="Mot de passe" type="password" name="password" (focus)="focus2=true" (blur)="focus2=false" required name="password" [(ngModel)]="newUser.password">
+                    <input formControlName="password" class="form-control" placeholder="Mot de passe" type="password" name="password" (focus)="focus2=true" (blur)="focus2=false" required name="password" >
                   </div>
                 </div>
                 <div class="form-group" [ngClass]="{'focused':focus2===true}">
@@ -51,7 +53,7 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
                     </div>
-                    <input class="form-control" placeholder="Confirmer Mot de passe" name="confirmPassword" type="password" (focus)="focus2=true" (blur)="focus2=false" required>
+                    <input formControlName="confirmpassword" class="form-control" placeholder="Confirmer Mot de passe" name="confirmPassword" type="password" (focus)="focus2=true" (blur)="focus2=false" required>
                   </div>
                 </div>
     
@@ -65,4 +67,22 @@
       </div>
     </div>
   </section>
+  <button hidden id="openModelButton" (click)="open(content)">open</button>
 </main>
+
+<ng-template #content let-c="close" let-d="dismiss" aria-labelledby="alert-User">    
+  <div class="modal-header">       
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">    
+          <span aria-hidden="true">×</span>    
+      </button>    
+  </div>    
+  <div class="modal-body">    
+    <p>
+      Votre demande d'inscription à ete enregisté
+      Vous allez recevoir un mail dés qu'elle soit traitée.
+    </p>
+  </div>    
+  <div class="modal-footer">    
+      <button type="button" class="btn btn-outline-primary" (click)="d('Cross click')">OK</button>    
+  </div>    
+</ng-template>

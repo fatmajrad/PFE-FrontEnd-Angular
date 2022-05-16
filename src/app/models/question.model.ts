@@ -9,8 +9,9 @@ export class Question{
    descriptionQuestion: Text;
    tag: Sujet[];
    reponses : Reponse[]; 
-   brouillon : Boolean;
-   statutValidation:Boolean;
+   statut:string;
+  remarque: String;
+  commentaire: import("c:/PFE/Pfe-Platforme de partage de connaissance/Frontend Angular/testRepo/src/app/models/commentaire.model").Commentaire;
  
   
    

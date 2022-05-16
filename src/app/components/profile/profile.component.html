@@ -1,15 +1,6 @@
 <main class="profile-page">
-  <section class="section-profile-cover section-shaped my-0">
-    <!-- Circles background -->
-    <div class="shape shape-style-1 shape-primary alpha-4">
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
+  <section class="section-profile-cover section-shaped my-0" style="background-color: black;">
+   
     <!-- SVG separator -->
     <div class="separator separator-bottom separator-skew">
       <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -31,8 +22,20 @@
             </div>
             <div class="col-lg-4 order-lg-3 text-lg-right align-self-lg-center">
               <div class="card-profile-actions py-4 mt-lg-0">
-                <a href="javascript:void(0)" class="btn btn-sm btn-info mr-4">Connect</a>
-                <a href="javascript:void(0)" class="btn btn-sm btn-default float-right">Message</a>
+                <menu>
+                  <li class="nav-item" ngbDropdown placement="bottom-right" style="float: right">
+                    <a class="nav-link nav-link-icon no-caret" ngbDropdownToggle id="nav-inner-success_dropdown_1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                      <span class="nav-link-inner--text d-lg-none">Settings</span>
+                    </a>
+                    <div>
+                    <div class="dropdown-menu-right" aria-labelledby="nav-inner-success_dropdown_1" ngbDropdownMenu>
+                    <a  class="dropdown-item">Modifier</a>
+                    <a  class="dropdown-item" >Supprimer</a> 
+                    </div>
+                    </div>
+                </li>
+                </menu>
               </div>
             </div>
             <div class="col-lg-4 order-lg-1">

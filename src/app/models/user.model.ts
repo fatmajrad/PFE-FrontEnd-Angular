@@ -6,10 +6,9 @@ export class User{
     password:string ;
     roles:Role[];
     token: any;
-    statutValidation:boolean;
+    statut:string;
     userFonction:String;
     validatedAt:Date;
-    demandedAt:Date;
-
-    
+    createdAt:Date;
+    remarque:String; 
 }
