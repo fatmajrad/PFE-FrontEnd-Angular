@@ -42,6 +42,7 @@ import { PublishQuestionComponent } from './components/publish-question/publish-
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ChartsModule } from 'ng2-charts';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
+import { UpdateProfileComponent } from './components/update-profile/update-profile.component';
 
 
 
@@ -68,6 +69,7 @@ import { ForbiddenComponent } from './forbidden/forbidden.component';
     PublishQuestionComponent,
     DashboardComponent,
     ForbiddenComponent,
+    UpdateProfileComponent,
  
     
   ],

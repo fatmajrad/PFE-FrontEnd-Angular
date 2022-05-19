@@ -39,6 +39,8 @@
   <div class="row" style="margin-left: 75px ; margin-top: 30px;">
     <div class="col-6 col-md-3">
       <form [formGroup]="searchForm">
+        <label> Nom de l'utilisateur
+        </label>
         <div class="input-group input-group-alternative mb-2">
           <input
             class="form-control"
@@ -55,6 +57,8 @@
       </form>
     </div>
     <div class="col-6 col-sm-3" >
+      <label> Statut de l'utilisateur
+      </label>
       <select class="form-control" (change)="onEditClick($event.target.value)" style="background-color: #eef2ff ;">
         <option>Tous</option>
         <option>Valide</option>
@@ -75,7 +79,7 @@
             <th>Nom</th>
             <th>Email</th>
             <th>Fonction</th>
-            <th>Inscription</th>
+            <th>Date Inscription</th>
             <th>Date Validation</th>
             <th>Statut</th>
             <th>Actions</th>
@@ -85,7 +89,7 @@
               <td style="padding: auto">{{ user.nomUser }}</td>
               <td>{{ user.email }}</td>
               <td>{{ user.userFonction }}</td>
-              <td>{{ user.createdAt  }}</td>
+              <td>{{ user.createdAt  | date: "dd/MM/yyyy"}}</td>
               <td>{{ user.validatedAt | date: "dd/MM/yyyy" }}</td>
               <td>
                 <span
@@ -111,7 +115,7 @@
                   type="button"
                   class="btn btn-icon btn btn-sm btn-success"
                   placement="top"
-                  ngbTooltip="Valiser demande User"
+                  ngbTooltip="Valider"
                   (click)="open(content2, 'acceptQuestion', user)"
                 >
                   <i class="fa fa-check" aria-hidden="true"></i>
@@ -121,7 +125,7 @@
                   type="button"
                   class="btn btn-icon btn btn-sm btn-warning"
                   placement="top"
-                  ngbTooltip="Refuser Demande User"
+                  ngbTooltip="Refuser "
                   (click)="open(content1, 'rejectQuestion', user)"
                 >
                   <i class="fa fa-times" aria-hidden="true"></i>
@@ -130,7 +134,7 @@
                   type="button"
                   class="btn btn-icon btn btn-sm btn-danger"
                   placement="top"
-                  ngbTooltip="Supprimer User"
+                  ngbTooltip="Supprimer"
                   (click)="open(content, 'delete-question', user)"
                 >
                   <i class="fa fa-trash" aria-hidden="true"></i>
@@ -139,7 +143,7 @@
                   type="button"
                   class="btn btn-icon btn btn-sm btn-info"
                   placement="top"
-                  ngbTooltip="Supprimer User"
+                  ngbTooltip="Consulter"
                   (click)="open(content4, 'view-question', user)"
                 >
                   <i class="fa fa-eye" aria-hidden="true"></i>

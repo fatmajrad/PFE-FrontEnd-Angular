@@ -39,6 +39,7 @@ export class UserComponent implements OnInit {
   initSearchForm() {
     this.searchForm= this.formBuilder.group({
       userNom: ['',Validators.required],
+      statut : []
     });
   }
   

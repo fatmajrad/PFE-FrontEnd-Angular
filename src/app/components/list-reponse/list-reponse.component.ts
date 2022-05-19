@@ -1,3 +1,4 @@
+
 import { VoteService } from './../../services/vote.service';
 
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
@@ -13,6 +14,7 @@ import { ModalDismissReasons, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Commentaire } from 'src/app/models/commentaire.model';
 import { Observable } from 'rxjs';
 import { User } from 'src/app/models/user.model';
+import { Vote } from 'src/app/models/vote.model';
 
 
 @Component({
@@ -36,33 +38,57 @@ export class ListReponseComponent implements OnInit {
   exist: boolean = false;
   currentReponses : Reponse[];
   showComments : boolean=false;
-
+  currentUserId :Number;
+  numberVotesReponse: any;
+  numberVotesCommentaire :any;
   constructor(private activatedRoute: ActivatedRoute, private reponseService: ReponseService,
     private modalService: NgbModal, private commentaireService: CommentaireService,
     private questionService: QuestionService, private formBuilder: FormBuilder,
     private authService: AuthService, private voteService: VoteService) { }
 
 
-  async ngOnInit(): Promise<void> {
+  ngOnInit() {
     this.addReponseCommentaire = this.formBuilder.group({
       reponse: [''],
       commentaire: [''],
     });
     this.getQuestion();
-  }
+    this.currentUserId= this.authService.getCurrentUserId();
+    console.log(this.currentUserId);
+   }
 
+showCommentsSection(){
+    if(this.showComments){
+      this.showComments=false;
+    }else{
+      this.showComments=true;
+    }
+  }
 
 getQuestion(){
    this.questionService.consulterQuestion(this.activatedRoute.snapshot.params.id).subscribe((response)=>{
     this.currentQuestion=response;
     this.currentReponses=this.currentQuestion.reponses;
+    this.id=response.user.id;
    }
    )
 }
 
-  canEditQuestion() {
+countNumberVotes(reponse : any, typeVote){
+  let allVotes = reponse.votes;
+  let x =0;
+  allVotes.forEach(vote => {
+    if(vote.typeVote ===typeVote){
+      x=x+1
+      
+    }
+  });
+  return x;
+}
+
+canEditQuestion() {
     if (this.authService.isloggedIn){
-      if (this.currentQuestion.user.id == this.authService.getCurrentUserId()) {
+      if (this.currentQuestion.user.id == this.currentUserId) {
         return true;
       } else {
         return false;
@@ -72,7 +98,7 @@ getQuestion(){
 
   canEditReponse(id:Number) {
     if ((this.authService.isloggedIn) &&(id)){
-      if (id == this.authService.getCurrentUserId()) {
+      if (id == this.currentUserId) {
         return true;
       } else {
         return false;
@@ -82,7 +108,7 @@ getQuestion(){
 
   canEditComment() {
     if (this.authService.isloggedIn) {
-      if (this.currentReponse.user.id == this.authService.getCurrentUserId()) {
+      if (this.currentReponse.user.id == this.currentUserId) {
         return true;
       } else {
         return false;
@@ -92,7 +118,7 @@ getQuestion(){
 
   ifAuthorized() {
     if (this.authService.isloggedIn) {
-      if (this.currentCommentaire.user.id == this.authService.getCurrentUserId()) {
+      if (this.id == this.currentUserId) {
         return true;
       } else {
         return false;
@@ -107,16 +133,16 @@ getQuestion(){
   }
 
   addReponse() {
-
     let reponse =
     {
       "contenu": this.addReponseCommentaire.get('reponse').value,
-      "user": "/api/users/" + this.authService.getCurrentUserId(),
+      "user": "/api/users/" + this.currentUserId,
       "Question": "/api/questions/" + this.currentQuestion.id
     }
     this.reponseService.addReponse(reponse).subscribe((response) => {this.getQuestion()});
 
   }
+
   updateReponse(reponse: Reponse) {
 
     this.reponseService.updateReponse(reponse, reponse.id).subscribe((response) => {this.getQuestion()});
@@ -133,7 +159,7 @@ getQuestion(){
     let commentaire =
     {
       "contenu": this.addReponseCommentaire.get('commentaire').value,
-      "user": "/api/users/" + this.authService.getCurrentUserId(),
+      "user": "/api/users/" + this.currentUserId,
       "reponse": "/api/reponses/" + id
     }
     
@@ -142,14 +168,7 @@ getQuestion(){
     });
   }
 
-  showCommentsSection(){
-    if(this.showComments){
-      this.showComments=false;
-    }else{
-      this.showComments=true;
-    }
-  }
-
+  
   publier(id:Number){
     this.questionService.publishQuestion(id).subscribe((response) => console.log(response));
   }
@@ -159,6 +178,64 @@ getQuestion(){
    }) 
    } 
 
+ 
+
+  acceptReponse(reponse){
+    let body={
+      "statut":true
+    }
+    this.reponseService.updateReponse(body,reponse.id).subscribe((response)=>{
+      console.log(reponse);
+      
+    })
+  }
+  
+/*********************************Reponse Votes system*************************************************** */
+
+   likeReponse(reponse : Reponse) {
+    this.voteService.getReponseVote(this.currentUserId,reponse.id).subscribe((response)=>{
+      if(response.length==0){
+        let vote = {
+          "typeVote": true,
+          "user": "/api/users/"+this.currentUserId,
+          "Connaissance": null,
+          "Question": null,
+          "Reponse": "api/reponses/"+reponse.id
+        }
+        this.voteService.addLike(vote).subscribe((response) => {console.log(response),
+         this.countNumberVotes(reponse,true)});
+      }else{
+        console.log("delete");
+        this.voteService.deleteVote(response[0].id);
+      }  
+    })
+  }
+  dislikeReponse(reponse:Reponse) {
+    this.voteService.getReponseVote(this.currentUserId,reponse.id).subscribe((response)=>{
+      if(response.length==0){
+        let vote = {
+          "typeVote": false,
+          "user": "/api/users/"+this.currentUserId,
+          "Connaissance": null,
+          "Question": null,
+          "Reponse": "api/reponses/"+reponse.id
+        }
+        this.voteService.addLike(vote).subscribe((response) => console.log(response));
+      }else{
+        if(response[0].typeVote==true){
+          console.log("vous aves deja un vote");
+          
+        }else{
+          console.log("delete");
+          this.voteService.deleteVote(response[0].id);
+        }
+       
+      }  
+    })
+  }
+
+
+/**********************Modal*********************************************** */
   open(content, type, reponse, commentaire) {
     this.currentReponse = reponse;
     this.currentCommentaire = commentaire;
@@ -206,6 +283,20 @@ getQuestion(){
             this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
           }
         );
+    }else if(type=='accept-reponse'){
+      this.modalService
+      .open(content, { ariaLabelledBy: "accept-reponse-modal" })
+      .result.then(
+        (result) => {
+          this.closeResult = `Closed with: ${result}`;
+          if (result === "yes") {
+            this.acceptReponse(reponse);
+          }
+        },
+        (reason) => {
+          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        }
+      );
     }
   }
   private getDismissReason(reason: any): string {
@@ -217,106 +308,6 @@ getQuestion(){
       return `with: ${reason}`;
     }
   }
-
-  getCommentaire() {
-    this.reponses = this.currentQuestion.reponses;
-    for (let i = 0; i < this.reponses.length; i++) {
-      console.log(this.reponses[i]);
-    }
-  }
-
-  async checkQuestionVote() {
-    const response = await this.voteService.getQuestionVote(this.currentQuestion.id, this.authService.getCurrentUserId()).toPromise();
-      return response.length;
-  }
-
-  async likeQuestion() {
-    console.log(this.checkQuestionVote())
-    /*if (this.checkQuestionVote()==0) {
-      const userId = this.authService.getCurrentUserId()
-      const questionId = this.currentQuestion.id;
-      let vote = {
-        "typeVote": true,
-        "user": "/api/users/" + userId,
-        "Connaissance": null,
-        "Question": "api/questions/" + questionId,
-        "Reponse": null
-      }
-      this.voteService.addLike(vote).subscribe((response) => console.log(response));;
-      console.log("okay");
-     } else {
-      console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
-
-    }*/
-  }
-  async dislikeQuestion() {
-    if (this.exist == true) {
-      const userId = this.authService.getCurrentUserId();
-      console.log(this.authService.getCurrentUserId());
-      const questionId = this.currentQuestion.id;
-      console.log(this.currentQuestion.id);
-      let vote = {
-        "typeVote": false,
-        "user": "/api/users/" + userId,
-        "Connaissance": null,
-        "Question": "api/questions/" + questionId,
-        "Reponse": null
-      }
-      this.voteService.addLike(vote).subscribe((response) => console.log(response));;
-      console.log("okay");
-    } else {
-      console.log("vote exist deja");
-
-    }
-  }
-
-
-  async checkReponseVote() {
-    const response = await this.voteService.getReponseVote(this.currentReponse.id, this.authService.getCurrentUserId()).toPromise();
-    console.log(response);
-    if (response.length > 0) {
-      this.exist = false;
-    } else if (response.length = 0) {
-      this.exist = true;
-    }
-  }
-
-  async likeReponse() {
-    //if (this.exist == true) {
-      const userId = this.authService.getCurrentUserId()
-      const reponseId = this.currentReponse.id;
-      let vote = {
-        "typeVote": true,
-        "user": "/api/users/51",
-        "Connaissance": null,
-        "Question": null,
-        "Reponse": "api/reponses/3"
-      }
-      this.voteService.addLike(vote).subscribe((response) => console.log(response));;
-      console.log("okay");
-   /* } else {
-      console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
-
-    }*/
-  }
-  async dislikeReponse() {
-    if (this.exist == true) {
-      const userId = this.authService.getCurrentUserId()
-      const reponseId = this.currentReponse.id;
-      let vote = {
-        "typeVote": false,
-        "user": "/api/users/" + userId,
-        "Connaissance": null,
-        "Question": null,
-        "Reponse": "api/reponses/" + reponseId
-      }
-      this.voteService.addLike(vote).subscribe((response) => console.log(response));;
-      console.log("okay");
-    } else {
-      console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
-    }
-  }
-
  
 }
 

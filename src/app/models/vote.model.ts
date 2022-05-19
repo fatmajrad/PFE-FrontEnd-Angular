@@ -5,4 +5,5 @@ export class Vote{
     id : Number ; 
     contenu : Text;
     user : User;
+    typeVote: Boolean;
 }

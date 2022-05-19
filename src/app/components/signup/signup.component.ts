@@ -39,57 +39,38 @@ export class SignupComponent implements OnInit {
 
   initForm() {
     this.signUpForm = this.formBuilder.group({
-      nomUser: [""],
-      email: [""],
-      fonction: [""],
-      password: [""],
+      nomUser: ["",[Validators.required, Validators.minLength(5)]],
+      email: ["",[Validators.required, Validators.minLength(5)]],
+      fonction: ["",[Validators.required]],
+      password: ["", [Validators.required, Validators.minLength(8)]],
       confirmpassword: [""],
     });
   }
-  signUpUser() {
-    let pass = this.signUpForm.get("password").value;
-    let confirmpass = this.signUpForm.get("confirmpassword").value;
-    let valide = false;
-    if (pass === confirmpass) {
-      let user = {
-        email: this.signUpForm.get("email").value,
-        password: pass,
-        nomUser: this.signUpForm.get("nomUser").value,
-        userFonction: this.signUpForm.get("fonction").value,
-      };
-      console.log(user);
-
+  signUpUser(user) {
+   
       this.userService.addDemandeUser(user).subscribe(
         (response) => {
           console.log(response);
 
           document.getElementById("openModelButton").click();
-        },
+        
+          },
         (err) => {
           this.err = 1;
         }
       );
-    } else {
-      console.log("hell");
-    }
+    
   }
 
-  getNomUser() {
-    return this.signUpForm.get("nomUser").value;
-  }
-  getPassword() {
-    return this.signUpForm.get("password").value;
-  }
-  getConfirmPass() {
-    return this.signUpForm.get("confirmpassword").value;
-  }
-  getFunction() {
-    return this.signUpForm.get("fonction").value;
-  }
-  getEmail() {
-    this.signUpForm.get("email").value;
-  }
+  passwordErrorValidator = (control: FormGroup) => {
+    const password = control.value.password;
+    const confirmedPassword = control.value.confirmedPassword;
 
+    return password !== confirmedPassword
+      ? control.get('confirmedPassword').setErrors({ passwordMismatch: true })
+      : control.get('confirmedPassword').setErrors(null);
+  }
+  
   open(content) {
     this.modalService
       .open(content, { ariaLabelledBy: "alert-User" })

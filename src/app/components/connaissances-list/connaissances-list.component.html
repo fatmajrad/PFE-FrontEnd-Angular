@@ -22,7 +22,7 @@
                 <div class="panel">
                     <ul class="panel-activity__list" style="background-color: white">
                         <form [formGroup]="sujetForm" action="" style="float: right">
-                            <input formControlName="sujet" matInput type="text" class="form-control"[matAutocomplete]="auto" placeholder="Sujets"  [formControl]="formControl" style="backgroundColor:#9b9cdb; margin-bottom: 10px;">
+                            <input formControlName="sujet" matInput type="text" class="form-control"[matAutocomplete]="auto" placeholder="Sujets"  [formControl]="formControl" style="backgroundColor:#eef2ff; margin-bottom: 10px;">
                             <mat-autocomplete #auto="matAutocomplete">
                               <mat-option *ngFor="let sujet of filteredOptions  | async" [value]="sujet.nom">
                                 {{sujet.nom}}
@@ -92,7 +92,7 @@
                                                     class="text-body font-weight-bold">{{ connaissance.user.nomUser
                                                     }}</a>
                                             </h6>
-                                            <div *ngFor="let sujet of toArray(connaissance?.sujet)">
+                                            <div *ngFor="let sujet of toArray(connaissance.sujet)">
                                                 <span class="badge badge-pill badge-info text-uppercase">{{ sujet.nom
                                                     }}</span>
                                             </div>
@@ -104,19 +104,19 @@
                                     </div>
 
                                     <div style="margin-bottom: 5px; float: right">
-                                        <button class="btn btn-sm btn-2 btn-primary" type="button">
-                                            3
+                                        <button class="btn btn-sm btn-2 btn-primary" type="button" (click)="likeConnaissance(connaissance)">
+                                           {{countNumberVotes(connaissance,true)}}
                                             <span class="btn-inner--icon"><i class="fa fa-thumbs-up" aria-hidden="true"
                                                     (click)="likeConnaissance()"></i></span>
                                         </button>
-                                        <button class="btn btn-sm btn-2 btn-danger" type="button">
-                                            3
+                                        <button class="btn btn-sm btn-2 btn-danger" type="button" (click)="dislikeConnaissance(connaissance)">
+                                            {{countNumberVotes(connaissance,false)}}
                                             <span class="btn-inner--icon"><i class="fa fa-thumbs-down"
                                                     aria-hidden="true" (click)="dislikeConnaissance()"></i></span>
                                         </button>
                                         <button class="btn btn-sm btn-2 btn-info" type="button"
                                             (click)="showCommentsSection()">
-                                            5
+                                            {{connaissance.commentaires.length}}
                                             <span class="btn-inner--icon"><i class="fa fa-comment"
                                                     aria-hidden="true"></i></span>
                                         </button>
@@ -167,20 +167,14 @@
                                         </p>
                                         <div style="margin-bottom: 5px; float: right">
                                             <button class="btn btn-sm btn-2 btn-primary" type="button">
-                                                3
+                                               countNumberVotes(commentaire,true)
                                                 <span class="btn-inner--icon"><i class="fa fa-thumbs-up" aria-hidden="true"
                                                         (click)="likeConnaissance()"></i></span>
                                             </button>
                                             <button class="btn btn-sm btn-2 btn-danger" type="button">
-                                                3
+                                                countNumberVotes(commentaire,false)
                                                 <span class="btn-inner--icon"><i class="fa fa-thumbs-down"
                                                         aria-hidden="true" (click)="dislikeConnaissance()"></i></span>
-                                            </button>
-                                            <button class="btn btn-sm btn-2 btn-info" type="button"
-                                                (click)="showCommentsSection()">
-                                                5
-                                                <span class="btn-inner--icon"><i class="fa fa-comment"
-                                                        aria-hidden="true"></i></span>
                                             </button>
                                         </div>
                                     </div>

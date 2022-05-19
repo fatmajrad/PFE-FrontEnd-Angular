@@ -66,6 +66,7 @@
                                             </a>
                                             <div class="dropdown-menu-right" aria-labelledby="nav-inner-success_dropdown_1" ngbDropdownMenu>
                                             <a class="dropdown-item" (click)="open(content,'modify-reponse',reponse,commentaire)">Modifier</a>
+                                            <a class="dropdown-item" (click)="open(content8,'accept-reponse',reponse,commentaire)">Accepter</a>
                                             <a class="dropdown-item" (click)="open(content1,'delete-reponse',reponse,commentaire)">Supprimer</a>
                                               
                                             </div>
@@ -77,15 +78,15 @@
                                         </h6>
                                         <p [innerHTML]="reponse.contenu"></p>
                                         <button class="btn btn-sm btn-2 btn-primary" type="button">
-                                            3
-                                            <span class="btn-inner--icon"><i class="fa fa-thumbs-up" aria-hidden="true" (click)="likeReponse()"></i></span>
+                                            {{countNumberVotes(reponse,true)}}
+                                            <span class="btn-inner--icon"><i class="fa fa-thumbs-up" aria-hidden="true" (click)="likeReponse(reponse)"></i></span>
                                         </button>
                                         <button class="btn btn-sm btn-2 btn-danger" type="button">
-                                            3
-                                            <span class="btn-inner--icon"><i class="fa fa-thumbs-down" aria-hidden="true" (click)="dislikeReponse()"></i></span>
+                                            {{countNumberVotes(reponse,false)}}
+                                            <span class="btn-inner--icon"><i class="fa fa-thumbs-down" aria-hidden="true" (click)="dislikeReponse(reponse)"></i></span>
                                         </button>
                                         <button   class="btn btn-sm btn-2 btn-info" type="button" (click)="showCommentsSection()">
-                                            5
+                                            {{reponse.commentaires.length}}
                                             <span class="btn-inner--icon"><i class="fa fa-comment" aria-hidden="true"></i></span>
                                         </button>
                                     </div>
@@ -171,11 +172,27 @@
             </button>    
         </div>    
         <div class="modal-body">    
-         <p>Supprimer</p>
+         <p>Vous etes sure vous voulez supprimer votre reponse? </p>
         </div>    
         <div class="modal-footer">    
             <button type="button" class="btn btn-outline-primary" (click)="d('Cross click')">Annuler</button>    
             <button type="button" class="btn btn-success" (click)="c('yes')">Supprimer</button>    
+        </div>    
+    </ng-template>
+
+    <ng-template #content8 let-c="close" let-d="dismiss" aria-labelledby="accept-reponse-modal">    
+        <div class="modal-header">    
+            <h4 class="modal-title" id="modify-reponse">Supprimer reponse</h4>    
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">    
+                <span aria-hidden="true">×</span>    
+            </button>    
+        </div>    
+        <div class="modal-body">    
+         <p>Si cette reponse vous a aidé à resoudre ce probleme merci de l'accepter</p>
+        </div>    
+        <div class="modal-footer">    
+            <button type="button" class="btn btn-outline-primary" (click)="d('Cross click')">Annuler</button>    
+            <button type="button" class="btn btn-success" (click)="c('yes')">Accepter</button>    
         </div>    
     </ng-template>
 

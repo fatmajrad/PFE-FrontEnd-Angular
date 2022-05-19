@@ -31,6 +31,12 @@ export class VoteService {
       return this.http.get<Vote[]>(url, httpOptions);
     }
 
+    getConnaissanceVote(idUser:Number,idConnaissance:Number): Observable<Vote[]>{
+      let url="http://localhost:8000/api/votes?page=1&user.id="+idUser+"&Connaissance.id="+idConnaissance;
+      console.log(url);
+      return this.http.get<Vote[]>(url, httpOptions);
+    }
+
 
     addLike(vote: any){
       console.log(vote);

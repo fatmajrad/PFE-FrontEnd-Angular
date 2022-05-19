@@ -36,7 +36,7 @@ export class PublishQuestionComponent implements OnInit {
   }
 
   initForm(x) {
-    console.log(x);
+  
     let titre:String = x.intituleQuestion;
     let description : String = x.descriptionQuestion; 
     let sujets : Sujet[] = x.tag;

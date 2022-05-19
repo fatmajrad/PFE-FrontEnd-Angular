@@ -183,7 +183,6 @@ export class DashboardComponent implements OnInit {
       this.questions = questions;
       this.questionsDate = this.questions.map((data : any)=>data.createdAt);
       this.questionsTotal = this.questions.map((data : any)=> data.total);
-      
       this.connaissanceService.getConnaissancesByDateIntervall(formattedminDate,formattedmaxDate).subscribe(connaissances => {
        
         this.connaissances = connaissances;

@@ -93,6 +93,19 @@ export class QuestionsListComponent implements OnInit {
     });
   }
 
+  countNumberVotes(reponse : any, typeVote){
+    let allVotes = reponse.votes;
+    console.log(allVotes);
+    let x =0;
+    allVotes.forEach(vote => {
+      if(vote.typeVote ===typeVote){
+        x=x+1
+     
+      }
+    });
+    return x;
+  }
+
   /*onSelect(question){
     console.log(question);
     this.router.navigate(['reponse-list/'+question.id]);

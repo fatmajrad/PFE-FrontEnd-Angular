@@ -1,9 +1,11 @@
+import { QuestionService } from './../../services/question.service';
 import { Component, OnInit } from '@angular/core';
+import { Question } from 'src/app/models/question.model';
 
 @Component({
     selector: 'app-home',
     templateUrl: './home.component.html',
-    styleUrls: ['./home.component.scss']
+    styleUrls: ['./home.component.css']
 })
 
 export class HomeComponent implements OnInit {
@@ -15,7 +17,21 @@ export class HomeComponent implements OnInit {
 
     focus;
     focus1;
-    constructor() { }
+    questions : Question[]
+    constructor(private questionService :QuestionService) { }
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.getRecentQuestions();
+    }
+
+    getRecentQuestions() {
+        this.questionService.getRecentQuestions().subscribe((questions) => {
+          this.questions = questions;
+        });
+      }
+
+      toArray(answers: object) {
+        return Object.keys(answers).map((key) => answers[key]);
+      }
+    
 }

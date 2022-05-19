@@ -20,6 +20,7 @@ import { UpdateQuestionComponent } from './components/update-question/update-que
 import { ListValidationQuestionsComponent } from './components/list-validation-questions/list-validation-questions.component';
 import { PublishQuestionComponent } from './components/publish-question/publish-question.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { UpdateProfileComponent } from './components/update-profile/update-profile.component';
 
 const routes: Routes =[
     { path: 'home',             component: HomeComponent },
@@ -39,6 +40,7 @@ const routes: Routes =[
     { path: 'mes-questions',          component: MesQuestionsComponent},
     { path: 'publish-question/:id',          component: PublishQuestionComponent},
     { path: 'dashboard',          component: DashboardComponent},
+    { path: 'update-profile/:id',          component: UpdateProfileComponent},
 ];
 
 @NgModule({

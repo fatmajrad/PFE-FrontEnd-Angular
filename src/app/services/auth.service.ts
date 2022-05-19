@@ -27,6 +27,8 @@ export class AuthService {
 
   constructor(private router: Router, private http: HttpClient) {}
   login(user: User) {
+    console.log(user);
+    
     return this.http.post<User>(this.apiURL + "/login", user);
   }
 

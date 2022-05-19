@@ -133,8 +133,11 @@ export class AddQuestionComponent implements OnInit {
     return true;
   }
 
+  getActivityByid(this){
+
+  }
+
   AjouterQuestion() {
-    console.log(this.authService.getCurrentUserId());
     let question = {
       "intituleQuestion": this.addQuestionForm.get('intituleQuestion').value,
       "descriptionQuestion": this.addQuestionForm.get('descriptionQuestion').value,

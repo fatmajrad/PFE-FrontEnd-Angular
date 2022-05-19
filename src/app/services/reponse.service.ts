@@ -22,7 +22,7 @@ export class ReponseService {
     return this.http.post<any>(this.apiURL, reponse, httpOptions);
   }
 
-  updateReponse(reponse: Reponse,id:Number) {
+  updateReponse(reponse: any,id:Number) {
     const url = `${this.apiURL}/${id}`;
     return this.http.put<any>(url, reponse, httpOptions)
   }

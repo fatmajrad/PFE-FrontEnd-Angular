@@ -1,0 +1,47 @@
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" />
+<main>
+    <section class="section section-shaped section-lg">
+        <div class="shape shape-style-1" style="background-color: #eef2ff">
+        <!--<span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>-->
+        </div>
+        <div class="container">
+            <div class="card card-user ">
+                <div class="card-body">
+                    <form [formGroup]="updateProfileForm">
+                        <div class="form-group">
+                            <label for="exampleFormControlInput1">Login</label>
+                            <input formControlName="userName"  class="form-control" id="exampleFormControlInput1" />
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleFormControlInput1">Email address</label>
+                            <input formControlName="email"  class="form-control" id="exampleFormControlInput1" />
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleFormControlInput1">Fonction</label>
+                            <input formControlName="fonction"  class="form-control" id="exampleFormControlInput1" />
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleFormControlInput1">Sujets intrested in</label>
+                            <input formControlName="subjects" class="form-control" id="exampleFormControlInput1" />
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleFormControlInput1">Description</label>
+                            <quill-editor formControlName="description"></quill-editor>
+                        </div>
+                        <div style="float:right;">
+                        <button class ="btn btn-outline-primary">Annuler</button>
+                        <button class="btn btn-success" (click)="updateProfile()">Modifier</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
