@@ -25,7 +25,7 @@ export class HomeComponent implements OnInit {
     }
 
     getRecentQuestions() {
-        this.questionService.getRecentQuestions().subscribe((questions) => {
+        this.questionService.listeValidatedQuestions().subscribe((questions) => {
           this.questions = questions;
         });
       }

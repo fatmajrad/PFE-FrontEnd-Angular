@@ -4,70 +4,94 @@
 <main>
     <section class="section section-shaped section-lg" style="background-color: white">
         <div class="shape shape-style-1 bg-gradient-default"></div>
-      
-            <div class="container-xxl" style="margin-left: 80px; margin-right:5 px; margin-top: 40px;">
-                <div class="row" style="margin-right: 5px;">
-                    <div class="col-sm-3">
-                        <div class="list-group">
-                            <button type="button" class="list-group-item list-group-item-action active">
-                                Toutes les questions
-                            </button>
-                            <button type="button" class="list-group-item list-group-item-action" (click)="getRecentQuestions()">
-                                les plus récentes
-                            </button>
-                            <button type="button" class="list-group-item list-group-item-action">les plus pertinentes</button>
-                        </div>
+
+        <div class="container-xxl" style="margin-left: 80px; margin-right:5 px; margin-top: 40px;">
+            <div class="row" style="margin-right: 5px;">
+                <div class="col-sm-3">
+                    <div class="list-group">
+                        <button type="button" class="list-group-item list-group-item-action active">
+                            Toutes les questions
+                        </button>
+                        <button type="button" class="list-group-item list-group-item-action"
+                            (click)="getRecentQuestions()">
+                            les plus récentes
+                        </button>
+                        <button type="button" class="list-group-item list-group-item-action">les plus
+                            pertinentes</button>
                     </div>
-                    <div class="col-sm-8" >
-                        <form [formGroup]="sujetForm" action="" style="float: right">
-                            <input formControlName="sujet" matInput type="text" class="form-control"[matAutocomplete]="auto" placeholder="Sujets"  [formControl]="formControl">
-                            <mat-autocomplete #auto="matAutocomplete">
-                              <mat-option *ngFor="let sujet of filteredOptions  | async" [value]="sujet.nom">
-                                {{sujet.nom}}
-                              </mat-option>
-                            </mat-autocomplete>
-                        </form>
-                        <div *ngFor="let question of questions" class="card mb-4 "  >
-                            <div class="card-body p-2 p-sm-3" [routerLink]="['/reponse-list',question.id]">
-                                <div class="media forum-item">
-                                    <a href="#" data-toggle="collapse" data-target=".forum-content"><img
-                                            src="https://bootdey.com/img/Content/avatar/avatar1.png"
-                                            class="mr-3 rounded-circle" width="50" alt="User" /></a>
-                                    <div class="media-body">
-                                        
-                                        <h6>
-                                            <a href="#" data-toggle="collapse" data-target=".forum-content"
-                                                class="text-body font-weight-bold">{{ question.intituleQuestion}}</a>
-                                        </h6>
-                                        {{question.user.nomUser}}
-                                        Crée le : {{question.createdAt| date:'shortDate'}}
-                                        <div *ngFor="let tag of toArray(question?.tag)">
-                                            <span class="badge badge-pill badge-info text-uppercase">{{tag.nom}}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div style="margin-bottom: 5px; float: right">
-                                    <button class="btn btn-sm btn-2 btn-info" type="button">
-                                        {{question.reponses.length}}
-                                        <span class="btn-inner--icon"><i class="fa fa-comment"
-                                                aria-hidden="true"></i></span>
+                </div>
+                <div class="col-sm-8">
+                    <div class="panel">
+                        <ul class="panel-activity__list" style="background-color: white">
+                            <form [formGroup]="sujetForm" action="" style="float: right">
+                                <div class="formGroup" style="display:flex;margin-bottom:10px">
+                                    <input formControlName="sujet" matInput type="text" class="form-control"
+                                        [matAutocomplete]="auto" placeholder="Sujets" [formControl]="formControl"
+                                        style="background-color:#eef2ff">
+                                    <mat-autocomplete #auto="matAutocomplete"
+                                        (optionSelected)="getConnaissancesBySujet($event.option.value)">
+                                        <mat-option *ngFor="let sujet of filteredOptions  | async" [value]="sujet.nom">
+                                            {{sujet.nom}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <button class="btn btn-sm btn-info" style="margin-left:10px"
+                                        (click)="getQuestions()">
+                                        Reset
                                     </button>
                                 </div>
+                            </form>
+
+
+                            <h4>Liste des Questions:</h4>
+                            <div *ngFor="let question of questions" class="card mb-8 " style="margin-top:20px">
+                                <div class="card-body p-2 p-sm-3" [routerLink]="['/reponse-list',question.id]"
+                                    style="background-color:#eef2ff;">
+                                    <div class="media forum-item">
+                                        <a href="#" data-toggle="collapse" data-target=".forum-content"><img
+                                                src="https://bootdey.com/img/Content/avatar/avatar1.png"
+                                                class="mr-3 rounded-circle" width="50" alt="User" /></a>
+                                        <div class="media-body">
+
+                                            <h6>
+                                                <a href="#" data-toggle="collapse" data-target=".forum-content"
+                                                    class="text-body font-weight-bold">{{
+                                                    question.intituleQuestion}}</a>
+                                            </h6>
+                                            {{question.user.nomUser}}
+                                            Crée le : {{question.createdAt| date:'shortDate'}}
+                                            <div *ngFor="let tag of toArray(question?.tag)">
+                                                <span
+                                                    class="badge badge-pill badge-info text-uppercase">{{tag.nom}}</span>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                    <div style="margin-bottom: 5px; float: right">
+                                        <button class="btn btn-sm btn-2 btn-info" type="button"
+                                            (click)="showCommentsSection()">
+                                            5
+                                            <span class="btn-inner--icon"><i class="fa fa-comment"
+                                                    aria-hidden="true"></i></span>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        </ul>
                     </div>
-                  
-                  </div>
-              
+                </div>
+
+            </div>
+
             <div class="main-body p-0">
-               
+
                 <div class="inner-main">
                     <!-- Inner main header -->
-                    
+
                     <!-- /Inner main header -->
-                    
-                           
-                       
+
+
+
 
                     <ul class="pagination pagination-sm pagination-circle justify-content-center mb-0">
                         <li class="page-item disabled">

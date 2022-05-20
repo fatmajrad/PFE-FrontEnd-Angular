@@ -76,6 +76,26 @@ export class QuestionsListComponent implements OnInit {
     )
   }
 
+  getQuestions(){
+    this.questionService.listeValidatedQuestions().subscribe((questions) => {
+      this.questions = questions;
+    });
+  }
+  getConnaissancesBySujet(sujetNom){
+    console.log(sujetNom);
+    let connaissancessSujet: Question []= [];;
+      this.questions.forEach(connaissance => {
+        connaissance.tag.forEach(element => {
+          if(element.nom==sujetNom){
+            connaissancessSujet.push(connaissance)
+          }
+        });
+      });
+   
+   this.questions= connaissancessSujet
+  }
+
+
   toArray(answers: object) {
     return Object.keys(answers).map((key) => answers[key]);
   }

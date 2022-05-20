@@ -34,7 +34,8 @@
               "./node_modules/quill/dist/quill.snow.css"
             ],
             "scripts": [   
-              "./node_modules/quill/dist/quill.min.js"
+              "./node_modules/quill/dist/quill.min.js",
+              "node_modules/jquery/dist/jquery.min.js"
             ]
           },
           "configurations": {

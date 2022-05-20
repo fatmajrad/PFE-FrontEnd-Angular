@@ -76,9 +76,8 @@
       <div class="table-responsive">
         <table class="table table-striped">
           <tr>
-            <th>Nom</th>
+            <th>Login</th>
             <th>Email</th>
-            <th>Fonction</th>
             <th>Date Inscription</th>
             <th>Date Validation</th>
             <th>Statut</th>
@@ -88,7 +87,6 @@
             <tr>
               <td style="padding: auto">{{ user.nomUser }}</td>
               <td>{{ user.email }}</td>
-              <td>{{ user.userFonction }}</td>
               <td>{{ user.createdAt  | date: "dd/MM/yyyy"}}</td>
               <td>{{ user.validatedAt | date: "dd/MM/yyyy" }}</td>
               <td>
@@ -125,7 +123,7 @@
                   type="button"
                   class="btn btn-icon btn btn-sm btn-warning"
                   placement="top"
-                  ngbTooltip="Refuser "
+                  ngbTooltip="Refuser"
                   (click)="open(content1, 'rejectQuestion', user)"
                 >
                   <i class="fa fa-times" aria-hidden="true"></i>

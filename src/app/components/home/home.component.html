@@ -1,22 +1,141 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css"
-    integrity="sha256-46r060N2LrChLLb5zowXQ72/iKKNiw/lAmygmHExk/o=" crossorigin="anonymous" />
+  integrity="sha256-46r060N2LrChLLb5zowXQ72/iKKNiw/lAmygmHExk/o=" crossorigin="anonymous" />
 
 <main>
-    <section class="section section-shaped section-lg" style="background-color: white;margin-left: 80px; margin-right:5 px; margin-top: 40px;">
-        <div class="container">
-            <div class="wrapper">
-                <div class="blog_post">
-                  <div class="img_pod">
-                    <img src="https://pbs.twimg.com/profile_images/890901007387025408/oztASP4n.jpg" alt="random image">
-                  </div>
-                  <div class="container_copy">
-                    <h3>12 January 2019</h3>
-                    <h1>CSS Positioning</h1>
-                    <p>The position property specifies the type of positioning method used for an element (static, relative, absolute, fixed, or sticky).</p>
-                  </div>
-                  <a class="btn_primary" href='#'>Read More</a>
-                </div>
-              </div>
+  <section class="section section-shaped section-lg"
+    style="background-color: white;margin-left: 80px; margin-right:5 px; margin-top: 40px;">
+    <div class="shape shape-style-1 bg-gradient-default"></div>
+    <div class="col px-0">
+      <div class="row align-items-center justify-content-center">
+        <div class="col-lg-6 text-center">
+          <img src="./assets/img/brand/logo.png" style="width: 150px;" class="img-fluid">
+          <h2 class="mb-0">Where your view is right.</h2>
+          <div class="btn-wrapper mt-5">
+            <a href="https://www.creative-tim.com/product/argon-design-system-angular?ref=adsa-index-header"
+              class="btn btn-lg btn-primary">
+              <span class="btn-inner--icon"><i class="fa fa-share-square"></i></span>
+              <span class="btn-inner--text"> Share something</span>
+            </a>
+            <a href="https://github.com/creativetimofficial/argon-design-system-angular?ref=adsa-index-header"
+              class="btn btn-lg btn-default" target="_blank">
+              <span class="btn-inner--icon"><i class="fa fa-question-circle-o"></i></span>
+              <span class="btn-inner--text"> Q
+                <span style="color:lightblue;">&</span> A</span>
+            </a>
+          </div>
+          <div class="mt-5">
+            <small class="text-white font-weight-bold mb-0 mr-2">proudly coded by</small>
+            <img src="./assets/img/brand/fatma.jpg" style="height: 28px;" class="img-fluid rounded-circle shadow">
+            <small class="text-white font-weight-bold mb-0 mr-2"> Amazing Fatouma</small>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <h2 style="margin-bottom: 20px;"> Les dernieres questions</h2>
+      </div>
+      
+      <div class="container">
+        <div class="card">
+          
+          <div class="card__body">
+            <span class="tag tag-blue">Technology</span>
+            <h4>What's new in 2022 Tech</h4>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi perferendis molestiae non nemo doloribus. Doloremque, nihil! At ea atque quidem!</p>
+          </div>
+          <div class="card__footer">
+            <div class="user">
+              <img src="https://i.pravatar.cc/40?img=1" alt="user__image" class="user__image">
+              <div class="user__info">
+                <h5>Jane Doe</h5>
+                <small>2h ago</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          
+          <div class="card__body">
+            <span class="tag tag-brown">Food</span>
+            <h4>Delicious Food</h4>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi perferendis molestiae non nemo doloribus. Doloremque, nihil! At ea atque quidem!</p>
+          </div>
+          <div class="card__footer">
+            <div class="user">
+              <img src="https://i.pravatar.cc/40?img=2" alt="user__image" class="user__image">
+              <div class="user__info">
+                <h5>Jony Doe</h5>
+                <small>Yesterday</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          
+        <div class="card__body">
+            <span class="tag tag-red">Automobile</span>
+            <h4>Race to your heart content</h4>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi perferendis molestiae non nemo doloribus. Doloremque, nihil! At ea atque quidem!</p>
+          </div>
+          <div class="card__footer">
+            <div class="user">
+              <img src="https://i.pravatar.cc/40?img=3" alt="user__image" class="user__image">
+              <div class="user__info">
+                <h5>John Doe</h5>
+                <small>2d ago</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+</div>
+
+    <div class="container"  style="margin-left: 80px; margin-right:5 px; margin-top: 40px;">
+         <div class="row">
+          <h4>Les dernieres connaissances</h4>
+         </div>
+    </div>
+    <div class="container">
+      <div  *ngFor="let n of [1,2,3]"class="card col-md-8">
+        <div class="card__header">
+        </div>
+        <div class="card__body">
+          <h4>What's new in 2022 Tech</h4>
+          <span class="tag tag-red">Technology</span>
+        </div>
+        <div class="card__footer">
+          <div>
+            4 reponses
+          </div>
+          <div class="user">
+            <img src="https://i.pravatar.cc/40?img=1" alt="user__image" class="user__image">
+            <div class="user__info">
+              <h5>Jane Doe</h5>
+              <small>2h ago</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+     <div class="row">
+      <h4> Les sujets les pllus populaires</h4>
+     </div>
+     <div class="container "  style="margin-left:100px;margin-right:100px">
+      <div  *ngFor="let n of [1,2,3,4]"class="card col-md-4 ">
+        <div class="card__header">
+        </div>
+        <div class="card__body">
+          <h3>Symfony</h3>
+        </div>
+        <div class="card__footer">
+         <button  class="btn btn-sm btn-primary" type="button"> Connaissances</button>
+         <btn  class="btn btn-sm btn-default" type="button">Questions</btn>
+        </div>
+     </div>
+    </div>
+  </div>
+  </section>
 </main>

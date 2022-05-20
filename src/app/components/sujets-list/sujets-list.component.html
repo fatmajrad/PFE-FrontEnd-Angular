@@ -45,6 +45,8 @@
             </mat-card-title>
           </mat-card-header>
           <mat-card-content (click)="open(content4,'detailSujet',sujet)" >
+            <p>{{
+              (sujet.descriptionSujet.length>40)? (sujet.descriptionSujet | slice:0:40)+'..':(sujet.descriptionSujet)}}</p>
           </mat-card-content>
           <mat-card-actions style="float:inline-end;" class="col-md-12 text-center">
             <button class="btn btn-sm btn-primary" type="button">Questions</button>

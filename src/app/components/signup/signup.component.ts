@@ -40,35 +40,47 @@ export class SignupComponent implements OnInit {
   initForm() {
     this.signUpForm = this.formBuilder.group({
       nomUser: ["",[Validators.required, Validators.minLength(5)]],
-      email: ["",[Validators.required, Validators.minLength(5)]],
+      email: ["",[Validators.required, Validators.minLength(10)]],
       fonction: ["",[Validators.required]],
       password: ["", [Validators.required, Validators.minLength(8)]],
-      confirmpassword: [""],
+      confirmpassword: ["",[Validators.required]],
     });
   }
-  signUpUser(user) {
-   
-      this.userService.addDemandeUser(user).subscribe(
+  signUpUser() {
+    let user= {
+      "email": this.signUpForm.get('email').value,
+      "password":  this.signUpForm.get('password').value,
+      "nomUser":  this.signUpForm.get('nomUser').value,
+      "userFonction":  this.signUpForm.get('fonction').value,
+    }
+    console.log(user);
+    
+    this.userService.addDemandeUser(user).subscribe(
         (response) => {
           console.log(response);
-
           document.getElementById("openModelButton").click();
-        
           },
         (err) => {
           this.err = 1;
         }
       );
-    
+  }
+
+  PwdType: boolean;
+  PwdConfirmedType: boolean;
+  toggleFieldTextType(value) {
+    value === 'pwd'
+      ? (this.PwdType = !this.PwdType)
+      : (this.PwdConfirmedType = !this.PwdConfirmedType);
   }
 
   passwordErrorValidator = (control: FormGroup) => {
     const password = control.value.password;
-    const confirmedPassword = control.value.confirmedPassword;
+    const confirmpassword = control.value.confirmpassword;
 
-    return password !== confirmedPassword
-      ? control.get('confirmedPassword').setErrors({ passwordMismatch: true })
-      : control.get('confirmedPassword').setErrors(null);
+    return password !== confirmpassword
+      ? control.get('confirmpassword').setErrors({ passwordMismatch: true })
+      : control.get('confirmpassword').setErrors(null);
   }
   
   open(content) {
