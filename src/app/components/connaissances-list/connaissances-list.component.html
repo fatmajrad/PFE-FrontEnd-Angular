@@ -22,7 +22,7 @@
                 <div class="panel">
                     <ul class="panel-activity__list" style="background-color: white">
                         <form [formGroup]="sujetForm" action="" style="float: right">
-                            <input formControlName="sujet" matInput type="text" class="form-control"[matAutocomplete]="auto" placeholder="Sujets"  [formControl]="formControl" style="backgroundColor:#eef2ff; margin-bottom: 10px;">
+                            <input formControlName="sujet" matInput type="text" class="form-control"[matAutocomplete]="auto" placeholder="Sujets"  [formControl]="formControl" style="background-Color:#eef2ff; margin-bottom: 10px;">
                             <mat-autocomplete #auto="matAutocomplete">
                               <mat-option *ngFor="let sujet of filteredOptions  | async" [value]="sujet.nom">
                                 {{sujet.nom}}
