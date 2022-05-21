@@ -18,61 +18,19 @@
                             pertinentes</button>
                     </div>
                 </div>
-<<<<<<< HEAD
             
             <div class="col-sm-8">
                 <div class="panel">
                     <ul class="panel-activity__list" style="background-color: white">
                         <form [formGroup]="sujetForm" action="" style="float: right">
-                            <input formControlName="sujet" matInput type="text" class="form-control"[matAutocomplete]="auto" placeholder="Sujets"  [formControl]="formControl" style="background-Color:#eef2ff; margin-bottom: 10px;">
-                            <mat-autocomplete #auto="matAutocomplete">
-                              <mat-option *ngFor="let sujet of filteredOptions  | async" [value]="sujet.nom">
-                                {{sujet.nom}}
-                              </mat-option>
-                            </mat-autocomplete>
-                        </form>
-                        <form  class="panel-activity__status"
-                            (click)="open(content1, 'addConnaissance', connaissance)">
-                            <textarea name="user_activity" placeholder="Share what you've been up to..."
-                                class="form-control"></textarea>
-                            <div class="actions">
-                                <div class="btn-group">
-                                    <button type="button" class="btn-link" title="" data-toggle="tooltip"
-                                        data-original-title="Post an Image">
-                                        <i class="fa fa-image"></i>
-                                    </button>
-                                    <button type="button" class="btn-link" title="" data-toggle="tooltip"
-                                        data-original-title="Post an Video">
-                                        <i class="fa fa-video-camera"></i>
-                                    </button>
-                                    <button type="button" class="btn-link" title="" data-toggle="tooltip"
-                                        data-original-title="Post an Idea">
-                                        <i class="fa fa-lightbulb-o"></i>
-                                    </button>
-                                    <button type="button" class="btn-link" title="" data-toggle="tooltip"
-                                        data-original-title="Post an Question">
-                                        <i class="fa fa-question-circle-o"></i>
-=======
-
-                <div class="col-sm-8">
-                    <div class="panel">
-                        <ul class="panel-activity__list" style="background-color: white">
-                            <form [formGroup]="sujetForm" action="" style="float: right">
-                                <div class="formGroup" style="display:flex;margin-bottom:10px">
-                                <input formControlName="sujet" matInput type="text"
-                                class="form-control"
-                                [matAutocomplete]="auto" placeholder="Sujets" [formControl]="formControl"
-                                
-                                style="background-color:#eef2ff">
-                                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="getConnaissancesBySujet($event.option.value)">
-                                <mat-option *ngFor="let sujet of filteredOptions  | async" [value]="sujet.nom" >
-                                    {{sujet.nom}}
-                                </mat-option>
+                                <input formControlName="sujet" matInput type="text" class="form-control"
+                                    [matAutocomplete]="auto" placeholder="Sujets" [formControl]="formControl"
+                                    style="background-Color:#eef2ff; margin-bottom: 10px;">
+                                <mat-autocomplete #auto="matAutocomplete">
+                                    <mat-option *ngFor="let sujet of filteredOptions  | async" [value]="sujet.nom">
+                                        {{sujet.nom}}
+                                    </mat-option>
                                 </mat-autocomplete>
-                                <button class="btn btn-sm btn-info" style="margin-left:10px" (click)="getConnaissances()">
-                                    Reset
-                                </button>
-                                </div>
                             </form>
                             <form class="panel-activity__status"
                                 (click)="open(content1, 'addConnaissance', connaissance)">
@@ -97,11 +55,6 @@
                                             <i class="fa fa-question-circle-o"></i>
                                         </button>
                                     </div>
-                                    <button type="submit" class="btn btn-sm btn-rounded btn-info">
-                                        Partager
->>>>>>> master
-                                    </button>
-                                </div>
                             </form>
 
                             <h4>Liste des connaissances:</h4>

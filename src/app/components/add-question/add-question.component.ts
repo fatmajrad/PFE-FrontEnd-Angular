@@ -5,13 +5,7 @@ import { Question } from "src/app/models/question.model";
 import { Sujet } from "src/app/models/sujet.model";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { AuthService } from "src/app/services/auth.service";
-import {
-  debounceTime,
-  distinctUntilChanged,
-  map,
-  startWith,
-  switchMap,
-} from "rxjs/operators";
+import { debounceTime, distinctUntilChanged, map, startWith, switchMap} from "rxjs/operators";
 import { MatTableDataSource } from "@angular/material/table";
 import { Router } from "@angular/router";
 import { ModalDismissReasons, NgbModal } from "@ng-bootstrap/ng-bootstrap";
