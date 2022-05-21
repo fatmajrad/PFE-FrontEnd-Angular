@@ -43,6 +43,9 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ChartsModule } from 'ng2-charts';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
 import { UpdateProfileComponent } from './components/update-profile/update-profile.component';
+import { HomeBestSubjectsComponent } from './components/home-best-subjects/home-best-subjects.component';
+import { HomeLatestQuestionsComponent } from './components/home-latest-questions/home-latest-questions.component';
+import { HomeLatestConnaissancesComponent } from './components/home-latest-connaissances/home-latest-connaissances.component';
 
 
 
@@ -70,6 +73,9 @@ import { UpdateProfileComponent } from './components/update-profile/update-profi
     DashboardComponent,
     ForbiddenComponent,
     UpdateProfileComponent,
+    HomeBestSubjectsComponent,
+    HomeLatestQuestionsComponent,
+    HomeLatestConnaissancesComponent,
  
     
   ],

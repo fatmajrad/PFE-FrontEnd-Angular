@@ -1,4 +1,5 @@
 <main class="profile-page">
+  
   <section class="section-profile-cover section-shaped my-0" style="background-color: rgb(7, 6, 72);">
    
     <!-- SVG separator -->
@@ -41,27 +42,25 @@
             <div class="col-lg-4 order-lg-1">
               <div class="card-profile-stats d-flex justify-content-center">
                 <div>
-                  <span class="heading">22</span>
-                  <span class="description">Friends</span>
+                  <span class="heading">{{currentUser.connaissances.length}}</span>
+                  <span class="description">Connaissances</span>
                 </div>
                 <div>
-                  <span class="heading">10</span>
-                  <span class="description">Photos</span>
+                  <span class="heading">{{currentUser.questions.length}}</span>
+                  <span class="description">Questions</span>
                 </div>
                 <div>
-                  <span class="heading">89</span>
-                  <span class="description">Comments</span>
+                  <span class="heading">{{currentUser.reponses.length}}</span>
+                  <span class="description">Réponses</span>
                 </div>
               </div>
             </div>
           </div>
           <div class="text-center mt-5">
             <h3>{{nomUser}}
-              <span class="font-weight-light">, 27</span>
             </h3>
-            <div class="h6 font-weight-300"><i class="ni location_pin mr-2"></i></div>
-            <div class="h6 mt-4"><i class="ni business_briefcase-24 mr-2"></i>{{fonction}}</div>
-            <div *ngFor="let topic of toArray(subjects)"><i class="ni education_hat mr-2"></i> 
+            <div><i class="ni business_briefcase-24 mr-2"></i>{{userFonction}}</div>
+            <div *ngFor="let topic of toArray(subjects)" style="margin-top:5 px;"><i class="ni education_hat mr-2"></i> 
               <span class="badge badge-pill badge-info text-uppercase">{{topic.nom}}</span>
             </div>
           </div>
@@ -76,7 +75,7 @@
       </div>
     </div>
   </section>
-
+  
   <ng-template #content let-c="close" let-d="dismiss" aria-labelledby="update-profile">    
     <div class="modal-header">    
         <h4 class="modal-title" id="modify-sujet">Modifier Profil</h4>    
@@ -86,6 +85,18 @@
     </div>    
     <div class="modal-body">    
       <form [formGroup]="updateProfileForm">
+        <div class="profile-image">
+          <img
+            width="120"
+            height="120"
+            class="margin-top mat-elevation-z1"
+            src=" /assets/img/brand/profile-image-placeholder.jpg"
+          />
+          <button mat-mini-fab (click)="inputField.click()">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </div>
+        <input #inputField hidden type="file" (change)="uploadFile($event, user)" />
         <div class="form-group">
             <label for="exampleFormControlInput1">Login</label>
             <input formControlName="userName"  class="form-control" id="exampleFormControlInput1" />
@@ -101,10 +112,6 @@
         <div class="form-group">
             <label for="exampleFormControlInput1">Sujets intrested in</label>
             <input formControlName="subjects" class="form-control" id="exampleFormControlInput1" />
-        </div>
-        <div style="float:right;">
-        <button class ="btn btn-outline-primary">Annuler</button>
-        <button class="btn btn-success" (click)="updateProfile()">Modifier</button>
         </div>
     </form>    
     </div>    

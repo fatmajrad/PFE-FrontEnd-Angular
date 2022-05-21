@@ -5,7 +5,7 @@ import { User } from "./user.model";
 export class Question{
    id: number;
    user:User;
-   intituleQuestion: Text;
+   intituleQuestion: String;
    descriptionQuestion: Text;
    tag: Sujet[];
    reponses : Reponse[]; 

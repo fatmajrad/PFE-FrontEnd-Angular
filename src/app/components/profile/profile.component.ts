@@ -7,11 +7,17 @@ import { User } from "src/app/models/user.model";
 import { AuthService } from "src/app/services/auth.service";
 import { UserService } from "src/app/services/user.service";
 
+
+
 @Component({
+  
   selector: "app-profile",
   templateUrl: "./profile.component.html",
+  styleUrls: [ './profile.component.css' ],
 })
+
 export class ProfileComponent implements OnInit {
+ 
   nomUser :any;
   description : any;
   subjects : [];
@@ -31,22 +37,27 @@ export class ProfileComponent implements OnInit {
     private router : Router,
     private modalService: NgbModal,
     
-  ) {}
+    
+  ) {
+    
+  }
 
   ngOnInit() {
+   
     this.userService
       .getUserById(this.activatedRoute.snapshot.params.id)
       .subscribe((response) => {
         this.currentUser=response[0];
         this.nomUser = response[0].nomUser; 
         this.description = response[0].description;
-        this.subjects = response[0].sujets;
+        this.subjects = response[0].intrestedTopics;
         this.userFonction = response[0].userFonction;
         this.email=response[0].email;
         this.id=response[0].id;
         this.initUpdateUserProfile();
       });
-  }
+    }
+  
 
   initUpdateUserProfile(){
     this.updateProfileForm = this.formBuilder.group({
@@ -79,7 +90,7 @@ export class ProfileComponent implements OnInit {
  
   open(content) {
       this.modalService
-        .open(content, { ariaLabelledBy: "update-profile" })
+        .open(content, { size: "lg",ariaLabelledBy: "update-profile" })
         .result.then(
           (result) => {
             this.closeResult = `Closed with: ${result}`;
@@ -102,4 +113,10 @@ export class ProfileComponent implements OnInit {
         return `with: ${reason}`;
       }
     }
+
+    
 }
+function readURL(arg0: HTMLElement) {
+  throw new Error("Function not implemented.");
+}
+

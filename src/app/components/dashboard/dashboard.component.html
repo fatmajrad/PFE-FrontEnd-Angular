@@ -1,55 +1,54 @@
-
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 <main>
-<section class="section section-shaped section-lg" >
-    <div class="shape shape-style-1 bg-white"></div>
-    <div class="card shadow m-6"style="margin-left: 80px; margin-right: 80px; background-color: white">
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-4 col-xl-3" style="margin-left: 80px;margin-right:80px;">
-                <div class="card bg-c-blue order-card">
-                    <div class="card-block">
-                        <h4 class="m-b-20">Utilisateurs</h4>
-                        <h2 class="text-right"><i class="fa fa-users f-left"></i><span>{{propOne}}</span></h2>
-                        
+    <section class="section section-shaped section-lg" style="background-color:  #eef2ff;">
+        <div class="shape shape-style-1 bg-white"></div>
+      
+           
+                <div class="row">
+
+                    <div class="col-md-4 col-xl-3" style="margin-left: 80px;margin-right:80px;">
+                        <div class="card bg-c-blue order-card">
+                            <div class="card-block">
+                                <h4 class="m-b-20">Utilisateurs</h4>
+                                <h2 class="text-right"><i class="fa fa-users f-left"></i><span>{{propOne}}</span></h2>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-xl-3">
+                        <div class="card bg-c-green order-card">
+                            <div class="card-block">
+                                <h4 class="m-b-20">Questions</h4>
+                                <h2 class="text-right"><i class="fa fa-question f-left"></i><span>{{propTwo}}</span>
+                                </h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-xl-3" style="margin-left: 80px;margin-right:80px;">
+                        <div class="card bg-c-yellow order-card">
+                            <div class="card-block">
+                                <h4 class="m-b-20">Connaissances</h4>
+                                <h2 class="text-right"><i
+                                        class="fa fa-file-text-o f-left"></i><span>{{propThree}}</span></h2>
+
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="col-md-4 col-xl-3">
-                <div class="card bg-c-green order-card">
-                    <div class="card-block">
-                        <h4 class="m-b-20">Questions</h4>
-                        <h2 class="text-right"><i class="fa fa-question f-left" ></i><span>{{propTwo}}</span></h2>   
-                    </div>
+                <div class="card" style="margin-left: 80px;margin-right:80px;"> 
+                <div class="col-md-8 mt-4 mt-md-0" style="margin-left: 150px;margin-right:80px;">
+                        <div class="card-title" style="margin-left: 80px;margin-right:80px;margin-top:20px;">
+                            <h4>Evolution Cette semaine</h4>
+                        </div>
+                        <div class="card-body">
+                            <div style="width: 800px;background-color: #eef2ff; margin-left: 20px;">
+                                <canvas id="canva">{{chart}}</canvas>
+                            </div>
+                        </div>
                 </div>
-            </div>
-            
-            <div class="col-md-4 col-xl-3" style="margin-left: 80px;margin-right:80px;">
-                <div class="card bg-c-yellow order-card">
-                    <div class="card-block">
-                        <h4 class="m-b-20">Connaissances</h4>
-                        <h2 class="text-right"><i class="fa fa-file-text-o f-left"></i><span>{{propThree}}</span></h2>
-                       
-                    </div>
-                </div>
-            </div>
-          
-            <div class="col-md-8 mt-4 mt-md-0" style="margin-left: 150px;margin-right:80px;">
-                <div class="card">
-                    <div class="card-title" style="margin-left: 80px;margin-right:80px;margin-top:20px;">
-                        <h4>Evolution Cette semaine</h4>
-                    </div>
-                    <div class="card-body">
-                        <div style="width: 800px;background-color: #eef2ff; margin-left: 20px;">
-                            <canvas id="canva">{{chart}}</canvas>
-                       </div>
-                    </div>
-                  </div>
-                
-              </div> 
-        </div> 
-    </div>
-    </div>
-</section>
+               </div>
+        
+    </section>
 </main>

@@ -99,7 +99,7 @@
             <tr>
               <td style="padding: auto">{{ question.user?.nomUser }}</td>
               <td>{{ question.createdAt }}</td>
-              <td>{{ question.intituleQuestion }}</td>
+              <td>{{ (question.intituleQuestion.length>30)? (question.intituleQuestion | slice:0:30)+'..':(question.intituleQuestion) }}</td>
               <td>
                 <span
                   *ngIf="question.statut == 'valide'"

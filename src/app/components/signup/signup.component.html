@@ -1,10 +1,10 @@
 <main>
   <section class="section section-shaped section-lg">
-    <div class="shape shape-style-1 bg-gradient-default" >
+    <div class="shape shape-style-1 bg-gradient-default">
     </div>
-    <div class="container pt-lg-md" >
+    <div class="container pt-lg-md">
       <div class="row justify-content-center">
-        
+
         <div class="col-lg-5">
           <div class="card bg-secondary shadow border-0" style="background-color:#eef2ff ;">
             <div class="card-body px-lg-5 py-lg-5">
@@ -17,15 +17,24 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
                     </div>
-                    
-                    <input formControlName="nomUser" class="form-control" placeholder="Login" type="text" (focus)="focus=true" (blur)="focus=false" name="nomUser"   required>
+
+                    <input formControlName="nomUser" class="form-control" placeholder="Login" type="text"
+                      (focus)="focus=true" (blur)="focus=false" name="nomUser" required>
+                    <i class="fa fa-check fa-lg" *ngIf="signUpForm.controls['nomUser'].valid"
+                      style="color: #00b88a"></i>
+                    <ng-container class="text-muted"
+                      *ngIf="!signUpForm.controls['nomUser'].valid && signUpForm.controls['nomUser'].dirty ">
+                      <i class="fa fa-exclamation-triangle"></i>
+                      <div *ngIf="signUpForm.controls['nomUser'].hasError('minlength' )"></div>
+                    </ng-container>
                   </div>
                   <div class="invalid-feedback">
-                   Login
+                    Login
                   </div>
                 </div>
                 <div class="form-group">
-                  <select formControlName="fonction" class="form-control" id="exampleFormControlSelect1" placeholder="Fonction" required name="fonction" >
+                  <select formControlName="fonction" class="form-control" id="exampleFormControlSelect1"
+                    placeholder="Fonction" required name="fonction">
                     <option>Etudiant</option>
                     <option>Professeur</option>
                     <option>Developpeur</option>
@@ -37,29 +46,25 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="ni ni-email-83"></i></span>
                     </div>
-                    <input formControlName="email" class="form-control" placeholder="Email" type="email" (focus)="focus1=true" (blur)="focus1=false" required name="email"  formControlName="email">
-                    <ng-container
-                    class="text-muted"
-                    *ngIf="
+                    <input formControlName="email" class="form-control" placeholder="Email" type="email"
+                      (focus)="focus1=true" (blur)="focus1=false" required name="email" formControlName="email">
+                    <ng-container class="text-muted" *ngIf="
                       !signUpForm.controls['email'].valid &&
-                      signUpForm.controls['email'].dirty
-                    "
-                  >
-                    <i class="fa fa-exclamation-triangle"></i>
-                    <div
-                      *ngIf="signUpForm.controls['email'].errors?.alreadyExist"
-                    >
-                      <p class="msgError">Cet email est déjà utilisé</p>
-                    </div>
-                    <div
+                       signUpForm.controls['email'].dirty
+                     ">
+                      <i class="fa fa-exclamation-triangle"></i>
+                      <div *ngIf="signUpForm.controls['email'].errors?.alreadyExist">
+                        <p class="msgError">Cet email est déjà utilisé</p>
+                      </div>
+                      <!-- <div
                       *ngIf="
                       signUpForm.controls['email'].errors?.email ||
                       signUpForm.controls['email'].errors?.required
                       "
                     >
                       <p class="msgError">Email syntaxe (xxxxxx@xxxxx.xxx)</p>
-                    </div>
-                  </ng-container>
+                    </div>-->
+                    </ng-container>
                   </div>
                 </div>
                 <div class="form-group" [ngClass]="{'focused':focus2===true}">
@@ -67,7 +72,21 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
                     </div>
-                    <input formControlName="password" class="form-control" placeholder="Mot de passe" type="password" name="password" (focus)="focus2=true" (blur)="focus2=false" required name="password" >
+                    <input formControlName="password" class="form-control" placeholder="Mot de passe" [type]="PwdType ? 'text' : 'password'" type="password"
+                      name="password" (focus)="focus2=true" (blur)="focus2=false" required name="password">
+                    <ng-container *ngIf="
+                    !signUpForm.controls['password'].valid &&
+                     signUpForm.controls['password'].dirty">
+                      <div *ngIf="
+                      signUpForm.controls['password'].hasError(
+                        'minlength'
+                      ) ||
+                      signUpForm.controls['password'].hasError('required')">
+                        <p class="msgError">
+                          Le mot de passe doit contenir 8 caractères minimum
+                        </p>
+                      </div>
+                    </ng-container>
                   </div>
                 </div>
                 <div class="form-group" [ngClass]="{'focused':focus2===true}">
@@ -75,10 +94,22 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
                     </div>
-                    <input formControlName="confirmpassword" class="form-control" placeholder="Confirmer Mot de passe" name="confirmPassword" type="password" (focus)="focus2=true" (blur)="focus2=false" required>
+                    <input formControlName="confirmpassword" class="form-control" placeholder="Confirmer Mot de passe"
+                      name="confirmPassword" [type]="PwdConfirmedType ? 'text' : 'password'" type="password"
+                      (focus)="focus2=true" (blur)="focus2=false" required>
+                      <ng-container  *ngIf="
+                          !signUpForm.controls['confirmpassword'].valid &&
+                          signUpForm.controls['confirmpassword'].dirty">
+                      <div *ngIf="
+                          signUpForm.controls['confirmpassword'].hasError(
+                              'passwordMismatch'
+                            )">
+                        <p class="msgError">Les mots de passe ne sont pas identiques</p>
+                      </div>
+                    </ng-container>
                   </div>
                 </div>
-    
+
                 <div class="text-center">
                   <button type="button" class="btn btn-primary mt-4" (click)="signUpUser()">Inscription</button>
                 </div>
@@ -92,20 +123,20 @@
   <button hidden id="openModelButton" (click)="open(content)">open</button>
 </main>
 
-<ng-template #content let-c="close" let-d="dismiss" aria-labelledby="alert-User">    
-  <div class="modal-header"> 
-    Confirmation      
-      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">    
-          <span aria-hidden="true">×</span>    
-      </button>    
-  </div>    
-  <div class="modal-body">    
+<ng-template #content let-c="close" let-d="dismiss" aria-labelledby="alert-User">
+  <div class="modal-header">
+    Confirmation
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
     <p>
       Votre demande d'inscription à ete enregisté
       Vous allez recevoir un mail dés qu'elle soit traitée.
     </p>
-  </div>    
-  <div class="modal-footer">    
-      <button type="button" class="btn btn-outline-primary" (click)="d('Cross click')">OK</button>    
-  </div>    
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-primary" (click)="d('Cross click')">OK</button>
+  </div>
 </ng-template>

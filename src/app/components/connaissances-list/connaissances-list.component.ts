@@ -223,6 +223,19 @@ export class ConnaissancesListComponent implements OnInit {
     })
   }
 
+  getConnaissancesBySujet(sujetNom){
+    console.log(sujetNom);
+    let connaissancessSujet: Connaissance []= [];;
+      this.connaissances.forEach(connaissance => {
+        connaissance.sujet.forEach(element => {
+          if(element.nom==sujetNom){
+            connaissancessSujet.push(connaissance)
+          }
+        });
+      });
+   
+   this.connaissances= connaissancessSujet
+  }
 
   open(content, type, connaissance) {
    
