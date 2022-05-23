@@ -3,38 +3,30 @@
 
 <main>
   <section class="section section-shaped section-lg"
-    style="background-color: white;margin-left: 80px; margin-right:5 px; margin-top: 40px;">
+    style="background-color: #eef2ff;">
     <div class="shape shape-style-1 bg-gradient-default"></div>
-    <div class="col px-0">
+    <div class="col px-0 ">
       <div class="row align-items-center justify-content-center">
-        <div class="col-lg-6 text-center">
+        <div class="col-lg-6 text-center" style=" margin-top: 100px;">
           <img src="./assets/img/brand/logo.png" style="width: 150px;" class="img-fluid">
-          <h2 class="mb-0">Where your view is right.</h2>
-          <div class="btn-wrapper mt-5">
-            <a href="https://www.creative-tim.com/product/argon-design-system-angular?ref=adsa-index-header"
-              class="btn btn-lg btn-primary">
-              <span class="btn-inner--icon"><i class="fa fa-share-square"></i></span>
-              <span class="btn-inner--text"> Share something</span>
-            </a>
-            <a href="https://github.com/creativetimofficial/argon-design-system-angular?ref=adsa-index-header"
-              class="btn btn-lg btn-default" target="_blank">
-              <span class="btn-inner--icon"><i class="fa fa-question-circle-o"></i></span>
-              <span class="btn-inner--text"> Q
-                <span style="color:lightblue;">&</span> A</span>
-            </a>
-          </div>
-          <div class="mt-5">
-            <small class="text-white font-weight-bold mb-0 mr-2">proudly coded by</small>
-            <img src="./assets/img/brand/fatma.jpg" style="height: 28px;" class="img-fluid rounded-circle shadow">
-            <small class="text-white font-weight-bold mb-0 mr-2"> Amazing Fatouma</small>
-          </div>
         </div>
       </div>
     </div>
-    <div class="container">
-      <div class="row">
-        <h2 style="margin-bottom: 20px;"> Les dernieres questions</h2>
+    <br>
+    <form class="form-inline form1">
+      <div class="form1">
+      <input class="form-control mr-sm-8 search" type="search" placeholder="Rechercher..." aria-label="Search">
+      <button class="btn btn-outline-primary " type="submit">Rechercher</button>
       </div>
+    </form>
+    <br><br><br>
+    <div class="row align-items-center justify-content-center">
+     <div class="col-lg-6 text-center">
+        <h2> Les dernieres connaissances</h2>
+     </div>
+    </div>
+    <div class="container ">
+      <br>
       
       <div class="container">
         <div class="card">
@@ -73,7 +65,7 @@
         </div>
         <div class="card">
           
-        <div class="card__body">
+          <div class="card__body">
             <span class="tag tag-red">Automobile</span>
             <h4>Race to your heart content</h4>
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi perferendis molestiae non nemo doloribus. Doloremque, nihil! At ea atque quidem!</p>
@@ -88,15 +80,17 @@
             </div>
           </div>
         </div>
-      </div>
-      
-</div>
-
-    <div class="container"  style="margin-left: 80px; margin-right:5 px; margin-top: 40px;">
-         <div class="row">
-          <h4>Les dernieres connaissances</h4>
-         </div>
+      </div>   
     </div>
+  
+    <br><br>
+    <div class="row align-items-center justify-content-center">
+      <div class="col-lg-6 text-center">
+         <h2> Les dernieres questions</h2>
+      </div>
+     </div>
+     <br>
+     <br>
     <div class="container">
       <div  *ngFor="let n of [1,2,3]"class="card col-md-8">
         <div class="card__header">
@@ -119,10 +113,17 @@
         </div>
       </div>
     </div>
-    <div class="container">
-     <div class="row">
-      <h4> Les sujets les pllus populaires</h4>
+
+    <br><br>
+    <div class="row align-items-center justify-content-center">
+      <div class="col-lg-6 text-center">
+         <h2> Les sujets les pllus populaires</h2>
+      </div>
      </div>
+     <br>
+     <br>
+
+    <div class="container">
      <div class="container "  style="margin-left:100px;margin-right:100px">
       <div  *ngFor="let n of [1,2,3,4]"class="card col-md-4 ">
         <div class="card__header">
@@ -137,5 +138,47 @@
      </div>
     </div>
   </div>
+  <br><br><br>
+  <div class="container2">
+    <div class="content">
+      <div class="left-side">
+        <div class="address details">
+          <i class="fas fa-map-marker-alt"></i>
+          <div class="topic">Address</div>
+          <div class="text-one">Surkhet, NP12,Birendranagar 06</div>
+        </div>
+        <div class="phone details">
+          <i class="fas fa-phone-alt"></i>
+          <div class="topic">Phone</div>
+          <div class="text-one">+0098 9893 5647</div>
+        </div>
+        <div class="email details">
+          <i class="fas fa-envelope"></i>
+          <div class="topic">Email</div>
+          <div class="text-one">codinglab@gmail.com</div>
+        </div>
+      </div>
+      <div class="right-side">
+        <div class="topic-text">Envoyer un message</div>
+        <p>Si vous avez une questions, vous pouvez m'envoyer un message à partir d'ici. C'est avec plaisir que je vous aide.</p>
+      <form action="#">
+        <div class="input-box">
+          <input type="text" placeholder="Nom">
+        </div>
+        <div class="input-box">
+          <input type="text" placeholder="Email">
+        </div>
+        <div class="input-box message-box">
+          <textarea placeholder="Message"></textarea>
+        </div>
+        <div class="button">
+          <input type="button" value="Envoyer" >
+        </div>
+      </form>
+    </div>
+    </div>
+  </div>
+  <br>
+  <br>
   </section>
 </main>

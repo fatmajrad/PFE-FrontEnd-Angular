@@ -1,3 +1,4 @@
+import { VoteService } from 'src/app/services/vote.service';
 import { SujetService } from "./../../services/sujet.service";
 import { Sujet } from "src/app/models/sujet.model";
 import { Component, OnInit } from "@angular/core";
@@ -36,7 +37,8 @@ export class QuestionsListComponent implements OnInit {
     private userService: UserService,
     private sujetService: SujetService,
     private router: Router,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private voteService : VoteService
   ) {
     this.filteredOptions = this.formControl.valueChanges.pipe(
       startWith(""),
@@ -113,6 +115,12 @@ export class QuestionsListComponent implements OnInit {
     });
   }
 
+  getRatedQuestions(){
+    this.voteService.getRatedReponses().subscribe((response)=>{
+
+    });
+  }
+
   countNumberVotes(reponse : any, typeVote){
     let allVotes = reponse.votes;
     console.log(allVotes);
@@ -120,16 +128,10 @@ export class QuestionsListComponent implements OnInit {
     allVotes.forEach(vote => {
       if(vote.typeVote ===typeVote){
         x=x+1
-     
       }
     });
     return x;
   }
 
-  /*onSelect(question){
-    console.log(question);
-    this.router.navigate(['reponse-list/'+question.id]);
-    console.log("okay")
-    //this.router.navigateByUrl('reponse-list/'+question.id);
-  }*/
+ 
 }

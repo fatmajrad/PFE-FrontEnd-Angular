@@ -5,7 +5,17 @@ import { Question } from "src/app/models/question.model";
 import { Sujet } from "src/app/models/sujet.model";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { AuthService } from "src/app/services/auth.service";
+<<<<<<< HEAD
 import { debounceTime, distinctUntilChanged, map, startWith, switchMap} from "rxjs/operators";
+=======
+import {
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  startWith,
+  switchMap,
+} from "rxjs/operators";
+>>>>>>> master
 import { MatTableDataSource } from "@angular/material/table";
 import { Router } from "@angular/router";
 import { ModalDismissReasons, NgbModal } from "@ng-bootstrap/ng-bootstrap";
@@ -118,6 +128,10 @@ export class AddQuestionComponent implements OnInit {
     this.fruits.push(event.option.viewValue);
     this.fruitInput.nativeElement.value = "";
     this.fruitCtrl.setValue(null);
+<<<<<<< HEAD
+=======
+   
+>>>>>>> master
   }
 
   initForm() {
@@ -134,12 +148,24 @@ export class AddQuestionComponent implements OnInit {
   close() {
     this.showAlertsucces = false;
     this.showAlertsucces = false;
+<<<<<<< HEAD
+=======
+  }
+  
+  getConnaissancesBySujet(sujetNom){
+    console.log(sujetNom);
+>>>>>>> master
   }
   
 
   AjouterQuestion() {
+<<<<<<< HEAD
      console.log( this.addQuestionForm.get("sujet").value);
    /* let question = {
+=======
+   
+  let question = {
+>>>>>>> master
       intituleQuestion: this.addQuestionForm.get("intituleQuestion").value,
       descriptionQuestion: this.addQuestionForm.get("descriptionQuestion")
         .value,
@@ -151,7 +177,11 @@ export class AddQuestionComponent implements OnInit {
     this.questionService.addQuestion(question).subscribe((response) => {
       console.log(response);
     });
+<<<<<<< HEAD
     this.router.navigate(["mes-questions"]);*/
+=======
+    this.router.navigate(["mes-questions"]);
+>>>>>>> master
   }
 
   saveBrouillon() {

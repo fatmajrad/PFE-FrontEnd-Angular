@@ -8,13 +8,13 @@
             <div class="row">
                 <div class="col-sm-3">
                     <div class="list-group">
-                        <button type="button" class="list-group-item list-group-item-action active">
+                        <button type="button" class="list-group-item list-group-item-action active" (click)="getConnaissances()">
                             Toutes les connaissances
                         </button>
-                        <button type="button" class="list-group-item list-group-item-action">
+                        <button type="button" class="list-group-item list-group-item-action" (click)="getRecentConnaissances()">
                             les plus récentes
                         </button>
-                        <button type="button" class="list-group-item list-group-item-action">les plus
+                        <button type="button" class="list-group-item list-group-item-action" (click)="getRatedConnaissances()">les plus
                             pertinentes</button>
                     </div>
                 </div>
@@ -97,9 +97,11 @@
                                                         }}</span>
                                                 </div>
                                                 {{ connaissance.createdAt | date: "dd/MM/yyyy" }}
+                                                <div>
                                                 <p [innerHTML]="connaissance.contenuConnaissance">
                                                     {{ connaissance.contenuConnaissance}}
                                                 </p>
+                                                </div>
                                             </div>
                                         </div>
 

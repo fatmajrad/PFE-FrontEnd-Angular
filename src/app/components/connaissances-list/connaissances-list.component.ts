@@ -1,4 +1,3 @@
-import { Reponse } from "src/app/models/reponse.model";
 import { ConnaissanceService } from "./../../services/connaissance.service";
 import { CommentaireService } from "./../../services/commentaire.service";
 import { SujetService } from "./../../services/sujet.service";
@@ -8,12 +7,12 @@ import { Sujet } from "src/app/models/sujet.model";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { Connaissance } from "src/app/models/connaissance.modal";
 import { AuthService } from "src/app/services/auth.service";
-import * as moment from "moment";
 import { Commentaire } from "src/app/models/commentaire.model";
 import { Observable } from "rxjs";
-import {COMMA, ENTER} from '@angular/cdk/keycodes'; 
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { debounceTime, distinctUntilChanged, map, startWith, switchMap } from "rxjs/operators";
 import { VoteService } from "src/app/services/vote.service";
+
 
 @Component({
   selector: "app-connaissances-list",
@@ -21,6 +20,7 @@ import { VoteService } from "src/app/services/vote.service";
   styleUrls: ["./connaissances-list.component.css"],
 })
 export class ConnaissancesListComponent implements OnInit {
+
   closeResult: string;
   sujets: Sujet[];
   connaissances: Connaissance[];
@@ -32,10 +32,10 @@ export class ConnaissancesListComponent implements OnInit {
   showComments: boolean = false;
   addConnaissanceCommentaire: FormGroup;
   filteredOptions: Observable<any[]>;
-  separatorKeysCodes: number[] =  [ENTER, COMMA];
-  sujetForm : FormGroup;
-  currentUserId : Number
-  
+  separatorKeysCodes: number[] = [ENTER, COMMA];
+  sujetForm: FormGroup;
+  currentUserId: Number
+
   constructor(
     private modalService: NgbModal,
     private sujetService: SujetService,
@@ -43,8 +43,8 @@ export class ConnaissancesListComponent implements OnInit {
     private authService: AuthService,
     private commentaireService: CommentaireService,
     private connaissanceService: ConnaissanceService,
-    private voteService : VoteService
-  ) {
+    private voteService: VoteService
+    ) {
     this.filteredOptions = this.formControl.valueChanges.pipe(
       startWith(""),
       debounceTime(400),
@@ -54,24 +54,6 @@ export class ConnaissancesListComponent implements OnInit {
       })
     );
   }
-  filter(val: string): Observable<any[]> {
-    // call the service which makes the http-request
-    return this.sujetService.getSujetAuto().pipe(
-      map((response) =>
-        response.filter((option) => {
-          return option.nom.toLowerCase().indexOf(val.toLowerCase()) === 0;
-        })
-      )
-    );
-  }
-  initSujetForm() {
-    this.sujetForm = new FormGroup(
-      {
-        sujet : new FormControl()
-      }
-    )
-  }
-
 
   ngOnInit(): void {
     this.getConnaissances();
@@ -79,10 +61,25 @@ export class ConnaissancesListComponent implements OnInit {
       this.sujets = sujets;
     });
     this.initAddForm();
-  
     this.initAddCommentaire();
     this.initSujetForm();
-    this.currentUserId=this.authService.getCurrentUserId();
+    this.currentUserId = this.authService.getCurrentUserId();
+  }
+
+  filter(val: string): Observable<any[]> {
+    return this.sujetService.getSujetAuto().pipe(
+      map((response) =>
+        response.filter((option) => {
+          return option.nom.toLowerCase().indexOf(val.toLowerCase()) === 0;
+        })));
+  }
+
+  initSujetForm() {
+    this.sujetForm = new FormGroup(
+      {
+        sujet: new FormControl()
+      }
+    )
   }
 
   toArray(answers: object) {
@@ -100,7 +97,7 @@ export class ConnaissancesListComponent implements OnInit {
     let contenu: String = this.currentConnaissance.contenuConnaissance;
     let sujetc: String = "sujet";
     let sujetsObject = this.toArray(this.currentConnaissance.sujet);
-    let sujets=[]
+    let sujets = []
     sujetsObject.forEach(element => {
       sujets.push(element.nomSujet);
     })
@@ -116,12 +113,12 @@ export class ConnaissancesListComponent implements OnInit {
       commentaire: [""],
     });
   }
-  countNumberVotes(connaissance : any, typeVote){
+  countNumberVotes(connaissance: any, typeVote) {
     let allVotes = connaissance.votes;
-    let x =0;
+    let x = 0;
     allVotes.forEach(vote => {
-      if(vote.typeVote ===typeVote){
-        x=x+1
+      if (vote.typeVote === typeVote) {
+        x = x + 1
       }
     });
     return x;
@@ -181,67 +178,91 @@ export class ConnaissancesListComponent implements OnInit {
     }
   }
 
-  likeConnaissance(connaissance : Connaissance) {
-    this.voteService.getConnaissanceVote(this.currentUserId,connaissance.id).subscribe((response)=>{
-      if(response.length==0){
+  likeConnaissance(connaissance: Connaissance) {
+    this.voteService.getConnaissanceVote(this.currentUserId, connaissance.id).subscribe((response) => {
+      if (response.length == 0) {
         let vote = {
           "typeVote": true,
-          "user": "/api/users/"+this.currentUserId,
-          "Connaissance": "/api/connaissances/"+connaissance.id,
+          "user": "/api/users/" + this.currentUserId,
+          "Connaissance": "/api/connaissances/" + connaissance.id,
           "Question": null,
           "Reponse": null
         }
-        this.voteService.addLike(vote).subscribe((response) => {console.log(response),
-         this.countNumberVotes(connaissance,true)});
-      }else{
+        this.voteService.addLike(vote).subscribe((response) => {
+          console.log(response),
+          this.countNumberVotes(connaissance, true)
+        });
+      } else {
         console.log("delete");
         this.voteService.deleteVote(response[0].id);
-      }  
+      }
     })
   }
-  dislikeConnaissance(connaissance : Connaissance) {
-    this.voteService.getConnaissanceVote(this.currentUserId,connaissance.id).subscribe((response)=>{
-      if(response.length==0){
+  dislikeConnaissance(connaissance: Connaissance) {
+    this.voteService.getConnaissanceVote(this.currentUserId, connaissance.id).subscribe((response) => {
+      if (response.length == 0) {
         let vote = {
           "typeVote": false,
-          "user": "/api/users/"+this.currentUserId,
-          "Connaissance": "/api/connaissances/"+connaissance.id,
+          "user": "/api/users/" + this.currentUserId,
+          "Connaissance": "/api/connaissances/" + connaissance.id,
           "Question": null,
           "Reponse": null
         }
         this.voteService.addLike(vote).subscribe((response) => console.log(response));
-      }else{
-        if(response[0].typeVote==true){
+      } else {
+        if (response[0].typeVote == true) {
           console.log("vous aves deja un vote");
-          
-        }else{
+
+        } else {
           console.log("delete");
           this.voteService.deleteVote(response[0].id);
         }
-       
-      }  
+
+      }
     })
   }
 
-  getConnaissancesBySujet(sujetNom){
+  getConnaissancesBySujet(sujetNom) {
     console.log(sujetNom);
-    let connaissancessSujet: Connaissance []= [];;
-      this.connaissances.forEach(connaissance => {
-        connaissance.sujet.forEach(element => {
-          if(element.nom==sujetNom){
-            connaissancessSujet.push(connaissance)
+    let connaissancessSujet: Connaissance[] = [];;
+    this.connaissances.forEach(connaissance => {
+      connaissance.sujet.forEach(element => {
+        if (element.nom == sujetNom) {
+          connaissancessSujet.push(connaissance)
+        }
+      });
+      this.connaissances = connaissancessSujet
+    });
+  }
+
+  getRatedConnaissances() {
+    console.log("les plus meriele");
+
+    let ratedConnaissances: Connaissance[] = [];
+    this.voteService.getRatedConnaissances().subscribe((response) => {
+      response.forEach(element => {
+        this.connaissances.forEach(connaissance => {
+          if (connaissance.id === element.Connaissance.id) {
+            ratedConnaissances.push(connaissance)
           }
         });
       });
-   
-   this.connaissances= connaissancessSujet
+      this.connaissances = ratedConnaissances;
+    })
+  }
+
+  getRecentConnaissances() {
+    this.connaissanceService.getRecentConnaissances().subscribe((response) => {
+      console.log(response);
+      this.connaissances = response
+    })
   }
 
   open(content, type, connaissance) {
-   
+
     this.currentConnaissance = connaissance;
     if (type == "addConnaissance") {
-  
+
       this.modalService
         .open(content, {
           size: "lg",
@@ -260,7 +281,7 @@ export class ConnaissancesListComponent implements OnInit {
           }
         );
     } else if (type == "updateConnaissance") {
-     
+
       this.initUpdateForm();
       this.modalService
         .open(content, {

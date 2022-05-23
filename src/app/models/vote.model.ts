@@ -1,3 +1,4 @@
+import { Connaissance } from 'src/app/models/connaissance.modal';
 import { User } from "./user.model";
 import { Question } from "./question.model";
 
@@ -6,4 +7,7 @@ export class Vote{
     contenu : Text;
     user : User;
     typeVote: Boolean;
+    Connaissance : Connaissance;
+    Reponses : Vote;
+    Question : Question;
 }
