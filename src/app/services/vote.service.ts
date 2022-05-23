@@ -25,13 +25,13 @@ export class VoteService {
       return this.http.get<Vote[]>(url, httpOptions);
     }
 
-    getReponseVote(idUser:Number,idReponse:Number): Observable<Vote[]>{
+  getReponseVote(idUser:Number,idReponse:Number): Observable<Vote[]>{
       let url="http://localhost:8000/api/votes?page=1&user.id="+idUser+"&Reponse.id="+idReponse;
       console.log(url);
       return this.http.get<Vote[]>(url, httpOptions);
     }
 
-    getConnaissanceVote(idUser:Number,idConnaissance:Number): Observable<Vote[]>{
+  getConnaissanceVote(idUser:Number,idConnaissance:Number): Observable<Vote[]>{
       let url="http://localhost:8000/api/votes?page=1&user.id="+idUser+"&Connaissance.id="+idConnaissance;
       console.log(url);
       return this.http.get<Vote[]>(url, httpOptions);
@@ -47,5 +47,16 @@ export class VoteService {
       const url = `${this.apiURL}/${id}`;
     return this.http.delete(url, httpOptions);
     }
+
+    getRatedConnaissances(): Observable<Vote[]>{
+      const url = "http://localhost:8000/api/votes/rated_connaissances"
+      return this.http.get<[]>(url, httpOptions);
+    }
   
+    getRatedReponses(): Observable<Vote[]>{
+      const url = "http://localhost:8000/api/votes/rated_reponses"
+      return this.http.get<[Vote]>(url, httpOptions);
+    }
+
+   
 }

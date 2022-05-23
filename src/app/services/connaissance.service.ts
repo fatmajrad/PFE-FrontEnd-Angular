@@ -44,4 +44,9 @@ export class ConnaissanceService {
     const url = "http://localhost:8000/api/connaissances/valide/count"
     return this.http.get<Connaissance[]>(url);
   }
+
+  getRecentConnaissances(){
+    const url ="http://localhost:8000/api/connaissances/recent"
+    return this.http.get<Connaissance[]>(url);
+  }
 }

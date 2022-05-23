@@ -1,3 +1,5 @@
+import { element } from 'protractor';
+import { Vote } from 'src/app/models/vote.model';
 import { Reponse } from "src/app/models/reponse.model";
 import { ConnaissanceService } from "./../../services/connaissance.service";
 import { CommentaireService } from "./../../services/commentaire.service";
@@ -14,6 +16,7 @@ import { Observable } from "rxjs";
 import {COMMA, ENTER} from '@angular/cdk/keycodes'; 
 import { debounceTime, distinctUntilChanged, map, startWith, switchMap } from "rxjs/operators";
 import { VoteService } from "src/app/services/vote.service";
+import { convertCompilerOptionsFromJson } from 'typescript';
 
 @Component({
   selector: "app-connaissances-list",
@@ -35,6 +38,8 @@ export class ConnaissancesListComponent implements OnInit {
   separatorKeysCodes: number[] =  [ENTER, COMMA];
   sujetForm : FormGroup;
   currentUserId : Number
+
+  
   
   constructor(
     private modalService: NgbModal,
@@ -74,6 +79,7 @@ export class ConnaissancesListComponent implements OnInit {
 
 
   ngOnInit(): void {
+  
     this.getConnaissances();
     this.sujetService.listeSujet().subscribe((sujets) => {
       this.sujets = sujets;
@@ -232,9 +238,31 @@ export class ConnaissancesListComponent implements OnInit {
             connaissancessSujet.push(connaissance)
           }
         });
+        this.connaissances= connaissancessSujet
       });
-   
-   this.connaissances= connaissancessSujet
+  }
+
+  getRatedConnaissances(){
+    console.log("les plus meriele");
+    
+    let ratedConnaissances : Connaissance[]=[];
+    this.voteService.getRatedConnaissances().subscribe((response)=>{
+      response.forEach(element => {
+        this.connaissances.forEach(connaissance => {
+          if(connaissance.id === element.Connaissance.id){
+            ratedConnaissances.push(connaissance)
+          }
+        });
+      });
+     this.connaissances=ratedConnaissances;
+    })
+  }
+
+  getRecentConnaissances(){
+    this.connaissanceService.getRecentConnaissances().subscribe((response)=>{
+      console.log(response);
+      this.connaissances=response
+    })
   }
 
   open(content, type, connaissance) {

@@ -108,12 +108,20 @@ export class UserComponent implements OnInit {
     console.log(body);
     this.userService.updateUser(u,body).subscribe({
       next:(res)=>{ 
-        this.type="success";
-        this.message="user est réfusée";
-        this.showAlertsucces=true;
-        this.userService.refuserDemandeUser(u.id).subscribe((response)=>{console.log(response)});
-        this.getAllUsers();
        
+        this.userService.refuserDemandeUser(u.id).subscribe({
+          next:(res)=>{
+            this.type="success";
+            this.message="user est réfusée";
+            this.showAlertsucces=true;
+          },
+          error:()=>{
+            this.showAlerterror=true;
+            this.type="error";
+            this.message="Probleme avec le refus";
+          }
+        });
+        this.getAllUsers();
        },
          error:()=>{
            this.showAlerterror=true;
