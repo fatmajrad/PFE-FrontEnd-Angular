@@ -4,8 +4,13 @@
     </div>
     <div class="container pt-lg-md">
       <div class="row justify-content-center">
-
+        
+        
         <div class="col-lg-5">
+          
+          <div class="alert alert-danger" role="alert" *ngIf="err==1">
+              L'adresse mail que vous avez saisi est déjà utilisée
+        </div>
           <div class="card bg-secondary shadow border-0" style="background-color:#eef2ff ;">
             <div class="card-body px-lg-5 py-lg-5">
               <div class="text-center text-muted mb-4">
@@ -72,7 +77,7 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
                     </div>
-                    <input formControlName="password" class="form-control" placeholder="Mot de passe" [type]="PwdType ? 'text' : 'password'" type="password"
+                    <input  formControlName="password" class="form-control" placeholder="Mot de passe" type="password"
                       name="password" (focus)="focus2=true" (blur)="focus2=false" required name="password">
                     <ng-container *ngIf="
                     !signUpForm.controls['password'].valid &&
@@ -94,9 +99,11 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
                     </div>
-                    <input formControlName="confirmpassword" class="form-control" placeholder="Confirmer Mot de passe"
-                      name="confirmPassword" [type]="PwdConfirmedType ? 'text' : 'password'" type="password"
-                      (focus)="focus2=true" (blur)="focus2=false" required>
+                    <input
+                    [type]="PwdConfirmedType ? 'text' : 'password'" type="password"
+                     formControlName="confirmpassword" class="form-control" placeholder="Confirmer Mot de passe"
+                      name="confirmPassword" 
+                      required>
                       <ng-container  *ngIf="
                           !signUpForm.controls['confirmpassword'].valid &&
                           signUpForm.controls['confirmpassword'].dirty">

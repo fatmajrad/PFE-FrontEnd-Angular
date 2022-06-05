@@ -5,10 +5,11 @@ export class User{
     nomUser:String;
     password:string ;
     roles:Role[];
-    token: any;
+   // token: any;
     statut:string;
     userFonction:String;
     validatedAt:Date;
     createdAt:Date;
     remarque:String; 
+    token?:string;
 }

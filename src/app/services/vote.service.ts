@@ -45,7 +45,12 @@ export class VoteService {
 
     deleteVote(id : Number){
       const url = `${this.apiURL}/${id}`;
-    return this.http.delete(url, httpOptions);
+      return this.http.delete(url, httpOptions);
+    }
+
+    updateVote(vote,id){
+      const url = `${this.apiURL}/${id}`;
+      return this.http.put<any>(url, vote, httpOptions)
     }
 
     getRatedConnaissances(): Observable<Vote[]>{

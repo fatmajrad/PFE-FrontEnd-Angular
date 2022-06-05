@@ -1,0 +1,10 @@
+:host ::ng-deep .bloghtml { 
+    display: inline-flex;
+    max-width: 400px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+  
+  :host ::ng-deep .bloghtml img { 
+    max-width: 400px;
+  }

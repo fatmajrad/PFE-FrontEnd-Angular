@@ -46,11 +46,11 @@
           </mat-card-header>
           <mat-card-content (click)="open(content4,'detailSujet',sujet)" >
             <p>{{
-              (sujet.descriptionSujet.length>40)? (sujet.descriptionSujet | slice:0:40)+'..':(sujet.descriptionSujet)}}</p>
+              (sujet.descriptionSujet.length>100)? (sujet.descriptionSujet | slice:0:100)+'..':(sujet.descriptionSujet)}}</p>
           </mat-card-content>
           <mat-card-actions style="float:inline-end;" class="col-md-12 text-center">
-            <button class="btn btn-sm btn-primary" type="button">Questions</button>
-            <button class="btn btn-sm btn-default" type="button">Connaissances</button>
+            <button class="btn btn-sm btn-primary" type="button" [routerLink]="['/sujet-questions-list',sujet.id]">Questions</button>
+            <button class="btn btn-sm btn-default" type="button"[routerLink]="['/sujet-connaissance-list',sujet.id]">Connaissances</button>
           </mat-card-actions>
         </mat-card>
       </div>

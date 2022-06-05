@@ -1,0 +1,85 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css"
+    integrity="sha256-46r060N2LrChLLb5zowXQ72/iKKNiw/lAmygmHExk/o=" crossorigin="anonymous" />
+
+<main>
+    <section class="section section-shaped section-lg" style="background-color: white">
+        <div class="shape shape-style-1 bg-gradient-default"></div>
+
+        <div class="container-xxl" style="margin-left: 80px; margin-right:5 px; margin-top: 40px;">
+            <div class="row" style="margin-right: 5px;">
+                <div class="col-sm-3">
+                    <div class="list-group">
+                        <button type="button" class="list-group-item list-group-item-action ">
+                            Toutes les questions
+                        </button>
+                        <button type="button" class="list-group-item list-group-item-action"
+                            (click)="getRecentQuestions()">
+                            Les plus récentes
+                        </button>
+                        <button type="button" class="list-group-item list-group-item-action" 
+                           (click)="getRatedQuestions()">Les plus
+                            pertinentes</button>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="panel">
+                        <ul class="panel-activity__list" style="background-color: white">
+                            <h4>Liste des Questions</h4>
+                            <div *ngFor="let question of questions | paginate: { itemsPerPage: 10, currentPage: page, totalItems:totalElement }" class="card mb-8 " style="margin-top:20px">
+                                <div class="card-body p-2 p-sm-3" [routerLink]="['/reponse-list',question.id]"
+                                    style="background-color:#eef2ff;">
+                                    <div class="media forum-item">
+                                        <a data-toggle="collapse" data-target=".forum-content"><img
+                                                src="https://bootdey.com/img/Content/avatar/avatar1.png"
+                                                class="mr-3 rounded-circle" width="50" alt="User" /></a>
+                                        <div class="media-body">
+
+                                            <h6>
+                                                <a data-toggle="collapse" data-target=".forum-content"
+                                                    class="text-body font-weight-bold">{{
+                                                    question.intituleQuestion}}</a>
+                                            </h6>
+                                            {{question.user.nomUser}}
+                                            Crée le : {{question.createdAt| date:'shortDate'}}
+                                            <div *ngFor="let tag of toArray(question?.tag)">
+                                                <span
+                                                    class="badge badge-pill badge-info text-uppercase">{{tag.nom}}</span>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                    <div style="margin-bottom: 5px; float: right">
+                                        <button class="btn btn-sm btn-2 btn-info" type="button"
+                                            (click)="showCommentsSection()">
+                                           {{question.reponses.length}}
+                                            <span class="btn-inner--icon"><i class="fa fa-comment"
+                                                    aria-hidden="true"></i></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </ul>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="main-body p-0">
+
+                <div class="inner-main">
+                    <!-- Inner main header -->
+
+                    <!-- /Inner main header -->
+
+
+
+
+                    <ul class="pagination pagination-sm pagination-circle justify-content-center mb-0">
+                        <pagination-controls (pageChange)="page = $event"></pagination-controls>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

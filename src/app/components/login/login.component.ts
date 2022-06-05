@@ -23,24 +23,29 @@ export class LoginComponent implements OnInit {
     private modalService: NgbModal
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+   
+  }
 
   onLoggedin() {
     this.authService.login(this.user).subscribe(
       (data) => {
-        let jwToken = data.token;
-        this.authService.saveToken(jwToken);
+       this.authService.saveToken(data.token)
+      // this.authService.saveUser(data)
         if (this.authService.isAdmin()) {
           this.router.navigate(["/dashboard"]);
+        
         } else if (!this.authService.isValid()) {
           document.getElementById("openModelButton").click();
-        } else {
+        } 
+        else {
           this.router.navigate(["/home"]);
         }
       },
       (err) => {
         this.err = 1;
       }
+
     );
   }
   open(content) {

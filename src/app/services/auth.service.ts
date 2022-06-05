@@ -24,22 +24,17 @@ export class AuthService {
   private helper = new JwtHelperService();
   statutUser: boolean;
   id: Number = null;
-
+  admin = false;
   constructor(private router: Router, private http: HttpClient) {}
   login(user: User) {
     console.log(user);
-    
     return this.http.post<User>(this.apiURL + "/login", user);
   }
 
-  getUserFromDB(username: string): Observable<User> {
-    const url = `${this.apiURL}/${username}`;
-    return this.http.get<User>(url);
-  }
+  
   saveToken(jwt: string) {
     localStorage.setItem("jwt", jwt);
     this.token = jwt;
-    //
     this.decodeJWT();
   }
   decodeJWT() {
@@ -48,12 +43,18 @@ export class AuthService {
     this.userName=decodedToken.name;
     this.roles = decodedToken.roles;
     this.loggedUser = decodedToken.email;
+    if(this.loggedUser==="admin@gmail.com"){
+      this.admin=true
+    }
     this.id = decodedToken.id;
     if(this.isValid()|| this.isAdmin()){
       this.isloggedIn = true;
       localStorage.setItem("isloggedIn",String( this.isloggedIn));
       localStorage.setItem("roles", String(this.roles));
-      localStorage.setItem("isloggedIn", String(this.isloggedIn));
+      localStorage.setItem("loggedUser", String(this.loggedUser));
+      localStorage.setItem("isAdmin",String(this.admin));
+      localStorage.setItem("LoggedUserId",String(this.id))
+      localStorage.setItem("userName",this.userName)
     } 
   }
   loadToken() {
@@ -61,6 +62,10 @@ export class AuthService {
     this.decodeJWT();
   }
 
+  getUserFromDB(username: string): Observable<User> {
+    const url = `${this.apiURL}/${username}`;
+    return this.http.get<User>(url);
+  }
   getToken(): string {
     return this.token;
   }
@@ -75,6 +80,8 @@ export class AuthService {
     localStorage.removeItem("loggedUser");
     localStorage.removeItem("isloggedIn");
     localStorage.removeItem("roles");
+    localStorage.removeItem("isAdmin");
+    localStorage.removeItem("LoggedUserId");
     this.router.navigate(["/login"]);
   }
   signIn(user: User) {
@@ -88,11 +95,7 @@ export class AuthService {
     
   }
   isAdmin(): Boolean {
-    let admin: Boolean = false;
-    if (this.loggedUser == "admin@gmail.com") {
-      admin = true;
-    }
-    return admin;
+    return this.admin;
   }
 
   isValid(): Boolean {
@@ -112,6 +115,10 @@ export class AuthService {
     return valid;
   }
 
+  currentRole(){
+    return this.roles.find( r => r.role == "ROLE_USER");
+  }
+
   getLoggedUser() {
     return localStorage.getItem("loggedUser");
   }
@@ -128,10 +135,11 @@ export class AuthService {
     });
   }
 
-  getCurrentUserId(): Number {
-    return this.id;
+  getCurrentUserId() {
+    let userId :Number = +localStorage.getItem("LoggedUserId");
+    return Number(localStorage.getItem("LoggedUserId"));
   }
   getUserName(){
-      return this.userName;
-  }
+      return  localStorage.getItem("userName")
+}
 }

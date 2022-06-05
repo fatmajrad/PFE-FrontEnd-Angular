@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Reponse } from '../models/reponse.model';
+import { Observable } from 'rxjs';
 
 
 const httpOptions = {
@@ -30,5 +31,9 @@ export class ReponseService {
   deleteReponse(id: Number) {
     const url = `${this.apiURL}/${id}`;
     return this.http.delete(url, httpOptions);
+  }
+
+  getReponse(): Observable<Reponse[]>{
+    return this.http.get<Reponse[]>(this.apiURL);
   }
 }

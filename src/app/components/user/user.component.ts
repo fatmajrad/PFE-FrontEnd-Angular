@@ -23,7 +23,8 @@ export class UserComponent implements OnInit {
   message: string;
   declineUserForm : FormGroup;
   searchForm : FormGroup
-   
+  totalElemnt : Number=0;
+  page=1
   constructor(
     private userService: UserService,
     private router: Router,
@@ -43,34 +44,38 @@ export class UserComponent implements OnInit {
     });
   }
   
+  resetForm(){
+    this.searchForm.reset();
+    this.getAllUsers();
+  }
   initDeclineForm(user : User){
     let adressmail: string = this.currentUser.email;
     let remarque : String = this.currentUser.remarque;
     
     this.declineUserForm = this.formBuilder.group({
      email: [adressmail],
-     contenuMail:[remarque]
+     contenuMail:[remarque,[Validators.required, Validators.minLength(20)]]
     });
   }
   getUserByNom(){
-    console.log(this.searchForm.get('userNom').value);
-    
     this.getUsersByName(this.searchForm.get('userNom').value);
   }
 
   getAllUsers(){
     this.userService.listeUser().subscribe((users) => {
       this.users = users;
+      this.totalElemnt = users.length
+      
     });
   }
   supprimerUser(u: User) {
     this.userService.supprimerDemandeUser(u.id).subscribe({
       next:(res)=>{ 
        this.type="success";
-       this.message="user supprimée avec succées";
+       this.message="Utilisateur supprimée avec succées";
        this.showAlertsucces=true;
-      this.supprimerDuTableauUser(u);
-      
+       this.supprimerDuTableauUser(u);
+    
       },
         error:()=>{
           this.showAlerterror=true;
@@ -89,83 +94,57 @@ export class UserComponent implements OnInit {
   }
 
   validerUser(u: User) {
-    this.userService.validerDemandeUser(u.id).subscribe({
-      next:(res)=>{ 
+    this.userService.validerDemandeUser(u.id).subscribe((response)=>{
        this.type="success";
-       this.message="user validée avec succées";
+       this.message="Utilisateur validée avec succées";
        this.showAlertsucces=true;
        this.getAllUsers();
-      
-      },
-        error:()=>{
-          this.showAlerterror=true;
-          this.type="error";
-          this.message="Erreur avec la validation";
-        }
-    });
+  })
   }
   refuserUser(u: User, body) {
-    console.log(body);
-    this.userService.updateUser(u,body).subscribe({
-      next:(res)=>{ 
-       
-        this.userService.refuserDemandeUser(u.id).subscribe({
-          next:(res)=>{
-            this.type="success";
-            this.message="user est réfusée";
-            this.showAlertsucces=true;
-          },
-          error:()=>{
-            this.showAlerterror=true;
-            this.type="error";
-            this.message="Probleme avec le refus";
-          }
-        });
-        this.getAllUsers();
-       },
-         error:()=>{
-           this.showAlerterror=true;
-           this.type="error";
-           this.message="Probleme avec le refus";
-     }});
-   }
+    this.userService.updateUser(u,body).subscribe((response)=>{
+      this.type="success";
+      this.message="Utilisateur validée avec succées";
+      this.showAlertsucces=true;
+      this.getAllUsers();
+ })
+ }
   
    getUserBystatus(statut){
-     console.log(statut);
-     
      this.userService.getUsersByStaut(statut).subscribe((users)=>{
        this.users=users
-       console.log(this.users,statut);
-       
+       this.totalElemnt = users.length
+       this.page=1
      })
    }
 
    getUsersByName(userName){
     this.userService.getUsersByUserName(userName).subscribe((users)=>{
       this.users=users
+      this.totalElemnt = users.length
+      this.page=1
     })
    }
 
    onEditClick(statut: any) {
    if(statut=='Invalide'){
-      console.log(statut);
      
       this.getUserBystatus('invalide');
    }else if(statut=='Valide'){
-    console.log(statut);
+    
       this.getUserBystatus('valide');
    }else if(statut=='En attente'){
-    console.log(statut);
+   
       this.getUserBystatus('onHold');
    }else{
-    console.log(statut);
+   
       this.getAllUsers();
    }
    
 }
 
 isPair(id){
-  console.log(id,!(id % 2))
+ 
   return !(id % 2)
 }
   open(content, type,user) {

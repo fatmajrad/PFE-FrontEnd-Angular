@@ -31,7 +31,8 @@ export class QuestionsListComponent implements OnInit {
   filteredOptions: Observable<any[]>;
   separatorKeysCodes: number[] =  [ENTER, COMMA];
   sujetForm : FormGroup;
-  
+  totalElement: Number 
+  page : number =1
   constructor(
     private questionService: QuestionService,
     private userService: UserService,
@@ -53,6 +54,7 @@ export class QuestionsListComponent implements OnInit {
   ngOnInit(): void {
     this.questionService.listeValidatedQuestions().subscribe((questions) => {
       this.questions = questions;
+      this.totalElement=questions.length;
     });
     this.sujetService.getlisteSujet().subscribe((sujets)=>{
       this.sujets=sujets;
@@ -76,6 +78,11 @@ export class QuestionsListComponent implements OnInit {
         sujet : new FormControl()
       }
     )
+  }
+
+  resetSearchForm(){
+    this.sujetForm.reset();
+    this.getQuestions();
   }
 
   getQuestions(){
@@ -131,6 +138,10 @@ export class QuestionsListComponent implements OnInit {
       }
     });
     return x;
+  }
+
+  getRoute(route: string,id: number) {
+    this.router.navigate([route, id]);
   }
 
  

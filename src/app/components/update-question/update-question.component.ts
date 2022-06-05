@@ -1,7 +1,12 @@
-import { Component, OnInit } from "@angular/core";
+import { COMMA, ENTER } from "@angular/cdk/keycodes";
+import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
+import { MatAutocomplete, MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
+import { MatChipInputEvent } from "@angular/material/chips";
 import { Router, ActivatedRoute } from "@angular/router";
 import { NgbModal, ModalDismissReasons } from "@ng-bootstrap/ng-bootstrap";
+import { Observable } from "rxjs";
+import { debounceTime, distinctUntilChanged, map, startWith } from "rxjs/operators";
 import { Question } from "src/app/models/question.model";
 import { Sujet } from "src/app/models/sujet.model";
 import { AuthService } from "src/app/services/auth.service";
@@ -14,6 +19,18 @@ import { SujetService } from "src/app/services/sujet.service";
   styleUrls: ["./update-question.component.css"],
 })
 export class UpdateQuestionComponent implements OnInit {
+  @ViewChild("fruitInput") fruitInput: ElementRef<HTMLInputElement>;
+  @ViewChild("auto") matAutocomplete: MatAutocomplete;
+
+  visible = true;
+  selectable = true;
+  removable = true;
+  separatorKeysCodes: number[] = [ENTER, COMMA];
+  fruitCtrl = new FormControl();
+  filteredFruits: Observable<string[]>;
+  fruits: string[] = [];
+  allFruits: string[] = [];
+  
   focus;
   focus1;
   currrentQuestionId: Number;
@@ -34,31 +51,51 @@ export class UpdateQuestionComponent implements OnInit {
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private questionService: QuestionService
-  ) {}
+  ) {
+    this.filteredFruits = this.fruitCtrl.valueChanges.pipe(
+      startWith(""),
+      debounceTime(400),
+      distinctUntilChanged(),
+      map((fruit: string | null) =>
+        fruit ? this._filter(fruit) : this.allFruits.slice()
+      )
+    );
+  }
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.allFruits.filter(
+      (fruit) => fruit.toLowerCase().indexOf(filterValue) === 0
+    ); 
+  }
 
   ngOnInit(): void {
-    this.questionService
-      .consulterQuestion(this.activatedRoute.snapshot.params.id)
-      .subscribe((response) => {
-        this.initForm(response),
-          (this.currrentQuestionId = response.id),
-          (this.currentQuestion = response);
+    this.questionService.consulterQuestion(this.activatedRoute.snapshot.params.id).subscribe((response) => {
+        this.initForm(response)
+        this.currrentQuestionId = response.id,
+        this.currentQuestion = response
+        this.currentQuestion.tag.forEach(tag => {
+          this.fruits.push(tag.nom)
+        });
       });
     this.sujetService.listeSujet().subscribe((sujets) => {
       this.sujets = sujets;
+      this.sujets.forEach((element) => {
+        this.allFruits.push(element.nom);
+      });
     });
-  }
-
-  initForm(x) {
+    let sujets =this.currentQuestion.tag
+    sujets.forEach(element => {
+      this.fruits.push(element.nom);
+    })
+   console.log(this.fruits);
    
-    let titre: String = x.intituleQuestion;
-    let description: String = x.descriptionQuestion;
-    let sujets: Sujet[] = x.tag;
+  }
+  initForm(x) {
     this.updateQuestionForm = this.formBuilder.group({
       test: [""],
-      intituleQuestion: [titre],
-      descriptionQuestion: [description],
-      sujet: [sujets],
+      intituleQuestion: [],
+      descriptionQuestion: [],
+      sujet: [],
     });
   }
 
@@ -66,16 +103,53 @@ export class UpdateQuestionComponent implements OnInit {
     return true;
   }
 
+  add(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+
+    // Add our fruit
+    if ((value || "").trim()) {
+      this.fruits.push(value.trim());
+     
+    }
+
+    // Reset the input value
+    if (input) {
+      input.value = "";
+    }
+
+    this.fruitCtrl.setValue(null);
+  }
+
+  remove(fruit: string): void {
+    const index = this.fruits.indexOf(fruit);
+
+    if (index >= 0) {
+      this.fruits.splice(index, 1);
+    }
+  }
+
+  selected(event: MatAutocompleteSelectedEvent): void {
+    this.fruits.push(event.option.viewValue);
+    this.fruitInput.nativeElement.value = "";
+    this.fruitCtrl.setValue(null);
+  }
   updateQuestion() {
+    let tags :any[] =[]
+    this.fruits.forEach(fruit => {
+     this.sujets.forEach(sujet => {
+       if(fruit == sujet.nom){
+         let id = "/api/sujets/"+sujet.id
+         tags.push(id)
+       }
+     });
+   });
     let question = {
       intituleQuestion: this.updateQuestionForm.get("intituleQuestion").value,
-      descriptionQuestion: this.updateQuestionForm.get("descriptionQuestion")
-        .value,
-      tag: ["/api/sujets/9"],
+      descriptionQuestion: this.updateQuestionForm.get("descriptionQuestion").value,
+      tag: tags,
     };
-    this.questionService
-      .updateQuestion(question, this.currrentQuestionId)
-      .subscribe((response) => console.log(response));
+    this.questionService.updateQuestion(question, this.currrentQuestionId).subscribe((response) => console.log(response));
     this.router.navigate(["/questions-list"]);
   }
 

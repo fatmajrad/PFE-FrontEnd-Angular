@@ -4,21 +4,30 @@
 <main>
     <section class="section section-shaped section-lg">
         <div class="shape shape-style-1 bg-white"></div>
+       
         <div style="
         width: 1200px;
         display: block;
         margin-left: auto;
         margin-right: auto;
         margin-top: 20px;
-      ">    
-            <li  class="nav-item" ngbDropdown placement="bottom-right" style="float: right;">
+        ">    
+         <ngb-alert *ngIf="showAlertsucces" type="success" dismissible="true" (close)="close()"
+         style="margin-bottom: 5px;margin-left: 800px; margin-right:80px;">
+         <span class="alert-inner--text"><strong>{{strong}}</strong>{{message}}</span>
+         </ngb-alert>
+         <ngb-alert *ngIf="showAlerterror" type="error" dismissible="true" (close)="close()"
+         style="margin-bottom: 5px;margin-left: 800px; margin-right:80px;">
+         <span class="alert-inner--text"><strong>{{strong}}</strong>{{message}}</span>
+         </ngb-alert>
+            <li  *ngIf="currentUserId===currentQuestion.user.id" class="nav-item" ngbDropdown placement="bottom-right" style="float: right;">
                 <a  class="nav-link nav-link-icon no-caret" ngbDropdownToggle id="nav-inner-success_dropdown_1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                   <span class="nav-link-inner--text d-lg-none">Settings</span>
                 </a>
                 <div class="dropdown-menu-right" aria-labelledby="nav-inner-success_dropdown_1" ngbDropdownMenu>
-                <a  class="dropdown-item" [routerLink]="['/update-question',currentQuestion.id]"> Modifier</a>
-                <a class="dropdown-item" >Supprimer</a>   
+                <a   class="dropdown-item" [routerLink]="['/update-question',currentQuestion.id]"> Modifier</a>
+                <a   class="dropdown-item" >Supprimer</a>   
                 </div>
             </li>
             <h4 class="display-4 mb-0">{{ currentQuestion.intituleQuestion }}</h4>
@@ -55,19 +64,22 @@
                 <h5 class="display-5 mb-0">Les réponses</h5>
                 <form [formGroup]="addReponseCommentaire">
                     <div *ngFor="let reponse of this.currentReponses">
-                        <div class="card mb-2" style="background-color: #eef2ff; margin-top: 20px;">
+                        <div class="card mb-2" [style]="reponseStyle(reponse)">
                             <div class="card-body p-2 p-sm-3">
                                 <div class="media forum-item">
+                                    <i class="fa fa-check fa-lg"
+                                     *ngIf="reponse.statut"
+                                     style="color: #00b88a"></i>
                                     <div class="media-body ml-3">
-                                        <li *ngIf="canEditReponse(reponse.user.id)" class="nav-item" ngbDropdown placement="bottom-right" style="float: right;">
+                                        <li *ngIf="currentUserId===reponse.user.id || currentUserId===currentQuestion.user.id"  class="nav-item" ngbDropdown placement="bottom-right" style="float: right;">
                                             <a class="nav-link nav-link-icon no-caret" ngbDropdownToggle id="nav-inner-success_dropdown_1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                                               <span class="nav-link-inner--text d-lg-none">Settings</span>
                                             </a>
                                             <div class="dropdown-menu-right" aria-labelledby="nav-inner-success_dropdown_1" ngbDropdownMenu>
-                                            <a class="dropdown-item" (click)="open(content,'modify-reponse',reponse,commentaire)">Modifier</a>
-                                            <a class="dropdown-item" (click)="open(content8,'accept-reponse',reponse,commentaire)">Accepter</a>
-                                            <a class="dropdown-item" (click)="open(content1,'delete-reponse',reponse,commentaire)">Supprimer</a>
+                                            <a *ngIf="currentUserId===reponse.user.id"class="dropdown-item" (click)="open(content,'modify-reponse',reponse,commentaire)">Modifier</a>
+                                            <a *ngIf="currentUserId===currentQuestion.user.id"class="dropdown-item" (click)="open(content8,'accept-reponse',reponse,commentaire)">Accepter</a>
+                                            <a *ngIf="currentUserId===reponse.user.id"class="dropdown-item" (click)="open(content1,'delete-reponse',reponse,commentaire)">Supprimer</a>
                                               
                                             </div>
                                         </li>
@@ -81,7 +93,7 @@
                                             {{countNumberVotes(reponse,true)}}
                                             <span class="btn-inner--icon"><i class="fa fa-thumbs-up" aria-hidden="true" (click)="likeReponse(reponse)"></i></span>
                                         </button>
-                                        <button class="btn btn-sm btn-2 btn-danger" type="button">
+                                        <button class="btn btn-sm btn-2 btn-danger" type="button" (click)="dislikeReponse(reponse)">
                                             {{countNumberVotes(reponse,false)}}
                                             <span class="btn-inner--icon"><i class="fa fa-thumbs-down" aria-hidden="true" (click)="dislikeReponse(reponse)"></i></span>
                                         </button>
@@ -93,7 +105,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div  class="d-flex flex-row add-comment-section mt-4 mb-4" >
+                        <div  *ngIf="authService.isloggedIn" class="d-flex flex-row add-comment-section mt-4 mb-4" >
                             <input formControlName="commentaire" *ngIf="authService.isloggedIn"  type="text" class="form-control mr-3"
                                 placeholder="Taper votre commentaire" />
                             <button *ngIf="authService.isloggedIn" class="btn btn-sm btn-outline-primary" type="button" (click)="addCommentaire(reponse.id)" >
@@ -103,15 +115,15 @@
                        <div *ngIf="showComments==true">
                         <div  *ngFor="let commentaire of toArray(reponse.commentaires)" class="card"
                         style="margin-left: 80px; background-color: #eef2ff ; margin-top: 20px;">
-                        <div class="card-body">
-                            <li class="nav-item" ngbDropdown placement="bottom-right" style="float: right;">
+                        <div class="card-body" style="background-color:#eef2ff ;">
+                            <li *ngIf="currentUserId===commentaire.user.id" class="nav-item" ngbDropdown placement="bottom-right" style="float: right;">
                                 <a class="nav-link nav-link-icon no-caret" ngbDropdownToggle id="nav-inner-success_dropdown_1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                                   <span class="nav-link-inner--text d-lg-none">Settings</span>
                                 </a>
                                 <div  class="dropdown-menu-right" aria-labelledby="nav-inner-success_dropdown_1" ngbDropdownMenu>
                                     <a class="dropdown-item" (click)="open(content3,'modify-commentaire',reponse,commentaire)">Modifier</a>
-                                    <a class="dropdown-item" (click)="open(content1,'delete-commentaire',reponse,commentaire)">Supprimer</a> 
+                                    <a  class="dropdown-item" (click)="open(content1,'delete-commentaire',reponse,commentaire)">Supprimer</a> 
                                 </div>
                             </li>
                             <h6 class="card-title">
@@ -119,20 +131,32 @@
                                     class="mr-3 rounded-circle" width="25" alt="User" />{{commentaire.user.nomUser}}<small
                                     class="text-muted ml-2">{{commentaire.createdAt | date: "shortDate"}}</small>
                             </h6>
-                            <p [innerHTML]="commentaire.contenu" style="margin-top: 2px">
+                            <div class="bloghtml">
+                            <div [innerHTML]="commentaire.contenu" style="margin-top: 2px">
                                 {{ commentaire.contenu }}
-                            </p>
+                            </div>
+                            </div>
                         </div>
                         </div>
                        </div>
                     </div>
 
                     <hr style=" height: 2px; border: none; background-color: #9b9cdb; border-radius: 2px;"/>
-                    <div style="margin-top: 30px">
-                        <h5 class="display-5 mb-0">Votre réponse</h5>
+                    <div *ngIf="authService.isloggedIn" style="margin-top: 30px">
+                
+                        <h5 class="display-5 mb-0"> <i class="fa fa-check fa-lg"
+                            *ngIf="addReponseCommentaire.controls['reponse'].valid"
+                            style="color: #00b88a"></i>Votre réponse</h5>
                         <quill-editor style="height: 300px" name="reponseContenu" formControlName="reponse">
                         </quill-editor>
-                        <button class="btn btn-primary" style="margin-top: 5px; float: right" (click)="addReponse()">
+                        <ng-container class="text-muted"
+                        *ngIf="!addReponseCommentaire.controls['reponse'].valid && addReponseCommentaire.controls['reponse'].dirty ">
+                        <p style="color: red"><i class="fa fa-exclamation-triangle"></i> La description de la
+                            connaissance doit contenir au minimum 20 caracteres</p>
+                        <div *ngIf="addReponseCommentaire.controls['reponse'].hasError('minlength' )">
+                        </div>
+                        </ng-container>
+                        <button class="btn btn-primary" style="margin-top: 5px; float: right"  [disabled]="addReponseCommentaire.invalid" (click)="addReponse()">
                             Ajouter
                         </button>
                     </div>
@@ -140,7 +164,6 @@
             </div>
         </div>
     </section>
-    
     
     <ng-template #content let-c="close" let-d="dismiss" aria-labelledby="modify-reponse-modal">    
         <div class="modal-header">    
@@ -150,17 +173,17 @@
             </button>    
         </div>    
         <div class="modal-body">    
-          <form >
+          <form [formGroup]="updateReponseReponseForm">
             <div class="form-group">
               <label for="exampleFormControlTextarea1">Reponse</label>
-              <quill-editor style="height: 300px" name="reponseContenu" [(ngModel)]="currentReponse.contenu">
+              <quill-editor style="height: 300px" name="reponseContenu"  formControlName="contenu" [ngModel]="currentReponse.contenu">
             </quill-editor>
             </div>
           </form>    
         </div>    
         <div class="modal-footer">    
             <button type="button" class="btn btn-outline-primary" (click)="d('Cross click')">Annuler</button>    
-            <button type="button" class="btn btn-success" (click)="c('yes')">Modifier</button>    
+            <button  type="button" class="btn btn-success" (click)="c('yes')">Modifier</button>    
         </div>    
     </ng-template>
 
@@ -198,22 +221,67 @@
 
     <ng-template #content3 let-c="close" let-d="dismiss" aria-labelledby="modify-commentaire-modal">    
         <div class="modal-header">
-            <h4 class="modal-title" id="modify-reponse">Modifier Commentaire</h4>    
-            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">    
-                <span aria-hidden="true">×</span>    
-            </button>    
+            <h4 class="modal-title" id="modify-reponse">Modifier Commentaire</h4>
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="updateConnaissanceCommentaire">
+
+                <div class="form-group">
+                    <div class="input-group mb-3">
+                        <label> Votre commentaire</label>
+                        <div class="input-group-prepend">
+
+                            <span class="input-group-text"><i class="fa fa-check fa-lg"
+                                    *ngIf="updateConnaissanceCommentaire.controls['commentaire'].valid"
+                                    style="color: #00b88a"></i></span>
+                        </div>
+                        <input formControlName="commentaire" type="text" class="form-control"
+                            placeholder="Taper votre commentaire" />
+                    </div>
+
+                    <ng-container class="text-muted"
+                        *ngIf="!updateConnaissanceCommentaire.controls['commentaire'].valid && updateConnaissanceCommentaire.controls['commentaire'].dirty ">
+                        <p style="color: red"><i class="fa fa-exclamation-triangle"></i> La description de la
+                            connaissance doit contenir au minimum 20 caracteres</p>
+                        <div *ngIf="updateConnaissanceCommentaire.controls['commentaire'].hasError('minlength' )">
+                        </div>
+                    </ng-container>
+                </div>
+
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-primary" (click)="d('Cross click')">
+                Annuler
+            </button>
+            <button type="button" class="btn btn-success" [disabled]="updateConnaissanceCommentaire.invalid"
+                (click)="c('yes')">
+                Modifier
+            </button>
         </div>    
-        <div class="modal-body">    
-          <form >
-            <div class="form-group">
-              <label for="exampleFormControlTextarea1">Reponse</label>
-              <textarea class="form-control" name="contenu"  [(ngModel)]="currentCommentaire.contenu" rows="3" value="currentCommentaire.contenu" ></textarea>
+    </ng-template>
+    <ng-template #content9 let-c="close" let-d="dismiss" aria-labelledby="delete-Commentaire">
+        <div class="modal-header">
+            <h4 class="modal-title" id="modify-reponse">Supprimer Commentaire</h4>
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+        <form [formGroup]="updateConnaissanceCommentaire">
+            <div class="d-flex flex-row add-comment-section mt-4 mb-4">
+                <p>Voulez-vous vraiment supprimer votre commentaire?</p>
             </div>
-          </form>    
-        </div>    
-        <div class="modal-footer">    
-            <button type="button" class="btn btn-outline-primary" (click)="d('Cross click')">Annuler</button>    
-            <button type="button" class="btn btn-success" (click)="c('yes')">Modifier</button>    
-        </div>    
+        </form>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-primary" (click)="d('Cross click')">
+                Annuler
+            </button>
+            <button type="button" class="btn btn-success" (click)="c('yes')">
+                Supprimer
+            </button>
+        </div>
     </ng-template>
 </main>

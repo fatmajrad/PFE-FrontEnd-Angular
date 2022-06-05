@@ -21,6 +21,8 @@ export class ListValidationQuestionsComponent implements OnInit {
   questions : Question[];
   sujets:Sujet[];
   user : User;
+  totalElement: Number 
+  page : number =1
   currentQuestion :Question;
   declineQuestionForm : FormGroup;
   searchForm : FormGroup
@@ -41,16 +43,15 @@ export class ListValidationQuestionsComponent implements OnInit {
 
   getAllquestions(){
     this.questionService.listeQuestion().subscribe(questions => {
-      this.questions = questions;    
+      this.questions = questions; 
+      this.totalElement=questions.length   
     });
   }
   getQuestionsBystatus(statut){
-    console.log(statut);
-    
     this.questionService.getQuestionsByStatut(statut).subscribe((questions)=>{
       this.questions=questions
-      console.log(this.questions,statut);
-      
+      this.totalElement=questions.length
+      this.page=1
     })
   }
   initSearchForm() {
@@ -65,29 +66,29 @@ export class ListValidationQuestionsComponent implements OnInit {
       remarqueQuestion:['']
     });
   }
-
+  resetForm(){
+    this.searchForm.reset();
+    this.getAllquestions();
+  }
   getQuestionIntitule(){
     this.getQuestionsByIntitule(this.searchForm.get('intitule').value);
   }
   getQuestionsByIntitule(intitule){
    this.questionService.getQuestionsByIntitule(intitule).subscribe((questions)=>{
      this.questions=questions
+     this.totalElement=questions.length
+     this.page=1
    })
   }
 
   onEditClick(statut: any) {
     if(statut=='Invalide'){
-       console.log(statut);
-      
        this.getQuestionsBystatus('invalide');
     }else if(statut=='Valide'){
-     console.log(statut);
        this.getQuestionsBystatus('valide');
     }else if(statut=='En attente'){
-     console.log(statut);
        this.getQuestionsBystatus('onHold');
     }else{
-     console.log(statut);
        this.getAllquestions();
     }
   }
@@ -106,7 +107,7 @@ export class ListValidationQuestionsComponent implements OnInit {
     this.questionService.validateQuestion(q.id).subscribe({
       next:(res)=>{ 
        this.type="success";
-       this.message="question Validée avec succées";
+       this.message="Question validée avec succées";
        this.showAlertsucces=true;
        this.getAllquestions();
       
@@ -114,7 +115,7 @@ export class ListValidationQuestionsComponent implements OnInit {
         error:()=>{
           this.showAlerterror=true;
           this.type="error";
-          this.message="Erreur avecla validation";
+          this.message="Erreur avec la validation";
         }
     });
   }
@@ -146,10 +147,23 @@ export class ListValidationQuestionsComponent implements OnInit {
     this.showAlertsucces=false;
   }
 
-  deleteQuestion(){
-    console.log("innnnn");
-  }
-
+  deleteQuestion(idQuestion){
+   this.questionService.deleteQuestion(idQuestion).subscribe({
+    next:(res)=>{ 
+     this.type="success";
+     this.message="Question supprimée avec succées";
+     this.showAlertsucces=true;
+     this.getAllquestions();
+    
+    },
+      error:()=>{
+        this.showAlerterror=true;
+        this.type="error";
+        this.message="Erreur avec la suppression";
+      }
+  });
+}
+  
   open(content, type,question) {
     this.currentQuestion=question;
      if (type === 'delete-question') {
@@ -159,7 +173,7 @@ export class ListValidationQuestionsComponent implements OnInit {
         (result) => {
           this.closeResult = `Closed with: ${result}`;
           if (result === "yes") { 
-            this.deleteQuestion();
+            this.deleteQuestion(this.currentQuestion.id);
           }
         },
         (reason) => {
@@ -168,7 +182,7 @@ export class ListValidationQuestionsComponent implements OnInit {
       );
     }else if (type === 'detailsQuestion') {
       this.modalService
-      .open(content, { ariaLabelledBy: "details-question" })
+      .open(content, {size: "lg", ariaLabelledBy: "details-question" })
       .result.then(
         (result) => {
           this.closeResult = `Closed with: ${result}`;
@@ -178,7 +192,7 @@ export class ListValidationQuestionsComponent implements OnInit {
         }
       );
     }else if (type == 'rejectQuestion') {
-      console.log(type);
+     
       
       this.initDeclineForm();
       this.modalService
@@ -187,7 +201,7 @@ export class ListValidationQuestionsComponent implements OnInit {
         (result) => {
           this.closeResult = `Closed with: ${result}`;
           if (result === "yes") { 
-            console.log("reject")
+           
            this.declineQuestion(question);
           }
         },

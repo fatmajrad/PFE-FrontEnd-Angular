@@ -62,6 +62,9 @@ export class SujetsListComponent implements OnInit {
       })
     );
   }
+  listquestionsbysujet(id: number){
+    this.router.navigate(["/sujet-questions-list"+id]);
+  }
 
   detailsSujets() {
     console.log("dd");

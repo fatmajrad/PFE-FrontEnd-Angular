@@ -58,16 +58,18 @@ export class QuestionService {
   
  
   getQuestionsByDateIntervall(minDate , maxDate){
-    const url = "http://localhost:8000/api/questions/valide/"+minDate+"/"+maxDate+"/countdate"
+
+    const url = "http://localhost:8000/api/users/valide/"+minDate+"/"+maxDate+"/countdate"
+    console.log(url);
+    
     return this.http.get<Question[]>(url);
   }
  
   getRecentQuestions(){
     const url = "http://localhost:8000/api/questions/recent"
+    
     return this.http.get<Question[]>(url);
   }
-  
-  
   
   consulterQuestion(id: number): Observable<Question> {
     const url = `${this.apiURL}/${id}`;
@@ -112,5 +114,19 @@ export class QuestionService {
     return this.http.get<Question[]>(url);
   }
 
+  getQuestionsBySujet(idSujet){
+    const url="http://localhost:8000/api/questions?statut=valide&tag.id="+idSujet
+    return this.http.get<Question[]>(url)
+  }
+
+  getMyQuestionsByTag(idSujet,IdUser){
+    const url="http://localhost:8000/api/questions?user.id="+IdUser+"&tag.id="+idSujet
+    return this.http.get<Question[]>(url);
+  }
+
+  getMyQuestionsByIntituleSujet(idUser,idSujet,intitule){
+    const url="http://localhost:8000/api/questions?user.id="+idUser+"&intituleQuestion="+intitule+"&tag.id="+idSujet
+    return this.http.get<Question[]>(url);
+  }
   
 }

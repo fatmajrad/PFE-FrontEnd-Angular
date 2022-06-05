@@ -1,3 +1,4 @@
+import {NgxPaginationModule} from 'ngx-pagination';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -5,7 +6,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app.routing';
-
 import { AppComponent } from './app.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { LandingComponent } from './components/landing/landing.component';
@@ -43,9 +43,9 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ChartsModule } from 'ng2-charts';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
 import { UpdateProfileComponent } from './components/update-profile/update-profile.component';
-import { HomeBestSubjectsComponent } from './components/home-best-subjects/home-best-subjects.component';
-import { HomeLatestQuestionsComponent } from './components/home-latest-questions/home-latest-questions.component';
-import { HomeLatestConnaissancesComponent } from './components/home-latest-connaissances/home-latest-connaissances.component';
+import { ReclamationListComponent } from './components/reclamation-list/reclamation-list.component';
+import { SujetConnaissanceListComponent } from './components/sujet-connaissance-list/sujet-connaissance-list.component';
+import { SujetQuestionsListComponent } from './components/sujet-questions-list/sujet-questions-list.component';
 
 
 
@@ -73,9 +73,9 @@ import { HomeLatestConnaissancesComponent } from './components/home-latest-conna
     DashboardComponent,
     ForbiddenComponent,
     UpdateProfileComponent,
-    HomeBestSubjectsComponent,
-    HomeLatestQuestionsComponent,
-    HomeLatestConnaissancesComponent,
+    ReclamationListComponent,
+    SujetConnaissanceListComponent,
+    SujetQuestionsListComponent,
  
     
   ],
@@ -102,7 +102,7 @@ import { HomeLatestConnaissancesComponent } from './components/home-latest-conna
     MatFormFieldModule,
     MatInputModule,
     ChartsModule,
-    
+    NgxPaginationModule,
    
   ],
   providers: [],

@@ -83,4 +83,11 @@ export class UserService {
     const url="http://localhost:8000/api/users?page=1&nomUser="+name
     return this.http.get<User[]>(url);
   }
+
+  getUserByEmail(email){
+    const url ="http://localhost:8000/api/users?page=1&email="+email
+    console.log(url);
+    
+    return this.http.get<User[]>(url);
+  }
 }

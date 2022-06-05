@@ -118,3 +118,10 @@ body {
     border-radius: 5px;
     margin-left: 20px;
 }
+
+@media only screen and (min-width : 300px) and (max-width : 780px) {
+    .search {
+        width: 95%;
+        margin: 0 auto;
+    }
+}

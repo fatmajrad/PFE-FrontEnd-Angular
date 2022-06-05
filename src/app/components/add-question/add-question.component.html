@@ -1,179 +1,103 @@
 <main>
-<<<<<<< HEAD
   <section class="section section-shaped section-lg" style="background-color: white;">
     <div class="shape shape-style-1 bg-gradient-default">
     </div>
-    
-    
-      <h3><ngb-alert *ngIf="showAlertsucces" type="success" dismissible="true"  (close)="close()" style="margin-bottom: 5px;margin-left: 800px; margin-right:80px;" >
+
+
+    <h3>
+      <ngb-alert *ngIf="showAlertsucces" type="success" dismissible="true" (close)="close()"
+        style="margin-bottom: 5px;margin-left: 800px; margin-right:80px;">
         <span class="alert-inner--text"><strong>{{strong}}</strong>{{message}}</span>
-    </ngb-alert>
-    <ngb-alert *ngIf="showAlerterror" type="error" dismissible="true"  (close)="close()" style="margin-bottom: 5px;margin-left: 800px; margin-right:80px;" >
+      </ngb-alert>
+      <ngb-alert *ngIf="showAlerterror" type="error" dismissible="true" (close)="close()"
+        style="margin-bottom: 5px;margin-left: 800px; margin-right:80px;">
         <span class="alert-inner--text"><strong>{{strong}}</strong>{{message}}</span>
-    </ngb-alert>
+      </ngb-alert>
     </h3>
-      <h1 class="mb-0" style="margin-top: 10px; margin-left: 80px;">Ajouter une question</h1>
-     
-        <form [formGroup]="addQuestionForm" class="form-container" style="margin-top: 20px; margin-left: 80px; margin-right: 80px;">
-          <div class="form-group" [ngClass]="{'focused':focus5===true}">
-              <h6>Question:</h6>
-              <input formControlName="intituleQuestion" class="form-control" placeholder="Question" type="text"(focus)="focus5=true" (blur)="focus5=false">
-              <p>Quelle est votre question ? </p>
+    <h1 class="mb-0" style="margin-top: 10px; margin-left: 80px;">Ajouter une question</h1>
+
+    <form [formGroup]="addQuestionForm" class="form-container"
+      style="margin-top: 20px; margin-left: 80px; margin-right: 80px;">
+      <div class="form-group">
+        <h6>Question:</h6>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fa fa-check fa-lg" *ngIf="addQuestionForm.controls['intituleQuestion'].valid"
+              style="color: #00b88a"></i></span>
           </div>
-            <div class="form-group">
-              <h6>Sujets:</h6>
-                <!--  <input formControlName="sujet" matInput type="text" class="form-control"[matAutocomplete]="auto" placeholder="Sujets"  [formControl]="formControl">
-                  <mat-autocomplete #auto="matAutocomplete">
-                    <mat-option *ngFor="let sujet of filteredOptions  | async" [value]="sujet.nom">
-                      {{sujet.nom}}
-                    </mat-option>
-                  </mat-autocomplete> -->
-                  <mat-form-field class="example-chip-list">
-                    <mat-label>Favorite Fruits</mat-label>
-                    <mat-chip-list #chipList aria-label="Fruit selection">
-                      <mat-chip
-                        *ngFor="let fruit of fruits"
-                        [selectable]="selectable"
-                        [removable]="removable"
-                        (removed)="remove(fruit)">
-                        {{fruit}}
-                        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-                      </mat-chip>
-                      <input
-                        placeholder="New fruit..."
-                        #fruitInput
-                        formControlName="sujet"
-                        [formControl]="fruitCtrl"
-                        [matAutocomplete]="auto"
-                        [matChipInputFor]="chipList"
-                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                        (matChipInputTokenEnd)="add($event)">
-                    </mat-chip-list>
-                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-                      <mat-option *ngFor="let fruit of filteredFruits | async" [value]="fruit">
-                        {{fruit}}
-                      </mat-option>
-                    </mat-autocomplete>
-                  </mat-form-field>
-                  <p >Quelles sont les sujets qui ont un rapport avec votre question </p>
-                  <!--<mat-form-field class="example-chip-list" appearance="fill">
-                    <mat-label>Sujet</mat-label>
-                   <mat-chip-list #chipList aria-label="sujet selection">
-                      <mat-chip
-                        *ngFor="let sujet of sujets"
-                        (removed)="remove(sujet)">
-=======
-    <section class="section section-shaped section-lg" style="background-color: white;">
-      <div class="shape shape-style-1 bg-gradient-default">
+          <input formControlName="intituleQuestion" class="form-control" placeholder="Question" type="text">
+        </div>
+        <label> intitule de question</label>
+        <ng-container class="text-muted"
+        *ngIf="!addQuestionForm.controls['intituleQuestion'].valid && addQuestionForm.controls['intituleQuestion'].dirty ">
+        <p style="color: red"><i class="fa fa-exclamation-triangle"> L'intitule de la question doit contenir au minimum 20 caracteres</i></p>
+        <div *ngIf="addQuestionForm.controls['intituleQuestion'].hasError('minlength' )"></div>
+        </ng-container>
       </div>
-      
-      
-        <h3><ngb-alert *ngIf="showAlertsucces" type="success" dismissible="true"  (close)="close()" style="margin-bottom: 5px;margin-left: 800px; margin-right:80px;" >
-          <span class="alert-inner--text"><strong>{{strong}}</strong>{{message}}</span>
-      </ngb-alert>
-      <ngb-alert *ngIf="showAlerterror" type="error" dismissible="true"  (close)="close()" style="margin-bottom: 5px;margin-left: 800px; margin-right:80px;" >
-          <span class="alert-inner--text"><strong>{{strong}}</strong>{{message}}</span>
-      </ngb-alert>
-      </h3>
-        <h1 class="mb-0" style="margin-top: 10px; margin-left: 80px;">Ajouter une question</h1>
+      <div class="form-group">
+        <h6>Sujets:</h6>
+
+        <mat-form-field class="example-chip-list">
+          <mat-label>Sujets</mat-label>
+          <mat-chip-list #chipList aria-label="Fruit selection">
+            <mat-chip *ngFor="let fruit of fruits" [selectable]="selectable" [removable]="removable"
+              (removed)="remove(fruit)">
+              {{fruit}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input placeholder="Sujet " #fruitInput formControlName="sujet" [formControl]="fruitCtrl"
+              [matAutocomplete]="auto" [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              (matChipInputTokenEnd)="add($event)">
+          </mat-chip-list>
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+            <mat-option *ngFor="let fruit of filteredFruits| async" [value]="fruit">
+              {{fruit}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <p>Quelles sont les sujets qui ont un rapport avec votre question </p>
+        <ng-container class="text-muted"
+        *ngIf="!addQuestionForm.controls['sujet'].valid && addQuestionForm.controls['sujet'].dirty">
+        <mat-error>Atleast 1 name need to be added</mat-error>
+        <div *ngIf="addQuestionForm.controls['sujet'].hasError('minlength' )"></div>
+        </ng-container>
+      </div>
+     
+      <div class="form-group">
+        <h6>  <i class="fa fa-check fa-lg" *ngIf="addQuestionForm.controls['descriptionQuestion'].valid"
+          style="color: #00b88a"></i>Decrivez votre Question:</h6>
+        <quill-editor formControlName="descriptionQuestion" [style]="quillEditor"></quill-editor>
+        <p>Quelle est votre question ? </p>
        
-          <form [formGroup]="addQuestionForm" class="form-container" style="margin-top: 20px; margin-left: 80px; margin-right: 80px;">
-            <div class="form-group" [ngClass]="{'focused':focus5===true}">
-                <h6>Question:</h6>
-                <input formControlName="intituleQuestion" class="form-control" placeholder="Question" type="text"(focus)="focus5=true" (blur)="focus5=false">
-                <p>Quelle est votre question ? </p>
-            </div>
-              <div class="form-group">
-                <h6>Sujets:</h6>
-                  <!--  <input formControlName="sujet" matInput type="text" class="form-control"[matAutocomplete]="auto" placeholder="Sujets"  [formControl]="formControl">
-                    <mat-autocomplete #auto="matAutocomplete">
-                      <mat-option *ngFor="let sujet of filteredOptions  | async" [value]="sujet.nom">
->>>>>>> master
-                        {{sujet.nom}}
-                      </mat-option>
-                    </mat-autocomplete> -->
-                    <mat-form-field class="example-chip-list">
-                      <mat-label>Favorite Fruits</mat-label>
-                      <mat-chip-list #chipList aria-label="Fruit selection">
-                        <mat-chip
-                          *ngFor="let fruit of fruits"
-                          [selectable]="selectable"
-                          [removable]="removable"
-                          (removed)="remove(fruit)">
-                          {{fruit}}
-                          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-                        </mat-chip>
-                        <input
-                          placeholder="New fruit..."
-                          #fruitInput
-                          formControlName="sujet"
-                          [formControl]="fruitCtrl"
-                          [matAutocomplete]="auto"
-                          [matChipInputFor]="chipList"
-                          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                          (matChipInputTokenEnd)="add($event)">
-                      </mat-chip-list>
-                      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-                        <mat-option *ngFor="let fruit of filteredFruits | async" [value]="fruit">
-                          {{fruit}}
-                        </mat-option>
-                      </mat-autocomplete>
-                    </mat-form-field>
-                    <p >Quelles sont les sujets qui ont un rapport avec votre question </p>
-                    <!--<mat-form-field class="example-chip-list" appearance="fill">
-                      <mat-label>Sujet</mat-label>
-                     <mat-chip-list #chipList aria-label="sujet selection">
-                        <mat-chip
-                          *ngFor="let sujet of sujets"
-                          (removed)="remove(sujet)">
-                          {{sujet.nom}}
-                          <button matChipRemove>
-                            <mat-icon>cancel</mat-icon>
-                          </button>
-                        </mat-chip>
-                        <input
-                          placeholder="taper le nom du sujet..."
-                          #sujetInput
-                          [formControl]="sujetCtrl"
-                          [matAutocomplete]="auto"
-                          [matChipInputFor]="chipList"
-                          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                          (matChipInputTokenEnd)="add($event)">
-                      </mat-chip-list>
-                      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-                        <mat-option *ngFor="let sujet of sujets | async" [value]="sujet.nom">
-                          {{fruit}}
-                        </mat-option>
-                      </mat-autocomplete>
-                    </mat-form-field>!-->
-              </div>
-              <div class="form-group">
-                <h6>Decrivez votre Question:</h6>
-                <quill-editor formControlName="descriptionQuestion" [style]="quillEditor" ></quill-editor>
-                <p>Essayez de donner toutes les inforamtions nécessaires  </p>
-              </div>
-          
-            <div style="float: right;">
-            <button (click)="Annuler(content)" class="btn btn-primary" >Annuler</button>
-            <button (click)="AjouterQuestion()" class="btn btn-outline-success">Ajouter</button>
-           </div>
-          </form>
-          <ng-template #content let-c="close" let-d="dismiss">    
-            <div class="modal-header">    
-                <h4 class="modal-title" id="modal-basic-title">Confirmation</h4>    
-                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">    
-                    <span aria-hidden="true">×</span>    
-                </button>    
-            </div>    
-            <div class="modal-body">    
-                <p>vous voulez garder le brouillon ?</p>    
-            </div>    
-            <div class="modal-footer">    
-                <button type="button" class="btn btn-outline-primary" (click)="d('Cross click')">Cancel</button>    
-                <button type="button" class="btn btn-outline-success" (click)="c('yes')">Yes</button>    
-            </div>    
-        </ng-template>
-      
+        <ng-container class="text-muted"
+        *ngIf="!addQuestionForm.controls['descriptionQuestion'].valid && addQuestionForm.controls['descriptionQuestion'].dirty ">
+        <p  style="color: red"><i class="fa fa-exclamation-triangle"></i> La description de la question doit contenir au minimum 20 caracteres</p> 
+        <div *ngIf="addQuestionForm.controls['descriptionQuestion'].hasError('minlength' )"></div>
+        </ng-container>
+        <p>Essayez de donner toutes les inforamtions nécessaires </p>
+      </div>
+
+      <div style="float: right;">
+        <button (click)="Annuler(content)" class="btn btn-primary">Annuler</button>
+        <button (click)="AjouterQuestion()" class="btn btn-outline-success" [disabled]="addQuestionForm.invalid">Ajouter</button>
+      </div>
+    </form>
+    <ng-template #content let-c="close" let-d="dismiss">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Confirmation</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>vous voulez garder le brouillon ?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="d('Cross click')">Annuler</button>
+        <button type="button" class="btn btn-outline-success" (click)="c('yes')">Sauvegarder</button>
+      </div>
+    </ng-template>
+
   </section>
-  
-  </main>
+
+</main>

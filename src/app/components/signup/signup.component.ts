@@ -25,6 +25,13 @@ export class SignupComponent implements OnInit {
   formControl = new FormControl();
   signUpForm: FormGroup;
   apiURL: string = "http://localhost:8080/produits/api";
+  PwdType: boolean;
+  PwdConfirmedType: boolean;
+  toggleFieldTextType(value) {
+    value === 'pwd'
+      ? (this.PwdType = !this.PwdType)
+      : (this.PwdConfirmedType = !this.PwdConfirmedType);
+  }
 
   constructor(
     private userService: UserService,
@@ -40,11 +47,12 @@ export class SignupComponent implements OnInit {
   initForm() {
     this.signUpForm = this.formBuilder.group({
       nomUser: ["",[Validators.required, Validators.minLength(5)]],
-      email: ["",[Validators.required, Validators.minLength(10)]],
+      email: ["",[Validators.required,Validators.email]],
       fonction: ["",[Validators.required]],
       password: ["", [Validators.required, Validators.minLength(8)]],
-      confirmpassword: ["",[Validators.required]],
-    });
+      confirmpassword: [""],
+    },
+    {validators: this.passwordErrorValidator});
   }
   signUpUser() {
     let user= {
@@ -53,27 +61,23 @@ export class SignupComponent implements OnInit {
       "nomUser":  this.signUpForm.get('nomUser').value,
       "userFonction":  this.signUpForm.get('fonction').value,
     }
-    console.log(user);
+    this.userService.getUserByEmail(this.signUpForm.get('email').value).subscribe((response)=>{
+      console.log(response);
+      
+      if(response.length===0){
+        this.userService.addDemandeUser(user).subscribe(
+          (response) => {
+            document.getElementById("openModelButton").click();
+            }
+        );
+      }else{
+        this.err=1;
+        
+      }
+    })
     
-    this.userService.addDemandeUser(user).subscribe(
-        (response) => {
-          console.log(response);
-          document.getElementById("openModelButton").click();
-          },
-        (err) => {
-          this.err = 1;
-        }
-      );
+   
   }
-
-  PwdType: boolean;
-  PwdConfirmedType: boolean;
-  toggleFieldTextType(value) {
-    value === 'pwd'
-      ? (this.PwdType = !this.PwdType)
-      : (this.PwdConfirmedType = !this.PwdConfirmedType);
-  }
-
   passwordErrorValidator = (control: FormGroup) => {
     const password = control.value.password;
     const confirmpassword = control.value.confirmpassword;
@@ -81,6 +85,8 @@ export class SignupComponent implements OnInit {
     return password !== confirmpassword
       ? control.get('confirmpassword').setErrors({ passwordMismatch: true })
       : control.get('confirmpassword').setErrors(null);
+    
+      
   }
   
   open(content) {
@@ -105,3 +111,42 @@ export class SignupComponent implements OnInit {
     }
   }
 }
+export function MustMatch(controlName: string, matchingControlName: string) {
+  return (formGroup: FormGroup) => {
+      const control = formGroup.controls[controlName];
+      const matchingControl = formGroup.controls[matchingControlName];
+
+      if (matchingControl.errors && !matchingControl.errors.mustMatch) {
+          // return if another validator has already found an error on the matchingControl
+          return;
+      }
+
+      // set error on matchingControl if validation fails
+      if (control.value !== matchingControl.value) {
+          matchingControl.setErrors({ mustMatch: true });
+      } else {
+          matchingControl.setErrors(null);
+      }
+  }
+  function MustMatch(controlName: string, matchingControlName: string) {
+    return (formGroup: FormGroup) => {
+        const control = formGroup.controls[controlName];
+        const matchingControl = formGroup.controls[matchingControlName];
+
+        if (matchingControl.errors && !matchingControl.errors.mustMatch) {
+            // return if another validator has already found an error on the matchingControl
+            return;
+        }
+
+        // set error on matchingControl if validation fails
+        if (control.value !== matchingControl.value) {
+            matchingControl.setErrors({ mustMatch: true });
+        } else {
+            matchingControl.setErrors(null);
+        }
+    }
+}
+}
+
+
+

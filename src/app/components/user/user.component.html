@@ -36,41 +36,38 @@
     </ngb-alert>
   </h3>
 
-  <div class="row" style="margin-left: 75px ; margin-top: 30px;">
-    <div class="col-6 col-md-3">
-      <form [formGroup]="searchForm">
-        <label> Nom de l'utilisateur
-        </label>
-        <div class="input-group input-group-alternative mb-2">
-          <input
-            class="form-control"
-            placeholder="Taper le nom du sujet"
-            type="text"
-            (focus)="focus1 = true"
-            (blur)="focus1 = false"
-            style="background-color: #eef2ff"
-            name="nom"
-            formControlName="userNom"
-          />
-          <button  class="btn btn-outline-primary" (click)="getUserByNom()" style="margin-left: 5px;">Chercher</button>
-        </div>
-      </form>
+  
+  <div class="card shadow m-6"
+  style="margin-left: 80px; margin-right: 80px;margin-top: 20px; background-color: white">
+  <form [formGroup]="searchForm" style="margin: 20px;">
+    <div class="row">
+      <div class="col">
+        <th>Nom de l'utilisateur</th>
+        <input class="form-control"  placeholder="Taper le nom du sujet" type="text" (focus)="focus1 = true" (blur)="focus1 = false"
+        name="nom"
+        formControlName="userNom"
+      />
+      </div>
+      <div class="col">
+      <th>Statut de validation</th>
+            <select class="form-control" (change)="onEditClick($event.target.value)">
+              <option>Tous</option>
+              <option>Valide</option>
+              <option>Invalide</option>
+              <option>En attente</option>
+            </select>
+          </div>
+     
+      <div class="col" style="margin-top: 10px;">
+         <button  class="btn btn-outline-primary" (click)="resetForm()" style="margin-left: 5px;margin-top:13px">Reset</button>
+         <button  class="btn btn-success" (click)="getUserByNom()" style="margin-left: 5px;margin-top:13px">Chercher</button>
+      </div>
     </div>
-    <div class="col-6 col-sm-3" >
-      <label> Statut de l'utilisateur
-      </label>
-      <select class="form-control" (change)="onEditClick($event.target.value)" style="background-color: #eef2ff ;">
-        <option>Tous</option>
-        <option>Valide</option>
-        <option>Invalide</option>
-        <option>En attente</option>
-      </select>
-    </div>
-  </div>
-
+  </form>
+</div>
   <div
     class="card shadow m-6"
-    style="margin-left: 80px; margin-right: 80px; background-color: white"
+    style="margin-left: 80px; margin-right: 80px;margin-top: 20px; background-color: white"
   >
     <div class="card-body">
       <div class="table-responsive">
@@ -83,7 +80,7 @@
             <th>Statut</th>
             <th>Actions</th>
           </tr>
-          <tbody *ngFor="let user of users" >
+          <tbody *ngFor="let user of users| paginate: { itemsPerPage: 10, currentPage: page, totalItems:totalElemnt}" >
             <tr>
               <td style="padding: auto">{{ user.nomUser }}</td>
               <td>{{ user.email }}</td>
@@ -150,6 +147,9 @@
             </tr>
           </tbody>
         </table>
+        <ul class="pagination pagination-sm pagination-circle justify-content-center mb-0">
+          <pagination-controls (pageChange)="page = $event"></pagination-controls>
+      </ul>
       </div>
     </div>
   </div>
@@ -231,6 +231,7 @@
         <div class="modal-body">
           <form [formGroup]="declineUserForm">
             <div class="form-group">
+              <fieldset disabled>
               <label for="recipient-name" class="col-form-label"
                 >Recipient:</label
               >
@@ -240,14 +241,26 @@
                 class="form-control"
                 id="recipient-name"
               />
+            </fieldset>
             </div>
             <div class="form-group">
               <label for="message-text" class="col-form-label">Message:</label>
-              <textarea
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fa fa-check fa-lg" *ngIf="declineUserForm.controls['contenuMail'].valid"
+                    style="color: #00b88a"></i></span>
+                </div>
+                <textarea
                 formControlName="contenuMail"
                 class="form-control"
                 id="message-text"
               ></textarea>
+              </div>
+              <ng-container class="text-muted"
+              *ngIf="!declineUserForm.controls['contenuMail'].valid && declineUserForm.controls['contenuMail'].dirty ">
+              <p style="color: red"><i class="fa fa-exclamation-triangle"> La description doit contenir au minimum 20 caracteres</i></p>
+              <div *ngIf="declineUserForm.controls['contenuMail'].hasError('minlength' )"></div>
+              </ng-container>
             </div>
           </form>
         </div>
@@ -259,7 +272,7 @@
           >
             Annuler
           </button>
-          <button type="button" class="btn btn-success" (click)="c('yes')">
+          <button type="button" class="btn btn-success" (click)="c('yes')"  [disabled]="!declineUserForm.valid">
             Refuser
           </button>
         </div>
@@ -331,7 +344,7 @@
       >
         <div class="modal-header">
           <h4 class="modal-title" id="confirmation_delete_modal">
-           {{currentUser.nomUser}}
+              Détails Utilisateur
           </h4>
           <button
             type="button"
@@ -343,12 +356,19 @@
           </button>
         </div>
         <div class="modal-body">
-          <p >
-            <span class="badge badge-pill badge-info text-uppercase">Remarques</span>
-          </p>
-          <p >
-            {{currentUser.remarque}}
-          </p>
+          <div class="modal-body">
+            <h6>Login</h6>
+            <p>{{currentUser?.nomUser }}</p>
+            <h6>Date Inscription</h6>
+            <p>{{currentUser?.createdAt| date: "dd/MM/yyyy"}}</p>
+            <span class="badge badge-pill badge-success text-uppercase">Traitée</span>
+            <h6>Fonction</h6>
+            <p>{{currentUser?.userFonction }}</p>
+            <h6>Date Validation</h6>
+            <p>{{currentReclamation?.validatedAt| date: "dd/MM/yyyy"}}</p>
+            <h6>Remarque</h6>
+            <p>{{currentReclamation?.remarque }}</p>
+          </div>
         </div>
         <div class="modal-footer">
           <button

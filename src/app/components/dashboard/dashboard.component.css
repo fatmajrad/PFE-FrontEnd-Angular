@@ -15,9 +15,7 @@ body{
     transition: all 0.3s ease-in-out;
     box-shadow: 0 .1rem 1rem rgba(0, 0, 0, 0.1);
     border-radius: 1em;
-    background: #ECE9E6;
-   
-    
+    background: white;
 }
 
 .card .card-block {

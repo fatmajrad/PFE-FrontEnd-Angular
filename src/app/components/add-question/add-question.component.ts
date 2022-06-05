@@ -1,13 +1,11 @@
+import { element } from 'protractor';
 import { QuestionService } from "./../../services/question.service";
 import { SujetService } from "./../../services/sujet.service";
 import { OnInit } from "@angular/core";
 import { Question } from "src/app/models/question.model";
 import { Sujet } from "src/app/models/sujet.model";
-import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from "src/app/services/auth.service";
-<<<<<<< HEAD
-import { debounceTime, distinctUntilChanged, map, startWith, switchMap} from "rxjs/operators";
-=======
 import {
   debounceTime,
   distinctUntilChanged,
@@ -15,7 +13,6 @@ import {
   startWith,
   switchMap,
 } from "rxjs/operators";
->>>>>>> master
 import { MatTableDataSource } from "@angular/material/table";
 import { Router } from "@angular/router";
 import { ModalDismissReasons, NgbModal } from "@ng-bootstrap/ng-bootstrap";
@@ -56,7 +53,7 @@ export class AddQuestionComponent implements OnInit {
   quillEditor = {
     height: "300px",
   };
-
+  
   type: string;
   strong: string;
   message: string;
@@ -93,11 +90,20 @@ export class AddQuestionComponent implements OnInit {
     });
   }
 
+  initForm() {
+    this.addQuestionForm = this.formBuilder.group({
+      intituleQuestion: ["", [Validators.required, Validators.minLength(20)]],
+      descriptionQuestion: ["", [Validators.required, Validators.minLength(20)]],
+      sujet: [""],
+    });
+  }
+
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
     return this.allFruits.filter(
       (fruit) => fruit.toLowerCase().indexOf(filterValue) === 0
     );
+    
   }
   add(event: MatChipInputEvent): void {
     const input = event.input;
@@ -106,6 +112,7 @@ export class AddQuestionComponent implements OnInit {
     // Add our fruit
     if ((value || "").trim()) {
       this.fruits.push(value.trim());
+     
     }
 
     // Reset the input value
@@ -128,77 +135,88 @@ export class AddQuestionComponent implements OnInit {
     this.fruits.push(event.option.viewValue);
     this.fruitInput.nativeElement.value = "";
     this.fruitCtrl.setValue(null);
-<<<<<<< HEAD
-=======
-   
->>>>>>> master
   }
 
-  initForm() {
-    this.addQuestionForm = this.formBuilder.group({
-      intituleQuestion: [""],
-      descriptionQuestion: [""],
-      sujet: [""],
-    });
-  }
+  
 
   isValid(desc: any) {
     return true;
   }
+  
   close() {
     this.showAlertsucces = false;
     this.showAlertsucces = false;
-<<<<<<< HEAD
-=======
   }
   
-  getConnaissancesBySujet(sujetNom){
-    console.log(sujetNom);
->>>>>>> master
-  }
+  
   
 
   AjouterQuestion() {
-<<<<<<< HEAD
-     console.log( this.addQuestionForm.get("sujet").value);
-   /* let question = {
-=======
+   let tags :any[] =[]
+   this.fruits.forEach(fruit => {
+     this.sujets.forEach(sujet => {
+       if(fruit == sujet.nom){
+         let id = "/api/sujets/"+sujet.id
+         tags.push(id)
+       }
+     });
+   }); 
    
   let question = {
->>>>>>> master
       intituleQuestion: this.addQuestionForm.get("intituleQuestion").value,
       descriptionQuestion: this.addQuestionForm.get("descriptionQuestion")
         .value,
-      tag: ["/api/sujets/16"],
+      tag: tags,
       user: "/api/users/" + this.authService.getCurrentUserId(),
       statut: "onHold",
     };
-    console.log(question);
-    this.questionService.addQuestion(question).subscribe((response) => {
-      console.log(response);
+    
+    this.questionService.addQuestion(question).subscribe({
+      next:(res)=>{ 
+       this.type="success";
+       this.message="Question ajoutée avec succées";
+       this.showAlertsucces=true;
+        setTimeout(()=>{ this.router.navigate(["mes-questions"]); },1000);
+      },
+        error:()=>{
+          this.showAlerterror=true;
+          this.type="error";
+          this.message="L'ajout de la question a echoué";
+        }
     });
-<<<<<<< HEAD
-    this.router.navigate(["mes-questions"]);*/
-=======
-    this.router.navigate(["mes-questions"]);
->>>>>>> master
   }
 
   saveBrouillon() {
-    console.log(this.authService.getCurrentUserId());
+    let tags :any[] =[]
+    this.fruits.forEach(fruit => {
+     this.sujets.forEach(sujet => {
+       if(fruit == sujet.nom){
+         let id = "/api/sujets/"+sujet.id
+         tags.push(id)
+       }
+     });
+    }); 
     let question = {
       intituleQuestion: this.addQuestionForm.get("intituleQuestion").value,
       descriptionQuestion: this.addQuestionForm.get("descriptionQuestion")
         .value,
-      tag: ["/api/sujets/9"],
+      tag: tags,
       user: "/api/users/" + this.authService.getCurrentUserId(),
       statut: "draft",
     };
-    console.log(question);
-    this.questionService.addQuestion(question).subscribe((response) => {
-      console.log(response);
+    this.questionService.addQuestion(question).subscribe({
+      next:(res)=>{ 
+        this.type="success";
+        this.message="Brouillon enregistré avec succées";
+        this.showAlertsucces=true;
+        setTimeout(()=>{ this.router.navigate(["mes-questions"]); },2000);
+      },
+        error:()=>{
+          this.showAlerterror=true;
+          this.type="error";
+          this.message="L'enregistrement du brouillon a echoué";
+        }
     });
-    this.router.navigate(["mes-questions"]);
   }
 
   Annuler(content) {
@@ -221,7 +239,6 @@ export class AddQuestionComponent implements OnInit {
           this.closeResult = `Closed with: ${result}`;
           if (result === "yes") {
             this.saveBrouillon();
-            this.router.navigate(["/mes-questions"]);
           }
         },
         (reason) => {

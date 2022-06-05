@@ -13,12 +13,13 @@ export class LoginGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): boolean {
     console.log(this.authService.isAdmin());
+
     
     if (this.authService.isAdmin())
     this.router.navigate(['dashboard']);
     else
     {
-    this.router.navigate(['/']);
+    this.router.navigate(['login']);
     return false;
     }
   }   

@@ -8,22 +8,22 @@
         <div class="container-xxl" style="margin-left: 80px; margin-right:5 px; margin-top: 40px;">
             <div class="row" style="margin-right: 5px;">
                 <div class="col-sm-3">
-                    <div class="list-group">
-                        <button type="button" class="list-group-item list-group-item-action active">
+                    <div class="btn-group-vertical">
+                        <button type="button" class="list-group-item list-group-item-action " (click)="getQuestions()">
                             Toutes les questions
                         </button>
                         <button type="button" class="list-group-item list-group-item-action"
                             (click)="getRecentQuestions()">
-                            les plus récentes
+                            Les plus récentes
                         </button>
-                        <button type="button" class="list-group-item list-group-item-action">les plus
+                        <button type="button" class="list-group-item list-group-item-action">Les plus
                             pertinentes</button>
                     </div>
                 </div>
                 <div class="col-sm-8">
                     <div class="panel">
                         <ul class="panel-activity__list" style="background-color: white">
-                            <form [formGroup]="sujetForm" action="" style="float: right">
+                            <form [formGroup]="sujetForm" action="" style="float: right;">
                                 <div class="formGroup" style="display:flex;margin-bottom:10px">
                                     <input formControlName="sujet" matInput type="text" class="form-control"
                                         [matAutocomplete]="auto" placeholder="Sujets" [formControl]="formControl"
@@ -34,26 +34,23 @@
                                             {{sujet.nom}}
                                         </mat-option>
                                     </mat-autocomplete>
-                                    <button class="btn btn-sm btn-info" style="margin-left:10px"
-                                        (click)="getQuestions()">
-                                        Reset
-                                    </button>
+                                <button class="btn btn-sm btn-info" style="margin-left:10px"
+                                    (click)="resetSearchForm">
+                                    Reset
+                                </button>
                                 </div>
                             </form>
-
-
                             <h4>Liste des Questions:</h4>
-                            <div *ngFor="let question of questions" class="card mb-8 " style="margin-top:20px">
-                                <div class="card-body p-2 p-sm-3" [routerLink]="['/reponse-list',question.id]"
+                            <div *ngFor="let question of questions | paginate: { itemsPerPage: 10, currentPage: page, totalItems:totalElement }" class="card mb-8 " style="margin-top:20px">
+                                <div class="card-body p-2 p-sm-3" (click)="getRoute('reponse-list',question.id)" 
                                     style="background-color:#eef2ff;">
                                     <div class="media forum-item">
-                                        <a href="#" data-toggle="collapse" data-target=".forum-content"><img
+                                        <a [routerLink]="['/reponse-list',question.id]" data-toggle="collapse" data-target=".forum-content"><img
                                                 src="https://bootdey.com/img/Content/avatar/avatar1.png"
                                                 class="mr-3 rounded-circle" width="50" alt="User" /></a>
                                         <div class="media-body">
-
                                             <h6>
-                                                <a href="#" data-toggle="collapse" data-target=".forum-content"
+                                                <a [routerLink]="['/reponse-list',question.id]" data-toggle="collapse" data-target=".forum-content"
                                                     class="text-body font-weight-bold">{{
                                                     question.intituleQuestion}}</a>
                                             </h6>
@@ -63,14 +60,12 @@
                                                 <span
                                                     class="badge badge-pill badge-info text-uppercase">{{tag.nom}}</span>
                                             </div>
-
-
                                         </div>
                                     </div>
                                     <div style="margin-bottom: 5px; float: right">
                                         <button class="btn btn-sm btn-2 btn-info" type="button"
                                             (click)="showCommentsSection()">
-                                            5
+                                           {{question.reponses.length}}
                                             <span class="btn-inner--icon"><i class="fa fa-comment"
                                                     aria-hidden="true"></i></span>
                                         </button>
@@ -80,7 +75,7 @@
                         </ul>
                     </div>
                 </div>
-
+                
             </div>
 
             <div class="main-body p-0">
@@ -94,20 +89,7 @@
 
 
                     <ul class="pagination pagination-sm pagination-circle justify-content-center mb-0">
-                        <li class="page-item disabled">
-                            <span class="page-link has-icon"><i class="fa fa-angle-left"></i></span>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="javascript:void(0)">1</a>
-                        </li>
-                        <li class="page-item active"><span class="page-link">2</span></li>
-                        <li class="page-item">
-                            <a class="page-link" href="javascript:void(0)">3</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link has-icon" href="javascript:void(0)"><i
-                                    class="fa fa-angle-right"></i></a>
-                        </li>
+                        <pagination-controls (pageChange)="page = $event"></pagination-controls>
                     </ul>
                 </div>
             </div>

@@ -1,3 +1,4 @@
+import { ReclamationListComponent } from './components/reclamation-list/reclamation-list.component';
 import { LoginGuard } from './gards/login.guard';
 import { NgModule } from '@angular/core';
 import { CommonModule, } from '@angular/common';
@@ -21,6 +22,8 @@ import { ListValidationQuestionsComponent } from './components/list-validation-q
 import { PublishQuestionComponent } from './components/publish-question/publish-question.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { UpdateProfileComponent } from './components/update-profile/update-profile.component';
+import { SujetQuestionsListComponent } from './components/sujet-questions-list/sujet-questions-list.component';
+import { SujetConnaissanceListComponent } from './components/sujet-connaissance-list/sujet-connaissance-list.component';
 
 const routes: Routes =[
     { path: 'home',             component: HomeComponent },
@@ -41,6 +44,11 @@ const routes: Routes =[
     { path: 'publish-question/:id',          component: PublishQuestionComponent},
     { path: 'dashboard',          component: DashboardComponent},
     { path: 'update-profile/:id',          component: UpdateProfileComponent},
+    { path: 'reclamation',          component: ReclamationListComponent},
+    { path: 'sujet-questions-list/:id',          component: SujetQuestionsListComponent},
+    { path: 'sujet-connaissance-list/:id',          component: SujetConnaissanceListComponent},
+
+
 ];
 
 @NgModule({
@@ -54,4 +62,5 @@ const routes: Routes =[
   exports: [
   ],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}

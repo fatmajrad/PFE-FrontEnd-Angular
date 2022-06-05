@@ -25,14 +25,30 @@ export class MesQuestionsComponent implements OnInit {
   invalidQ:Question[];
   brouillons:Question[]
   
-  sujets:Sujet[];
+  totaLElement: Number;
+  page1: Number =1;
+
+  totaLPublished: Number;
+  page2:Number=1;
+
+  totaLRequests: Number;
+  page3:Number=1;
+
+  totaLbrouillons: Number;
+  page4:Number=1;
+
+  totaLInvalid: Number;
+  page5:Number=1;
+  
+  sujets:Sujet[]=[];
+  sujet : any;
   user : User;
   currentUser:Number;
   closeResult: string;
   formControl = new FormControl();
   filteredOptions: Observable<any[]>;
-  sujetForm: FormGroup;
   searchForm : FormGroup
+  sujetId:Number=0
   constructor(private questionService : QuestionService,private modalService: NgbModal,private formBuilder: FormBuilder, private userService : UserService, private sujetService: SujetService, private router:Router,private authService:AuthService) { 
     this.filteredOptions = this.formControl.valueChanges.pipe(
       startWith(''),
@@ -44,17 +60,18 @@ export class MesQuestionsComponent implements OnInit {
     )
   }
   
-  async ngOnInit(): Promise<void> {
+   ngOnInit() {
     this.getCurrentUser();
-    this.currentUser= await this.authService.getCurrentUserId();
-    this.questions = await this.questionService.listMyQuestions(this.currentUser).toPromise();
+    this.getAllQuestions();
     this.initSearchForm();
     this.getMyDrafts();
     this.getMyInvalidQuestions();
     this.getMyPublished();
     this.getMyQuestionqRequests();
-    this.initSujetForm();
-  
+    this.sujetService.listeSujet().subscribe((response)=>{
+      this.sujets=response
+    })
+    
   }
   
   filter(val: string): Observable<any[]> {
@@ -68,36 +85,90 @@ export class MesQuestionsComponent implements OnInit {
    }
    initSearchForm() {
     this.searchForm= this.formBuilder.group({
-      intitule: ['',Validators.required],
+      intitule: [''],
+      sujet:[]
     });
   } 
 
-  getQuestionIntitule(){
-    console.log(this.searchForm.get('intitule').value);
-    this.getQuestionsByIntitule(this.searchForm.get('intitule').value);
-  }
-
-  getQuestionsByIntitule(intitule){
-   this.questionService.getMyQuestionsByIntitule(intitule,this.currentUser).subscribe((questions)=>{
-     console.log(questions);
-     
-   })
-  }
-  
-  initSujetForm() {
-    this.sujetForm = new FormGroup(
-      {
-        sujet : new FormControl()
-      }
-    )
-    /*this.sujetForm = this.formBuilder.group({
-      sujet: ['',Validators.required],
-    });*/
-  }
-  
+   
   toArray(answers: object) {
     return Object.keys(answers).map(key => answers[key])
   }
+  getAllQuestions(){
+    this.questionService.listMyQuestions(this.currentUser).subscribe((questions)=>{
+      this.questions=questions;
+      this.totaLElement=questions.length
+      this.page1=1})
+  }
+  getQuestions(){
+    let intitule = this.searchForm.get('intitule').value
+    
+    if(this.sujetId===0 && intitule!=""){
+     this.questionService.getMyQuestionsByIntitule(intitule,this.currentUser).subscribe((questions)=>{
+      this.questions=questions;
+      this.totaLElement=questions.length
+      this.page1=1
+        
+      })
+   }else if(intitule==="" && this.sujetId!=0){
+          this.questionService.getMyQuestionsByTag(this.sujetId, this.currentUser).subscribe((questions)=>{
+            this.questions=questions;
+            this.totaLElement=questions.length
+            this.page1=1
+    });
+    }else if(intitule!="" && this.sujetId!=0){
+        this.questionService.getMyQuestionsByIntituleSujet(this.currentUser,this.sujetId,intitule).subscribe((questions)=>{
+        this.questions=questions;
+        this.totaLElement=questions.length
+        this.page1=1
+     
+    })
+    }else{
+        this.questionService.listMyQuestions(this.currentUser).subscribe((questions)=>{
+        this.questions=questions;
+        this.totaLElement=questions.length
+        this.page1=1
+     })
+  }
+} 
+    getConnaissancesBySujet(event){
+      this.sujets.forEach(element =>{
+        if(element.nom===event){
+            this.sujetId=element.id
+        }
+       });
+    }
+  resetSearchForm(){
+    this.searchForm.reset();
+    this.getAllQuestions();
+  }
+  getMyDrafts(){
+    this.questionService.getMyQuestionsByStatut("draft",this.currentUser).subscribe(questions => {
+      this.brouillons = questions;
+      this.totaLbrouillons=questions.length
+      this.page4=1});
+  }
+  getMyPublished(){
+    this.questionService.getMyQuestionsByStatut("valide",this.currentUser).subscribe(questions => {
+      this.published = questions;
+      this.totaLPublished=questions.length
+    this.page2=1});
+  }
+  getMyQuestionqRequests(){
+    this.questionService.getMyQuestionsByStatut("onHold",this.currentUser).subscribe(questions => {
+      this.requests = questions;
+      this.totaLRequests=questions.length
+      this.page3=1});
+  }
+  getMyInvalidQuestions(){
+    this.questionService.getMyQuestionsByStatut("invalide",this.currentUser).subscribe(questions => {
+      this.invalidQ = questions;
+    this.totaLInvalid=questions.length
+      this.page5=1});
+     
+  }
+  
+  
   getUser(id : number){
     return this.userService.getUserById(id);
    
@@ -108,31 +179,7 @@ export class MesQuestionsComponent implements OnInit {
   }
 
   getCurrentUser(){
-    return this.authService.getCurrentUserId();
-    
-  }
-
-  
-  getMyDrafts(){
-    this.questionService.getMyQuestionsByStatut("draft",this.currentUser).subscribe(questions => {
-      this.brouillons = questions;});
-  }
-  
-
-  getMyPublished(){
-    this.questionService.getMyQuestionsByStatut("valide",this.currentUser).subscribe(questions => {
-      this.published = questions;});
-  }
-
-  getMyQuestionqRequests(){
-    this.questionService.getMyQuestionsByStatut("onHold",this.currentUser).subscribe(questions => {
-      this.requests = questions;});
-  }
-
-  getMyInvalidQuestions(){
-    this.questionService.getMyQuestionsByStatut("invalide",this.currentUser).subscribe(questions => {
-      this.invalidQ = questions;});
-      console.log(this.invalidQ);
+   this.currentUser= this.authService.getCurrentUserId();
   }
 
   publier(id:Number){
@@ -177,15 +224,13 @@ export class MesQuestionsComponent implements OnInit {
         }
       );
     }else{
-      console.log("deleteconnaissance1")
+     
       this.modalService
       .open(content, {centered: true, ariaLabelledBy: "delete-connaissance"})
       .result.then(
         (result) => {
-          console.log("deleteconnaissance2")
           this.closeResult = `Closed with: ${result}`;
           if (result === "yes") {
-           console.log("deleteconnaissance3")
           }
         },
         (reason) => {

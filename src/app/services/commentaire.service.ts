@@ -1,3 +1,4 @@
+import { Commentaire } from './../models/commentaire.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
@@ -15,11 +16,23 @@ export class CommentaireService {
   constructor(private http: HttpClient) { }
 
   addCommentaire(commentaire:any){
-    console.log("reponse f service",commentaire);
+   
     return this.http.post<any>(this.apiURL, commentaire, httpOptions);
   }
-
+  getCommentaire(id){
+    const url = `${this.apiURL}/${id}`;
+    return this.http.get<Commentaire>(url);
+  }
   
+  updateCommentaire(commentaire,id){
+    const url = `${this.apiURL}/${id}`;
+    return this.http.put<any>(url, commentaire, httpOptions)
+  }
+
+  deleteCommentaire(id){
+      const url = `${this.apiURL}/${id}`;
+      return this.http.delete(url, httpOptions);
+  }
   
 }
 

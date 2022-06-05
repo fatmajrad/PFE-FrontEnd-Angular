@@ -39,48 +39,37 @@
     </ngb-alert>
   </h3>
 
-  <div class="row" style="margin-left: 75px; margin-top: 30px">
-    <div class="col-6 col-md-3">
-        <form [formGroup]="searchForm">
-        <div class="input-group input-group-alternative mb-2">
-          <input
-            class="form-control"
-            placeholder="Taper le nom du sujet"
-            type="text"
-            (focus)="focus1 = true"
-            (blur)="focus1 = false"
-            style="background-color: #eef2ff"
-            name="nom"
-            formControlName="intitule"
-          />
-          <button
-            class="btn btn-outline-primary"
-            (click)="getQuestionIntitule()"
-            style="margin-left: 5px"
-          >
-            Chercher
-          </button>
-        </div>
-      </form>
-
+   <div class="card shadow m-6"
+  style="margin-left: 80px; margin-right: 80px;margin-top: 20px; background-color: white">
+  <form [formGroup]="searchForm" style="margin: 20px;">
+    <div class="row">
+      <div class="col">
+        <th>Intitule de la question</th>
+        <input class="form-control"  placeholder="Taper le nom du sujet" type="text" (focus)="focus1 = true" (blur)="focus1 = false"
+        name="nom"
+        formControlName="intitule"
+      />
+      </div>
+      <div class="col">
+      <th>Statut de validation</th>
+            <select class="form-control" (change)="onEditClick($event.target.value)">
+              <option>Tous</option>
+              <option>Valide</option>
+              <option>Invalide</option>
+              <option>En attente</option>
+            </select>
+          </div>
+     
+      <div class="col" style="margin-top: 10px;">
+         <button  class="btn btn-outline-primary" (click)="resetForm()" style="margin-left: 5px;margin-top:13px">Reset</button>
+         <button  class="btn btn-success"  (click)="getQuestionIntitule()" style="margin-left: 5px;margin-top:13px">Chercher</button>
+      </div>
     </div>
-    <div class="col-6 col-sm-3">
-      <select
-        class="form-control"
-        (change)="onEditClick($event.target.value)"
-        style="background-color: #eef2ff"
-      >
-        <option>Tous</option>
-        <option>Valide</option>
-        <option>Invalide</option>
-        <option>En attente</option>
-      </select>
-    </div>
-  </div>
-
+  </form>
+</div>
   <div
     class="card shadow m-6"
-    style="margin-left: 80px; margin-right: 80px; background-color: white"
+    style="margin-left: 80px; margin-right: 80px; background-color: white ; margin-top: 20px;"
   >
     <div class="card-body">
       <div class="table-responsive">
@@ -95,10 +84,10 @@
               <th>Actions</th>
             </tr>
           </thead>
-          <tbody *ngFor="let question of questions">
+          <tbody *ngFor="let question of questions | paginate: { itemsPerPage:10, currentPage: page, totalItems:totalElement }">
             <tr>
               <td style="padding: auto">{{ question.user?.nomUser }}</td>
-              <td>{{ question.createdAt }}</td>
+              <td>{{ question.createdAt| date: "dd/MM/yyyy" }}</td>
               <td>{{ (question.intituleQuestion.length>30)? (question.intituleQuestion | slice:0:30)+'..':(question.intituleQuestion) }}</td>
               <td>
                 <span
@@ -167,6 +156,9 @@
           </tbody>
         </table>
       </div>
+      <ul class="pagination pagination-sm pagination-circle justify-content-center mb-0">
+        <pagination-controls (pageChange)="page = $event"></pagination-controls>
+    </ul>
     </div>
   </div>
 
@@ -336,9 +328,9 @@
         aria-labelledby="details-question"
       >
         <div class="modal-header">
-          <h4 class="modal-title" id="confirmation_delete_modal">
-            {{ currentQuestion?.intituleQuestion }}
-          </h4>
+          <h5 class="modal-title" id="confirmation_delete_modal">
+           Détails Question
+          </h5>
           <button
             type="button"
             class="close"
@@ -349,19 +341,45 @@
           </button>
         </div>
         <div class="modal-body">
-          <p *ngFor="let tag of toArray(currentQuestion.tag)">
-            <span class="badge badge-pill badge-info text-uppercase">{{
-             remarque
-            }}</span>
-          </p>
-          <div class="alert alert-warning" role="alert">
-            This is a warning alert—check it out!
+          <div class="modal-body">
+            <h6>Intitule de la question</h6>
+            <p> {{ currentQuestion?.intituleQuestion }}</p>
+            <h6>Date Creation</h6>
+            <p>{{currentQuestion?.createdAt| date: "dd/MM/yyyy"}}</p>
+            <h6>Statut Validation</h6>
+            <p> <span
+              *ngIf="currentQuestion.statut == 'valide'"
+              class="badge badge-pill badge-success text-uppercase"
+              >Valide</span
+            >
+            <span
+              *ngIf="currentQuestion.statut == 'invalide'"
+              class="badge badge-pill badge-warning text-uppercase"
+              >Non Valide</span
+            >
+            <span
+              *ngIf="currentQuestion.statut == 'onHold'"
+              class="badge badge-pill badge-primary text-uppercase"
+              >En attente</span
+            ></p>
+            <h6>Sujets</h6>
+            <div *ngFor="let tag of toArray(currentQuestion.tag)">
+              <span class="badge badge-pill badge-info text-uppercase">{{
+               tag.nom
+              }}</span>
+            </div>
+            <h6>Description</h6>
+            <p [innerHTML]="currentQuestion.descriptionQuestion">
+              {{ currentQuestion?.descriptionQuestion }}
+            </p>
+            <h6>Date Validation</h6>
+            <p>{{currentQuestion?.validatedAt| date: "dd/MM/yyyy"}}</p>
+            
+            <h6>Remarque</h6>
+            <p>{{currentQuestion?.remarque }}</p>
           </div>
-          <p [innerHTML]="currentQuestion.descriptionQuestion">
-            {{ currentQuestion?.descriptionQuestion }}
-          </p>
-          
         </div>
+       
         <div class="modal-footer">
           <button
             type="button"

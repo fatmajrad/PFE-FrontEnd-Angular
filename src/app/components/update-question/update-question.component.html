@@ -1,65 +1,78 @@
 <main>
-    <section class="section section-shaped section-lg" style="background-color: white;">
-      <div class="shape shape-style-1 bg-gradient-default">
+  <section class="section section-shaped section-lg" style="background-color: white;">
+    <div class="shape shape-style-1 bg-gradient-default">
+    </div>
+
+
+    <h1 class="mb-0" style="margin-top: 10px; margin-left: 80px;">Modifier la question</h1>
+
+    <form [formGroup]="updateQuestionForm" class="form-container"
+      style="margin-top: 20px; margin-left: 80px; margin-right: 80px;">
+      <div *ngIf="currentQuestion?.statut=='invalide'" class="card" style="background-color:#FFF8DC;">
+        <div class="card-body">
+          <p class="text-warning mb-0">
+            {{currentQuestion.remarque}}</p>
+        </div>
       </div>
-      
-      
-      <h1 class="mb-0" style="margin-top: 10px; margin-left: 80px;">Modifier la question</h1>
-     
-        <form [formGroup]="updateQuestionForm" class="form-container" style="margin-top: 20px; margin-left: 80px; margin-right: 80px;">
-          <div *ngIf="currentQuestion.statut=='invalide'" class="card" style="background-color:#FFF8DC;">
-            <div class="card-body">
-              <p  class="text-warning mb-0">
-                {{currentQuestion.remarque}}</p>
-            </div>
-          </div>
-            <div class="form-group" [ngClass]="{'focused':focus5===true}">
-                
-                <input hidden formControlName="test" matInput type="text" class="form-control"[matAutocomplete]="auto">
-                
-            </div>
-           <div class="form-group" [ngClass]="{'focused':focus5===true}">
-              <h6>Question</h6>
-              <input formControlName="intituleQuestion" matInput type="text" class="form-control">
-              <p>Quelle est votre question ? </p>
-          </div>
-            <div class="form-group">
-              <h6>les sujets liées:</h6>
-                  <input formControlName="sujet" matInput type="text" class="form-control"[matAutocomplete]="auto">
-                  <mat-autocomplete #auto="matAutocomplete">
-                    <mat-option *ngFor="let sujet of sujets" [value]="sujet.nom">
-                      {{sujet.nom}}
-                    </mat-option>
-                  </mat-autocomplete>
-                  <p >Quelles sont les sujets qui ont un rapport avec votre question </p>
-            </div>
-          <div class="form-group">
-            <h6>Decrivez votre Question:</h6>
-            <quill-editor formControlName="descriptionQuestion" [style]="quillEditor" ></quill-editor>
-            <p>Essayez de donner toutes les inforamtions nécessaires  </p>
-          </div>
-          
-        
-          <div style="float: right;">
-          <button (click)="Annuler(content)" class="btn btn-primary">Annuler</button>
-          <button (click)="updateQuestion()" class="btn btn-outline-success">Modifier</button>
-         </div>
-        </form>
-        <ng-template #content let-c="close" let-d="dismiss">    
-          <div class="modal-header">    
-              <h4 class="modal-title" id="modal-basic-title">Confirmation</h4>    
-              <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">    
-                  <span aria-hidden="true">×</span>    
-              </button>    
-          </div>    
-          <div class="modal-body">    
-              <p>vous voulez vraiment abondonner votre question?</p>    
-          </div>    
-          <div class="modal-footer">    
-              <button type="button" class="btn btn-outline-primary" (click)="d('Cross click')">Cancel</button>    
-              <button type="button" class="btn btn-outline-success" (click)="c('yes')">Yes</button>    
-          </div>    
-      </ng-template>
+      <div class="form-group" [ngClass]="{'focused':focus5===true}">
+
+        <input hidden formControlName="test" matInput type="text" class="form-control" [matAutocomplete]="auto">
+
+      </div>
+      <div class="form-group" [ngClass]="{'focused':focus5===true}">
+        <h6>Question</h6>
+        <input formControlName="intituleQuestion" matInput type="text" class="form-control" [ngModel]="currentQuestion?.intituleQuestion">
+        <p>Quelle est votre question ? </p>
+      </div>
+      <div class="form-group">
+        <h6>Sujets:</h6>
+        <mat-form-field class="example-chip-list">
+          <mat-label>Sujets</mat-label>
+          <mat-chip-list #chipList aria-label="Fruit selection">
+            <mat-chip *ngFor="let fruit of fruits" [selectable]="selectable" [removable]="removable"
+              (removed)="remove(fruit)">
+              {{fruit}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input placeholder="Sujet " #fruitInput formControlName="sujet" [formControl]="fruitCtrl"
+              [matAutocomplete]="auto" [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              (matChipInputTokenEnd)="add($event)">
+          </mat-chip-list>
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+            <mat-option *ngFor="let fruit of filteredFruits| async" [value]="fruit">
+              {{fruit}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <p>Quelles sont les sujets qui ont un rapport avec votre question </p>
+      </div>
+      <div class="form-group">
+        <h6>Decrivez votre Question:</h6>
+        <quill-editor formControlName="descriptionQuestion" [style]="quillEditor" [ngModel]="currentQuestion?.descriptionQuestion"></quill-editor>
+        <p>Essayez de donner toutes les inforamtions nécessaires </p>
+      </div>
+
+
+      <div style="float: right;">
+        <button (click)="Annuler(content)" class="btn btn-primary">Annuler</button>
+        <button (click)="updateQuestion()" class="btn btn-outline-success">Modifier</button>
+      </div>
+    </form>
+    <ng-template #content let-c="close" let-d="dismiss">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Confirmation</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>vous voulez vraiment abondonner votre question?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary" (click)="d('Cross click')">Cancel</button>
+        <button type="button" class="btn btn-outline-success" (click)="c('yes')">Yes</button>
+      </div>
+    </ng-template>
   </section>
-  
-  </main>
+
+</main>

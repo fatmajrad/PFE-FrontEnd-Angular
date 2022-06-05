@@ -5,31 +5,42 @@
     <section class="section section-shaped section-lg" style="background-color: white">
         <div class="container-md" style="margin-top: 40px; margin-left: 200px; margin-right: 200px">
             <div class="main-body p-0">
-                <div class="row no-gutters">
-                    <div class="col-12 col-sm-6 col-sm-6">
-                        <form [formGroup]="searchForm">
-                            <div class="input-group input-group-alternative mb-2">
-                                <input class="form-control" placeholder="Taper la question" type="text"
-                                    (focus)="focus1 = true" (blur)="focus1 = false" style="background-color: #eef2ff"
-                                    name="nom" formControlName="intitule" />
-                                <button class="btn btn-outline-primary" (click)="getQuestionIntitule()"
-                                    style="margin-left: 5px">
-                                    Chercher
-                                </button>
+              <div class="card " style="background-color: white;">
+                  <div class="card-body">
+                    <div >
+                        <form  [formGroup]="searchForm">
+                            <div class="row">
+                                <div class="col">
+                                    <th>Intitule de la question</th>
+                                    <input class="form-control" placeholder="Taper la question" type="text"
+                                        (focus)="focus1 = true" (blur)="focus1 = false"
+                                        name="nom"  formControlName="intitule" style="padding-left: 5px;"/>
+                                </div>
+                                <div class="col">
+                                    <th>Sujet de la question</th>
+                                    <input  formControlName="sujet" matInput type="text" class="form-control"
+                                        [matAutocomplete]="auto" placeholder="Sujets" [formControl]="formControl" style="padding-left: 5px;">
+                                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="getConnaissancesBySujet($event.option.value)">
+                                        <mat-option *ngFor="let sujet of filteredOptions  | async" [value]="sujet.nom">
+                                            {{sujet.nom}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </div>
                             </div>
+                           <div style="float: right; margin-top: 5px;">
+                            <button class="btn   btn-outline-primary" (click)="resetSearchForm()">
+                                Reset
+                            </button>
+                            <button class="btn btn-success" (click)="getQuestions()">
+                                Chercher
+                            </button>
+                           </div>
                         </form>
                     </div>
-                    <div class="col-6 col-md-4" style="margin-left: 210px; width: 100px">
-                        <form [formGroup]="sujetForm" action="">
-                            <input formControlName="sujet" matInput type="text" class="form-control"[matAutocomplete]="auto" placeholder="Sujets"  [formControl]="formControl">
-                            <mat-autocomplete #auto="matAutocomplete">
-                              <mat-option *ngFor="let sujet of filteredOptions  | async" [value]="sujet.nom">
-                                {{sujet.nom}}
-                              </mat-option>
-                            </mat-autocomplete>
-                        </form>
-                    </div>
-                </div>
+                  </div>
+              </div>
+
+
                 <div class="inner-main">
                     <ngb-tabset [justify]="'center'" class="custom-tab-content flex-column flex-md-row" type="pills">
                         <ngb-tab>
@@ -38,7 +49,9 @@
                                 questions
                             </ng-template>
                             <ng-template ngbTabContent>
-                                <div *ngFor="let question of questions" class="card mb-2" style="margin-top: 30px">
+                                
+                                <div *ngFor="let question of questions | paginate: { itemsPerPage: 10, currentPage: page1, totalItems:totalElement}"
+                                    class="card mb-2" style="margin-top: 30px">
                                     <div class="card-body p-2 p-sm-3">
                                         <li class="nav-item" ngbDropdown placement="bottom-right" style="float: right">
                                             <a class="nav-link nav-link-icon no-caret" ngbDropdownToggle
@@ -56,9 +69,9 @@
                                             </div>
                                         </li>
                                         <div class="media forum-item">
-                                            <div class="media-body" [routerLink]="['/reponse-list', question.id]">
+                                            <div class="media-body" >
                                                 <h6>
-                                                    <a href="#" data-toggle="collapse" data-target=".forum-content"
+                                                    <a  [routerLink]="['/reponse-list', question.id]" data-toggle="collapse" data-target=".forum-content"
                                                         class="text-body font-weight-bold">{{ question.intituleQuestion
                                                         }}</a>
                                                     <div *ngFor="let tag of toArray(question?.tag)">
@@ -81,6 +94,9 @@
                                         </div>
                                     </div>
                                 </div>
+                                <ul class="pagination pagination-sm pagination-circle justify-content-center mb-0">
+                                    <pagination-controls (pageChange)="page1 = $event"></pagination-controls>
+                                </ul>
                             </ng-template>
                         </ngb-tab>
                         <ngb-tab>
@@ -89,7 +105,8 @@
                             </ng-template>
                             <ng-template ngbTabContent>
                                 <div class="card mb-2" style="margin-top: 30px">
-                                    <div *ngFor="let question of brouillons" class="card-body p-2 p-sm-3">
+                                    <div *ngFor="let question of brouillons | paginate: { itemsPerPage: 10, currentPage: page4, totalItems:totaLbrouillons}"
+                                        class="card-body p-2 p-sm-3">
                                         <li class="nav-item" ngbDropdown placement="bottom-right" style="float: right">
                                             <a class="nav-link nav-link-icon no-caret" ngbDropdownToggle
                                                 id="nav-inner-success_dropdown_1" role="button" data-toggle="dropdown"
@@ -107,7 +124,7 @@
                                         <div class="media forum-item" [routerLink]="['/publish-question', question.id]">
                                             <div class="media-body">
                                                 <h6>
-                                                    <a href="#" data-toggle="collapse" data-target=".forum-content"
+                                                    <a  data-toggle="collapse" data-target=".forum-content"
                                                         class="text-body font-weight-bold">{{ question.intituleQuestion
                                                         }}</a>
                                                     <div *ngFor="let tag of toArray(question?.tag)">
@@ -128,33 +145,19 @@
                                                     class="badge badge-pill badge-info text-uppercase">Brouillon</span>
                                             </div>
                                         </div>
-                                        <div style="float: right">
-                                            <button class="btn btn-sm btn-2 btn-primary" type="button">
-                                                3
-                                                <span class="btn-inner--icon"><i class="fa fa-thumbs-up"
-                                                        aria-hidden="true" (click)="likeReponse()"></i></span>
-                                            </button>
-                                            <button class="btn btn-sm btn-2 btn-danger" type="button">
-                                                3
-                                                <span class="btn-inner--icon"><i class="fa fa-thumbs-down"
-                                                        aria-hidden="true" (click)="dislikeReponse()"></i></span>
-                                            </button>
-                                            <button class="btn btn-sm btn-2 btn-info" type="button"
-                                                (click)="showCommentsSection()">
-                                                5
-                                                <span class="btn-inner--icon"><i class="fa fa-comment"
-                                                        aria-hidden="true"></i></span>
-                                            </button>
-                                        </div>
                                     </div>
                                 </div>
+                                <ul class="pagination pagination-sm pagination-circle justify-content-center mb-0">
+                                    <pagination-controls (pageChange)="page4 = $event"></pagination-controls>
+                                </ul>
                             </ng-template>
                         </ngb-tab>
                         <ngb-tab>
                             <ng-template ngbTabTitle><i class="fa fa-check" aria-hidden="true"></i>Publiées
                             </ng-template>
                             <ng-template ngbTabContent>
-                                <div *ngFor="let question of published" class="card mb-2" style="margin-top: 30px">
+                                <div *ngFor="let question of published | paginate: { itemsPerPage: 10, currentPage: page2, totalItems:totaLPublished}"
+                                    class="card mb-2" style="margin-top: 30px">
                                     <div class="card-body p-2 p-sm-3">
                                         <li class="nav-item" ngbDropdown placement="bottom-right" style="float: right">
                                             <a class="nav-link nav-link-icon no-caret" ngbDropdownToggle
@@ -173,9 +176,9 @@
                                         </li>
 
                                         <div class="media forum-item">
-                                            <div class="media-body" [routerLink]="['/reponse-list', question.id]">
+                                            <div class="media-body">
                                                 <h6>
-                                                    <a href="#" data-toggle="collapse" data-target=".forum-content"
+                                                    <a  [routerLink]="['/reponse-list', question.id]" data-toggle="collapse" data-target=".forum-content"
                                                         class="text-body font-weight-bold">{{ question.intituleQuestion
                                                         }}</a>
                                                     <div *ngFor="let tag of toArray(question?.tag)">
@@ -196,36 +199,22 @@
                                                     class="badge badge-pill badge-info text-uppercase">Brouillon</span>
                                             </div>
                                         </div>
-                                        <div style="float: right">
-                                            <button class="btn btn-sm btn-2 btn-primary" type="button">
-                                                3
-                                                <span class="btn-inner--icon"><i class="fa fa-thumbs-up"
-                                                        aria-hidden="true" (click)="likeReponse()"></i></span>
-                                            </button>
-                                            <button class="btn btn-sm btn-2 btn-danger" type="button">
-                                                3
-                                                <span class="btn-inner--icon"><i class="fa fa-thumbs-down"
-                                                        aria-hidden="true" (click)="dislikeReponse()"></i></span>
-                                            </button>
-                                            <button class="btn btn-sm btn-2 btn-info" type="button"
-                                                (click)="showCommentsSection()">
-                                                5
-                                                <span class="btn-inner--icon"><i class="fa fa-comment"
-                                                        aria-hidden="true"></i></span>
-                                            </button>
-                                        </div>
                                     </div>
                                 </div>
+                                <ul class="pagination pagination-sm pagination-circle justify-content-center mb-0">
+                                    <pagination-controls (pageChange)="page2 = $event"></pagination-controls>
+                                </ul>
                             </ng-template>
+
                         </ngb-tab>
                         <ngb-tab>
                             <ng-template ngbTabTitle>
                                 <i class="fa fa-times" aria-hidden="true"></i> Refusées
                             </ng-template>
                             <ng-template ngbTabContent>
-                                <h1 *ngIf="invalidQ == null">Aucune question pour le moment</h1>
-
-                                <div *ngFor="let question of invalidQ" class="card mb-2" style="margin-top: 30px">
+                              
+                                <div *ngFor="let question of invalidQ | paginate: { itemsPerPage: 10, currentPage: page5, totalItems:totaLInvalid}"
+                                    class="card mb-2" style="margin-top: 30px">
                                     <div class="card-body p-2 p-sm-3">
                                         <li class="nav-item" ngbDropdown placement="bottom-right" style="float: right">
                                             <a class="nav-link nav-link-icon no-caret" ngbDropdownToggle
@@ -243,9 +232,9 @@
                                             </div>
                                         </li>
                                         <div class="media forum-item">
-                                            <div class="media-body" [routerLink]="['/update-question', question.id]">
+                                            <div class="media-body" >
                                                 <h6>
-                                                    <a href="#" data-toggle="collapse" data-target=".forum-content"
+                                                    <a [routerLink]="['/update-question', question.id]" data-toggle="collapse" data-target=".forum-content"
                                                         class="text-body font-weight-bold">{{ question.intituleQuestion
                                                         }}</a>
                                                     <div *ngFor="let tag of toArray(question?.tag)">
@@ -268,12 +257,17 @@
                                         </div>
                                     </div>
                                 </div>
+                                <ul class="pagination pagination-sm pagination-circle justify-content-center mb-0">
+                                    <pagination-controls (pageChange)="page5 = $event"></pagination-controls>
+                                </ul>
                             </ng-template>
+
                         </ngb-tab>
                         <ngb-tab>
                             <ng-template ngbTabTitle> En attente </ng-template>
                             <ng-template ngbTabContent>
-                                <div *ngFor="let question of requests" class="card mb-2" style="margin-top: 30px">
+                                <div *ngFor="let question of requests | paginate: { itemsPerPage: 10, currentPage: page3, totalItems:totaLRequests}"
+                                    class="card mb-2" style="margin-top: 30px">
                                     <div class="card-body p-2 p-sm-3">
                                         <li class="nav-item" ngbDropdown placement="bottom-right" style="float: right">
                                             <a class="nav-link nav-link-icon no-caret" ngbDropdownToggle
@@ -293,7 +287,7 @@
                                         <div class="media forum-item">
                                             <div class="media-body" [routerLink]="['/reponse-list', question.id]">
                                                 <h6>
-                                                    <a href="#" data-toggle="collapse" data-target=".forum-content"
+                                                    <a  data-toggle="collapse" data-target=".forum-content"
                                                         class="text-body font-weight-bold">{{ question.intituleQuestion
                                                         }}</a>
                                                     <div *ngFor="let tag of toArray(question?.tag)">
@@ -316,26 +310,15 @@
                                         </div>
                                     </div>
                                 </div>
+                                <ul class="pagination pagination-sm pagination-circle justify-content-center mb-0">
+                                    <pagination-controls (pageChange)="page3 = $event"></pagination-controls>
+                                </ul>
                             </ng-template>
+
                         </ngb-tab>
                     </ngb-tabset>
 
-                    <ul class="pagination pagination-sm pagination-circle justify-content-center mb-0">
-                        <li class="page-item disabled">
-                            <span class="page-link has-icon"><i class="fa fa-angle-left"></i></span>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="javascript:void(0)">1</a>
-                        </li>
-                        <li class="page-item active"><span class="page-link">2</span></li>
-                        <li class="page-item">
-                            <a class="page-link" href="javascript:void(0)">3</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link has-icon" href="javascript:void(0)"><i
-                                    class="fa fa-angle-right"></i></a>
-                        </li>
-                    </ul>
+
                 </div>
             </div>
         </div>

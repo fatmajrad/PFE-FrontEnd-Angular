@@ -1,0 +1,298 @@
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css"
+  integrity="sha256-46r060N2LrChLLb5zowXQ72/iKKNiw/lAmygmHExk/o="
+  crossorigin="anonymous"
+/>
+<section
+  class="section section-shaped section-lg"
+  style="background-color: white"
+>
+  <div class="shape shape-style-1 bg-gradient-default"></div>
+  <h3>
+    <ngb-alert
+      *ngIf="showAlertsucces"
+      type="success"
+      dismissible="true"
+      (close)="close()"
+      style="margin-bottom: 5px; margin-left: 800px; margin-right: 80px"
+    >
+      <span class="alert-inner--text"
+        ><strong>{{ strong }}</strong
+        >{{ message }}</span
+      >
+    </ngb-alert>
+    <ngb-alert
+      *ngIf="showAlerterror"
+      type="error"
+      dismissible="true"
+      (close)="close()"
+      style="margin-bottom: 5px; margin-left: 800px; margin-right: 80px"
+    >
+      <span class="alert-inner--text"
+        ><strong>{{ strong }}</strong
+        >{{ message }}</span
+      >
+    </ngb-alert>
+  </h3>
+
+  <div
+    class="card shadow m-6"
+    style="margin-left: 80px; margin-right: 80px; background-color: white"
+  >
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <tr>
+            <th>Nom</th>
+            <th>Email</th>
+            <th>Date Réception</th>
+            <th>Statut</th>
+            <th>Actions</th>
+          </tr>
+          <tbody *ngFor="let reclamation of reclamations| paginate: { itemsPerPage: 10, currentPage: page, totalItems:totalElemnt}">
+            <tr>
+              <td style="padding: auto">{{ reclamation.userName }}</td>
+              <td>{{ reclamation.UserEmail }}</td>
+              <td>{{ reclamation.createdAt | date: "dd/MM/yyyy" }}</td>
+              <td>
+                <span
+                  *ngIf="reclamation.statut == 'Responded'"
+                  class="badge badge-pill badge-success text-uppercase"
+                  >Traitée</span
+                >
+
+                <span
+                  *ngIf="reclamation.statut == 'onHold'"
+                  class="badge badge-pill badge-primary text-uppercase"
+                  >En attente</span
+                >
+              </td>
+              <td>
+                <button
+                  type="button"
+                  class="btn btn-icon btn btn-sm btn-danger"
+                  placement="top"
+                  ngbTooltip="Supprimer"
+                  (click)="open(content, 'deleteReclamtion', reclamation)"
+                >
+                  <i class="fa fa-trash" aria-hidden="true"></i>
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-icon btn btn-sm btn-success"
+                  placement="top"
+                  ngbTooltip="Consulter"
+                  (click)="open(content4, 'viewReclamation', reclamation)"
+                >
+                  <i class="fa fa-eye" aria-hidden="true"></i>
+                </button>
+                <button
+                  *ngIf="reclamation.statut == 'onHold'"
+                  type="button"
+                  class="btn btn-icon btn btn-sm btn-info"
+                  placement="top"
+                  ngbTooltip="Repondre"
+                  (click)="open(content1, 'answerReclamation', reclamation)"
+                >
+                  <i class="fa fa-reply" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <ul class="pagination pagination-sm pagination-circle justify-content-center mb-0">
+          <pagination-controls (pageChange)="page = $event"></pagination-controls>
+      </ul>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="modal fade" style="width: 700px">
+      <button
+        class="btn btn-block btn-primary mb-3"
+        (click)="open(classic, '', '')"
+      >
+        Confirmation
+      </button>
+      <!------------------------------------------------------------------------------------------------------------------------------------------------->
+      <ng-template
+        #content
+        let-c="close"
+        let-d="dismiss"
+        aria-labelledby="confirm-delete"
+      >
+        <div class="modal-header">
+          <h4 class="modal-title" id="confirmation_delete_modal">
+            Confirmation
+          </h4>
+          <button
+            type="button"
+            class="close"
+            aria-label="Close"
+            (click)="d('Cross click')"
+          >
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Vous voulez vraiment supprimer la reclamation?</p>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline-primary"
+            (click)="d('Cross click')"
+          >
+            Annuler
+          </button>
+          <button type="button" class="btn btn-success" (click)="c('yes')">
+            Supprimer
+          </button>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="modal fade" style="width: 700px">
+      <button
+        class="btn btn-block btn-primary mb-3"
+        (click)="open(classic, '', '')"
+      >
+        Confirmation
+      </button>
+      <!-------------------------------------------------------------------------------------------------------------------------------------->
+      <ng-template
+        #content1
+        let-c="close"
+        let-d="dismiss"
+        aria-labelledby="confirm-rejection"
+      >
+        <div class="modal-header">
+          <h4 class="modal-title" id="confirmation_delete_modal">
+            Confirmation
+          </h4>
+          <button
+            type="button"
+            class="close"
+            aria-label="Close"
+            (click)="d('Cross click')"
+          >
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="answerForm">
+            <div class="form-group">
+              <fieldset disabled>
+              <label for="recipient-name" class="col-form-label"
+                >Recipient:</label
+              >
+              <input
+                [(ngModel)]="currentReclamation.UserEmail"
+                formControlName="email"
+                type="text"
+                class="form-control"
+                id="recipient-name"
+              />
+            </fieldset>
+            </div>
+            <div class="form-group">
+              <label for="message-text" class="col-form-label">Message:</label>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fa fa-check fa-lg" *ngIf="answerForm.controls['answer'].valid"
+                    style="color: #00b88a"></i></span>
+                </div>
+                <textarea
+                [(ngModel)]="currentReclamation.answer"
+                formControlName="answer"
+                class="form-control"
+                id="message-text"
+              ></textarea>
+              </div>
+              <ng-container class="text-muted"
+              *ngIf="!answerForm.controls['answer'].valid && answerForm.controls['answer'].dirty ">
+              <p style="color: red"><i class="fa fa-exclamation-triangle"> La description doit contenir au minimum 20 caracteres</i></p>
+              <div *ngIf="answerForm.controls['answer'].hasError('minlength' )"></div>
+              </ng-container>
+            </div>
+            <div class="form-group">
+             
+             
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline-primary"
+            (click)="d('Cross click')"
+          >
+            Annuler
+          </button>
+          <button type="button" class="btn btn-success" (click)="c('yes')" [disabled]="!answerForm.valid">
+            Envoyer
+          </button>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+  <!-------------------------------------------------------------------------------------------------------------------------------------->
+  <div class="row">
+    <div class="modal fade" style="width: 700px">
+      <button
+        class="btn btn-block btn-primary mb-3"
+        (click)="open(classic, '', '')"
+      >
+        Details Questions
+      </button>
+
+      <ng-template
+        #content4
+        let-c="close"
+        let-d="dismiss"
+        aria-labelledby="detailsReclamtion"
+      >
+        <div class="modal-header">
+          <h4 class="modal-title" id="confirmation_delete_modal">
+            Détails Réclamation
+         
+          </h4>
+          <button
+            type="button"
+            class="close"
+            aria-label="Close"
+            (click)="d('Cross click')"
+          >
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h6>Nom et Prénom</h6>
+          <p>{{ currentReclamation?.userName }}</p>
+          <h6>Date Réception</h6>
+          <p>{{currentReclamation?.createdAt| date: "dd/MM/yyyy"}}</p>
+          <span class="badge badge-pill badge-success text-uppercase">Traitée</span>
+          <h6>Description</h6>
+          <p>{{ currentReclamation?.description }}</p>
+          <h6>Date Réponse</h6>
+          <p>{{currentReclamation?.answredAt| date: "dd/MM/yyyy"}}</p>
+          <h6>Réponse</h6>
+          <p>{{ currentReclamation?.answer }}</p>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline-primary"
+            (click)="d('Cross click')"
+          >
+            Fermer
+          </button>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</section>

@@ -34,7 +34,9 @@ export class ConnaissanceService {
   }
 
   getConnaissancesByDateIntervall(minDate , maxDate){
-    const url = "http://localhost:8000/api/connaissances/valide/"+minDate+"/"+maxDate+"/countdate";
+    const url = "http://localhost:8000/api/users/valide/"+maxDate+"/"+minDate+"/countdate";
+    console.log(url);
+    
     console.log(url);
     
     return this.http.get<Connaissance[]>(url);
@@ -48,5 +50,21 @@ export class ConnaissanceService {
   getRecentConnaissances(){
     const url ="http://localhost:8000/api/connaissances/recent"
     return this.http.get<Connaissance[]>(url);
+  }
+
+  getConnaissanceById(id){
+    const url = `${this.apiURL}/${id}`;
+    return this.http.get<Connaissance>(url);
+  }
+  
+  deleteConnaissance(id: Number) {
+    const url = `${this.apiURL}/${id}`;
+    return this.http.delete(url, httpOptions);
+  }
+
+  getConnaissancesBySujet(idSujet): Observable<Connaissance[]>{
+    const url="http://localhost:8000/api/connaissances?sujet.id="+idSujet;
+    return this.http.get<Connaissance[]>(url);
+
   }
 }

@@ -1,0 +1,326 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css"
+    integrity="sha256-46r060N2LrChLLb5zowXQ72/iKKNiw/lAmygmHExk/o=" crossorigin="anonymous" />
+
+<main>
+    <section class="section section-shaped section-lg" style="background-color: white">
+        <div class="shape shape-style-1 bg-gradient-default"></div>
+        <h3>
+            <ngb-alert *ngIf="showAlertsucces" type="success" dismissible="true" (close)="close()"
+                style="margin-bottom: 5px;margin-left: 800px; margin-right:80px;">
+                <span class="alert-inner--text"><strong>{{strong}}</strong>{{message}}</span>
+            </ngb-alert>
+            <ngb-alert *ngIf="showAlerterror" type="error" dismissible="true" (close)="close()"
+                style="margin-bottom: 5px;margin-left: 800px; margin-right:80px;">
+                <span class="alert-inner--text"><strong>{{strong}}</strong>{{message}}</span>
+            </ngb-alert>
+        </h3>
+        <div class="container-lg" style="margin-left: 80px; margin-right:100 px; margin-top: 40px;">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="list-group">
+                        <button type="button" class="list-group-item list-group-item-action"
+                            (click)="getConnaissances()">
+                            Toutes les connaissances
+                        </button>
+                        <button type="button" class="list-group-item list-group-item-action"
+                            (click)="getRecentConnaissances()">
+                            Les plus récentes
+                        </button>
+                        <button type="button" class="list-group-item list-group-item-action"
+                            (click)="getRatedConnaissances()">Les plus
+                            pertinentes</button>
+                    </div>
+                </div>
+
+                <div class="col-sm-8">
+                    <div class="panel">
+                        <ul class="panel-activity__list" style="background-color: white">
+                          
+
+                            <h4>Liste des connaissances:</h4>
+                            <div *ngFor="let connaissance of connaissances | paginate: { itemsPerPage: 10, currentPage: page, totalItems:totalElement}">
+                                <div>
+                                    <div class="card mb-2" style="
+                                    margin-top: 20px;
+                                    margin-left: 5px;
+                                    margin-right: 5px;
+                                    background-color: #eef2ff;
+                                    ">
+                                    <div class="card-body" style="padding-bottom : 0%">
+                                        <li *ngIf="currentUserId===connaissance.user.id" class="nav-item" ngbDropdown placement="bottom-right" style="float: right">
+                                            <a class="nav-link nav-link-icon no-caret" ngbDropdownToggle
+                                                id="nav-inner-success_dropdown_1" role="button" data-toggle="dropdown"
+                                                aria-haspopup="true" aria-expanded="false">
+                                                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                                                <span class="nav-link-inner--text d-lg-none">Settings</span>
+                                            </a>
+                                            <div class="dropdown-menu-right"
+                                                aria-labelledby="nav-inner-success_dropdown_1" ngbDropdownMenu>
+                                                <a class="dropdown-item" 
+                                                    (click)="open(content2, 'updateConnaissance', connaissance,commentaire) ">Modifier</a>
+                                                <a class="dropdown-item"  
+                                                    (click)="open(content3, 'deleteConnaissance', connaissance,commentaire)">Supprimer</a>
+                                            </div>
+                                        </li>
+                                        <div class="media forum-item">
+                                            <a data-toggle="collapse" data-target=".forum-content"><img
+                                                    src="https://bootdey.com/img/Content/avatar/avatar1.png"
+                                                    class="mr-3 rounded-circle" width="50" alt="User" /></a>
+                                            <div class="media-body">
+                                                <h6>
+                                                    <a data-toggle="collapse" data-target=".forum-content"
+                                                        class="text-body font-weight-bold">{{ connaissance.user.nomUser
+                                                        }}</a>
+                                                </h6>
+                                                <div *ngFor="let sujet of toArray(connaissance.sujet)">
+                                                    <span class="badge badge-pill badge-info text-uppercase">{{
+                                                        sujet.nom
+                                                        }}</span>
+                                                </div>
+                                                <p> {{ connaissance.createdAt | date: "dd/MM/yyyy" }}</p>
+                                                <div class="bloghtml">
+                                                    <div [innerHTML]="connaissance.contenuConnaissance">
+                                                        {{connaissance.contenuConnaissance}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom: 5px; float: right">
+                                            <button class="btn btn-sm btn-2 btn-primary" [disabled]="!authService.isloggedIn"
+                                                type="button"
+                                                (click)="likeConnaissance(connaissance)">
+                                                {{countNumberVotes(connaissance,true)}}
+                                                <span class="btn-inner--icon"><i class="fa fa-thumbs-up"
+                                                        aria-hidden="true" (click)="likeConnaissance()"></i></span>
+                                            </button>
+                                            <button class="btn btn-sm btn-2 btn-danger" type="button" [disabled]="!authService.isloggedIn"
+                                                (click)="dislikeConnaissance(connaissance)">
+                                                {{countNumberVotes(connaissance,false)}}
+                                                <span class="btn-inner--icon"><i class="fa fa-thumbs-down"
+                                                        aria-hidden="true" (click)="dislikeConnaissance()"></i></span>
+                                            </button>
+                                            <button class="btn btn-sm btn-2 btn-info" type="button" [disabled]="!authService.isloggedIn"
+                                                (click)="showCommentsSection()">
+                                                {{connaissance.commentaires.length}}
+                                                <span class="btn-inner--icon"><i class="fa fa-comment"
+                                                        aria-hidden="true"></i></span>
+                                            </button>
+                                        </div>
+                                        <hr
+                                            style="height: 0.5px;border: none;background-color: #9b9cdb;border-radius: 0.5px;" />
+                                        <form *ngIf="authService.isloggedIn"[formGroup]="addConnaissanceCommentaire" style="margin-top: 0.5px;">
+                                            <div class="d-flex flex-row add-comment-section mt-4 mb-4">
+                                                <input formControlName="commentaire" type="text"
+                                                    class="form-control mr-3" placeholder="Taper votre commentaire" />
+                                                <button class="btn btn-sm btn-primary" type="button"
+                                                    (click)="addCommentaire(connaissance.id)">
+                                                    Commenter
+                                                </button>
+                                            </div>
+                                           
+                                        </form>
+                                    </div>
+                                </div>
+                                <div *ngIf="showComments">
+                                    <div *ngFor="let commentaire of toArray(connaissance.commentaires)" class="card"
+                                        style="
+                      margin-left: 80px;
+                      background-color: #eef2ff;
+                      margin-top: 20px;
+                    ">
+                                        <div class="card-body">
+                                            <li *ngIf="currentUserId===commentaire.user.id" class="nav-item" ngbDropdown placement="bottom-right"
+                                                style="float: right">
+                                                <a class="nav-link nav-link-icon no-caret" ngbDropdownToggle
+                                                    id="nav-inner-success_dropdown_1" role="button"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                                                    <span class="nav-link-inner--text d-lg-none">Settings</span>
+                                                </a>
+                                                <div class="dropdown-menu-right"
+                                                    aria-labelledby="nav-inner-success_dropdown_1" ngbDropdownMenu>
+                                                    <a class="dropdown-item"
+                                                        (click)="open(content8, 'update-commentaire',connaissance,commentaire)">Modifier</a>
+                                                    <a class="dropdown-item"
+                                                        (click)="open(content9, 'delete-commentaire',connaissance,commentaire)">Supprimer</a>
+                                                </div>
+                                            </li>
+                                            <h6 class="card-title">
+                                                <img src="https://bootdey.com/img/Content/avatar/avatar1.png"
+                                                    class="mr-3 rounded-circle" width="25"
+                                                    alt="User" />{{commentaire.user.nomUser}}<small
+                                                    class="text-muted ml-2"></small>
+                                            </h6>
+                                            <p>{{commentaire.createdAt| date: "dd/MM/yyyy"}}</p>
+                                            <p style="margin-top: 2px">
+                                                {{commentaire.contenu }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                                </div>
+                            <ul class="pagination pagination-sm pagination-circle justify-content-center mb-0">
+                                <pagination-controls (pageChange)="page = $event"></pagination-controls>
+                            </ul>
+                        </ul>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+
+        <ng-template #content2 let-c="close" let-d="dismiss" aria-labelledby="update-connaissance">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modify-reponse">Modifier Connaissance</h4>
+                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="updateConnaissanceForm">
+                    <div class="form-group">
+                        <h6>Sujets:</h6>
+                        <mat-form-field class="example-chip-list">
+                            <mat-chip-list #chipList aria-label="Fruit selection">
+                                <mat-chip *ngFor="let fruit of fruits" [selectable]="selectable" [removable]="removable"
+                                    (removed)="remove(fruit)">
+                                    {{fruit}}
+                                    <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                                </mat-chip>
+                                <input placeholder="Sujet " #fruitInput formControlName="sujet"
+                                    [formControl]="fruitCtrl" [matAutocomplete]="auto" [matChipInputFor]="chipList"
+                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                    (matChipInputTokenEnd)="add($event)">
+                            </mat-chip-list>
+                            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                                <mat-option *ngFor="let fruit of filteredFruits| async" [value]="fruit">
+                                    {{fruit}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+
+                        <ng-container class="text-muted"
+                            *ngIf="!updateConnaissanceForm.controls['sujet'].valid && updateConnaissanceForm.controls['sujet'].dirty">
+                            <mat-error>Atleast 1 name need to be added</mat-error>
+                            <div *ngIf="updateConnaissanceForm.controls['sujet'].hasError('minlength' )"></div>
+                        </ng-container>
+                        <p>
+                            Quelles sont les sujets qui ont un rapport avec votre connaissance
+                        </p>
+                    </div>
+                    <div class="form-group">
+                        <h6><i class="fa fa-check fa-lg" *ngIf="updateConnaissanceForm.controls['contenu'].valid"
+                                style="color: #00b88a"></i>Description:</h6>
+                        <quill-editor formControlName="contenu" [style]="quillEditor" aria-placeholder="Description"
+                            value="currentConnaissance.contenu"></quill-editor>
+
+                        <ng-container class="text-muted"
+                            *ngIf="!updateConnaissanceForm.controls['contenu'].valid && updateConnaissanceForm.controls['contenu'].dirty ">
+                            <p style="color: red"><i class="fa fa-exclamation-triangle"></i> La description de la
+                                connaissance doit contenir au minimum 20 caracteres</p>
+                            <div *ngIf="updateConnaissanceForm.controls['contenu'].hasError('minlength' )"></div>
+                        </ng-container>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" (click)="d('Cross click')">
+                    Annuler
+                </button>
+                <button type="button" class="btn btn-success" [disabled]="updateConnaissanceForm.invalid"
+                    (click)="c('yes')">
+                    Modifier
+                </button>
+            </div>
+        </ng-template>
+
+        <ng-template #content3 let-c="close" let-d="dismiss" aria-labelledby="delete-connaissance">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modify-reponse">Supprimer Connaissance</h4>
+                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Veuillez confirmer la suppression de la connaissance</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" (click)="d('Cross click')">
+                    Annuler
+                </button>
+                <button type="button" class="btn btn-success" (click)="c('yes')">
+                    Supprimer
+                </button>
+            </div>
+        </ng-template>
+
+        <ng-template #content8 let-c="close" let-d="dismiss" aria-labelledby="update-Commentaire">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modify-reponse">Modifier Commentaire</h4>
+                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="updateConnaissanceCommentaire">
+
+                    <div class="form-group">
+                        <div class="input-group mb-3">
+                            <label> Votre commentaire</label>
+                            <div class="input-group-prepend">
+
+                                <span class="input-group-text"><i class="fa fa-check fa-lg"
+                                        *ngIf="updateConnaissanceCommentaire.controls['commentaire'].valid"
+                                        style="color: #00b88a"></i></span>
+                            </div>
+                            <input formControlName="commentaire" type="text" class="form-control"
+                                placeholder="Taper votre commentaire" />
+                        </div>
+
+                        <ng-container class="text-muted"
+                            *ngIf="!updateConnaissanceCommentaire.controls['commentaire'].valid && updateConnaissanceCommentaire.controls['commentaire'].dirty ">
+                            <p style="color: red"><i class="fa fa-exclamation-triangle"></i> La description de la
+                                connaissance doit contenir au minimum 20 caracteres</p>
+                            <div *ngIf="updateConnaissanceCommentaire.controls['commentaire'].hasError('minlength' )">
+                            </div>
+                        </ng-container>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" (click)="d('Cross click')">
+                    Annuler
+                </button>
+                <button type="button" class="btn btn-success" [disabled]="updateConnaissanceCommentaire.invalid"
+                    (click)="c('yes')">
+                    Modifier
+                </button>
+            </div>
+        </ng-template>
+        <ng-template #content9 let-c="close" let-d="dismiss" aria-labelledby="delete-Commentaire">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modify-reponse">Supprimer Commentaire</h4>
+                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <form [formGroup]="updateConnaissanceCommentaire">
+                <div class="d-flex flex-row add-comment-section mt-4 mb-4">
+                    <p>Voulez-vous vraiment supprimer votre commentaire?</p>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" (click)="d('Cross click')">
+                    Annuler
+                </button>
+                <button type="button" class="btn btn-success" (click)="c('yes')">
+                    Supprimer
+                </button>
+            </div>
+        </ng-template>
+    </section>
+</main>
