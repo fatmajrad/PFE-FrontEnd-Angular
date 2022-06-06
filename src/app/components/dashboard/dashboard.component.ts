@@ -15,6 +15,8 @@ import { DatePipe } from "@angular/common";
 import { forkJoin } from "rxjs";
 import { NgbModal, ModalDismissReasons } from "@ng-bootstrap/ng-bootstrap";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { LOADIPHLPAPI } from "dns";
+
 
 @Component({
   selector: "app-dashboard",
@@ -98,7 +100,8 @@ export class DashboardComponent implements OnInit {
   
     this.startDate = this.datePipe.transform(this.minDate, "yyyy-MM-dd");
     this.endDate = this.datePipe.transform(maxDate, "yyyy-MM-dd");
-    this.getAllApi(this.startDate, this.endDate);
+   // this.getAllApi(this.startDate, this.endDate);
+    console.log("t3adina");
     
     this.initDatePickerForm();
     this.userService.countAllUsers().subscribe((response)=>{
@@ -111,6 +114,7 @@ export class DashboardComponent implements OnInit {
    
     this.propTwo=response
    })
+ 
   }
   initDatePickerForm(){
     this.datePickerForm = this.formBuilder.group({
@@ -146,10 +150,16 @@ export class DashboardComponent implements OnInit {
   }
 
   chargerChart() {
-    let dateMin = this.datePickerForm.get("startDate").value;
-    let dateMax = this.datePickerForm.get("endDate").value;
-    this.endDate = dateMax.year + "-" + dateMax.month + "-" + dateMax.day;
-    this.startDate = dateMin.year + "-" + dateMin.month + "-" + dateMin.day;
+    console.log("3ella");
+    let startDate = this.datePickerForm.get("startDate").value;
+    let endDate = this.datePickerForm.get("endDate").value;
+    console.log(startDate,endDate);
+     
+     this.endDate = endDate.year + "-" + endDate.month + "-" + endDate.day;
+     this.startDate = startDate.year + "-" + startDate.month + "-" + startDate.day;
+     console.log(this.startDate,this.endDate);
+    
+    
     this.getAllApi(this.startDate, this.endDate);
   }
   createChart() {
@@ -163,7 +173,7 @@ export class DashboardComponent implements OnInit {
             data: this.questionsTotal,
             borderWidth: 1,
             fill: false,
-            hidden: false,
+           
             backgroundColor: "white",
             borderColor: "rgb(255, 159, 64)",
           },
@@ -172,8 +182,7 @@ export class DashboardComponent implements OnInit {
             data: this.connaissancesTotal,
             borderWidth: 1,
             fill: false,
-            hidden: false,
-
+           
             borderColor: "rgb(75, 192, 192)",
           },
           {
@@ -256,22 +265,21 @@ export class DashboardComponent implements OnInit {
   getAllApi(formattedminDate, formattedmaxDate) {
    
     this.questionService.getQuestionsByDateIntervall(formattedminDate, formattedmaxDate).subscribe((questions) => {
-      
-        
         this.questions = questions;
+        console.log("quess",questions);
         this.questionsDate = questions.map((data: any) => data.createdAt);
         this.questionsTotal = questions.map((data: any) => data.total);
         this.connaissanceService.getConnaissancesByDateIntervall(formattedminDate, formattedmaxDate).subscribe((connaissances) => {
-          
+          console.log("conn",connaissances);
           this.connaissances = connaissances;
           this.connaissancesTotal = connaissances.map(
             (data: any) => data.total
           );
           this.userService.getUsersByDateIntervall(formattedminDate, formattedmaxDate).subscribe((users) => {
-                
+            console.log("users",users);
             this.users = users;
             this.usersTotal =users.map((data: any) => data.total);
-            setTimeout(()=>{ this.createChart() },1000);
+            setTimeout(()=>{ this.createChart() },5000);
           });
         });
       });

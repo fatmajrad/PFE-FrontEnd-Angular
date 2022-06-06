@@ -90,4 +90,14 @@ export class UserService {
     
     return this.http.get<User[]>(url);
   }
+
+  sendVerificationMail(id,body){
+    const url = `${this.apiURL}/${id}` + "/verifEmail";
+    return this.http.put(url,body, httpOptions);
+  }
+
+  resetPassword(id,body){
+    const url = `${this.apiURL}/${id}` + "/reset_password";
+    return this.http.put(url,body, httpOptions);
+  }
 }

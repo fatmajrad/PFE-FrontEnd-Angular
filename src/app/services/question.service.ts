@@ -59,7 +59,7 @@ export class QuestionService {
  
   getQuestionsByDateIntervall(minDate , maxDate){
 
-    const url = "http://localhost:8000/api/users/valide/"+minDate+"/"+maxDate+"/countdate"
+    const url = "http://localhost:8000/api/questions/valide/"+minDate+"/"+maxDate+"/countdate"
     console.log(url);
     
     return this.http.get<Question[]>(url);

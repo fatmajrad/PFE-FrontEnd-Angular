@@ -85,6 +85,7 @@ export class HomeComponent implements OnInit {
       this.sujets.push(sujets[0]);
       this.sujets.push(sujets[1]);
       this.sujets.push(sujets[2]);
+      this.sujets.push(sujets[3]);
     });
   }
 

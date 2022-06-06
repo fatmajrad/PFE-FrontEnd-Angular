@@ -49,7 +49,7 @@
           </div>
           <div class="row mt-3">
             <div class="col-6">
-              <a href="javascript:void(0)" class="text-light">
+              <a (click)="open(content1,'forgotpassword')" href="javascript:void(0)" class="text-light">
                 <small>Mot de passe oublié?</small>
               </a>
             </div>
@@ -64,7 +64,7 @@
     </div>
   </section>
 </main>
-<button hidden id="openModelButton" (click)="open(content)">open</button>
+<button hidden id="openModelButton" (click)="open(content,'userConfirmation')">open</button>
 <ng-template #content let-c="close" let-d="dismiss" aria-labelledby="alert-User">    
   <div class="modal-header">  
     <h>Validation du compte</h>     
@@ -75,10 +75,44 @@
   <div class="modal-body">    
     <p>
       Votre compte n'a pas été validé. 
-      
     </p>
   </div>    
   <div class="modal-footer">    
       <button type="button" class="btn btn-outline-primary" (click)="d('Cross click')">ok</button>    
+  </div>    
+</ng-template>
+
+<ng-template #content1 let-c="close" let-d="dismiss" aria-labelledby="forgot-password">    
+  <div class="modal-header">  
+    <h>Validation de l'email</h>     
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">    
+          <span aria-hidden="true">×</span>    
+      </button>    
+  </div>    
+  <div class="modal-body"> 
+    <form [formGroup]="verifMailForm" action="">
+      <div class="form-group">
+        
+        <h6>Email:</h6>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fa fa-check fa-lg" *ngIf="verifMailForm.controls['email'].valid"
+              style="color: #00b88a"></i></span>
+          </div>
+          <input formControlName="email" class="form-control" placeholder="Nom et Prénom" type="text">
+        </div>
+        <ng-container class="text-muted"
+        *ngIf="!verifMailForm.controls['email'].valid && verifMailForm.controls['email'].dirty ">
+        <p style="color: red"><i class="fa fa-exclamation-triangle"> Veuillez fournir une adresse mail valide</i></p>
+        <div *ngIf="verifMailForm.controls['email'].hasError('minlength' ) ||verifMailForm.controls['email'].hasError('email' ) "></div>
+        </ng-container>
+      </div>
+    </form>   
+  </div>    
+  <div class="modal-footer">    
+      <button type="button" class="btn btn-outline-primary" (click)="d('Cross click')">Annuler</button>    
+      <button type="button" class="btn btn-success" (click)="c('yes')" [disabled]="!verifMailForm.valid">
+        Envoyer
+      </button>
   </div>    
 </ng-template>

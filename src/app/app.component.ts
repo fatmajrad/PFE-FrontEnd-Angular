@@ -80,11 +80,9 @@ export class AppComponent implements OnInit {
         let loggedUser:string;
         isloggedin = localStorage.getItem('isloggedIn');
         if (isloggedin!="true" )
-        this.router.navigate(['/login']);
-    
+        this.router.navigate(['/home']);
         else
         this.authService.setLoggedUserFromLocalStorage(loggedUser);
-        
       var navbar : HTMLElement = this.element.nativeElement.children[0].children[0];
       this._router = this.router.events.filter(event => event instanceof NavigationEnd).subscribe((event: NavigationEnd) => {
           if (window.outerWidth > 991) {

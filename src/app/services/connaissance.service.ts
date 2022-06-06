@@ -34,7 +34,7 @@ export class ConnaissanceService {
   }
 
   getConnaissancesByDateIntervall(minDate , maxDate){
-    const url = "http://localhost:8000/api/users/valide/"+maxDate+"/"+minDate+"/countdate";
+    const url = "http://localhost:8000/api/connaissances/valide/"+maxDate+"/"+minDate+"/countdate";
     console.log(url);
     
     console.log(url);

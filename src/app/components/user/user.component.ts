@@ -25,6 +25,7 @@ export class UserComponent implements OnInit {
   searchForm : FormGroup
   totalElemnt : Number=0;
   page=1
+
   constructor(
     private userService: UserService,
     private router: Router,
@@ -94,20 +95,22 @@ export class UserComponent implements OnInit {
   }
 
   validerUser(u: User) {
-    this.userService.validerDemandeUser(u.id).subscribe((response)=>{
-       this.type="success";
-       this.message="Utilisateur validée avec succées";
-       this.showAlertsucces=true;
-       this.getAllUsers();
+    this.userService.validerDemandeUser(u.id).subscribe(()=>{
   })
+  this.type="success";
+  this.message="Utilisateur validée avec succées";
+  this.showAlertsucces=true;
+  this.getAllUsers();
   }
   refuserUser(u: User, body) {
-    this.userService.updateUser(u,body).subscribe((response)=>{
-      this.type="success";
-      this.message="Utilisateur validée avec succées";
-      this.showAlertsucces=true;
-      this.getAllUsers();
+    this.userService.updateUser(u,body).subscribe(()=>{
+      this.userService.refuserDemandeUser(u.id).subscribe((response)=>{
+      })
  })
+ this.type="success";
+ this.message="Utilisateur validée avec succées";
+ this.showAlertsucces=true;
+ this.getAllUsers();
  }
   
    getUserBystatus(statut){

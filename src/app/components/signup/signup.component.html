@@ -1,5 +1,5 @@
 <main>
-  <section class="section section-shaped section-lg">
+  <section class="section section-shaped section-lg" style="background-color:#eef2ff ;">
     <div class="shape shape-style-1 bg-gradient-default">
     </div>
     <div class="container pt-lg-md">
@@ -25,11 +25,9 @@
 
                     <input formControlName="nomUser" class="form-control" placeholder="Login" type="text"
                       (focus)="focus=true" (blur)="focus=false" name="nomUser" required>
-                    <i class="fa fa-check fa-lg" *ngIf="signUpForm.controls['nomUser'].valid"
-                      style="color: #00b88a"></i>
                     <ng-container class="text-muted"
                       *ngIf="!signUpForm.controls['nomUser'].valid && signUpForm.controls['nomUser'].dirty ">
-                      <i class="fa fa-exclamation-triangle"></i>
+                      <p style="color: red"><i class="fa fa-exclamation-triangle"> Veuillez fournir login valide</i></p>
                       <div *ngIf="signUpForm.controls['nomUser'].hasError('minlength' )"></div>
                     </ng-container>
                   </div>
@@ -57,18 +55,10 @@
                       !signUpForm.controls['email'].valid &&
                        signUpForm.controls['email'].dirty
                      ">
-                      <i class="fa fa-exclamation-triangle"></i>
+                     <p style="color: red"><i class="fa fa-exclamation-triangle"> Veuillez choisir une fonction</i></p>
                       <div *ngIf="signUpForm.controls['email'].errors?.alreadyExist">
                         <p class="msgError">Cet email est déjà utilisé</p>
                       </div>
-                      <!-- <div
-                      *ngIf="
-                      signUpForm.controls['email'].errors?.email ||
-                      signUpForm.controls['email'].errors?.required
-                      "
-                    >
-                      <p class="msgError">Email syntaxe (xxxxxx@xxxxx.xxx)</p>
-                    </div>-->
                     </ng-container>
                   </div>
                 </div>
@@ -87,9 +77,7 @@
                         'minlength'
                       ) ||
                       signUpForm.controls['password'].hasError('required')">
-                        <p class="msgError">
-                          Le mot de passe doit contenir 8 caractères minimum
-                        </p>
+                      <p style="color: red"><i class="fa fa-exclamation-triangle"> Le mot de passe doit contenir au minimum 8 caractéres</i></p>
                       </div>
                     </ng-container>
                   </div>
@@ -111,14 +99,15 @@
                           signUpForm.controls['confirmpassword'].hasError(
                               'passwordMismatch'
                             )">
-                        <p class="msgError">Les mots de passe ne sont pas identiques</p>
+                            <p style="color: red"><i class="fa fa-exclamation-triangle">Les mots de passe ne sont pas identiques</i></p>
+                       
                       </div>
                     </ng-container>
                   </div>
                 </div>
 
                 <div class="text-center">
-                  <button type="button" class="btn btn-primary mt-4" (click)="signUpUser()">Inscription</button>
+                  <button type="button" class="btn btn-primary mt-4" (click)="signUpUser()" [disabled]="!signUpForm.valid">Inscription</button>
                 </div>
               </form>
             </div>

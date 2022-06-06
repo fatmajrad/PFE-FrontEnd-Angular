@@ -67,7 +67,9 @@ export class SignupComponent implements OnInit {
       if(response.length===0){
         this.userService.addDemandeUser(user).subscribe(
           (response) => {
+            this.signUpForm.reset();
             document.getElementById("openModelButton").click();
+            setTimeout(()=>{ this.router.navigate(["/home"]); },1000);
             }
         );
       }else{

@@ -43,16 +43,13 @@ export class AuthService {
     this.userName=decodedToken.name;
     this.roles = decodedToken.roles;
     this.loggedUser = decodedToken.email;
-    if(this.loggedUser==="admin@gmail.com"){
-      this.admin=true
-    }
     this.id = decodedToken.id;
     if(this.isValid()|| this.isAdmin()){
       this.isloggedIn = true;
+      localStorage.setItem("isAdmin",String(this.admin))
       localStorage.setItem("isloggedIn",String( this.isloggedIn));
       localStorage.setItem("roles", String(this.roles));
       localStorage.setItem("loggedUser", String(this.loggedUser));
-      localStorage.setItem("isAdmin",String(this.admin));
       localStorage.setItem("LoggedUserId",String(this.id))
       localStorage.setItem("userName",this.userName)
     } 
@@ -76,6 +73,8 @@ export class AuthService {
     this.roles = undefined;
     this.token = undefined;
     this.isloggedIn = false;
+  
+    
     localStorage.removeItem("jwt");
     localStorage.removeItem("loggedUser");
     localStorage.removeItem("isloggedIn");
@@ -87,15 +86,15 @@ export class AuthService {
   signIn(user: User) {
     this.loggedUser = user.email;
     this.isloggedIn = true;
-    this.roles = user.roles;
-    if(this.isValid()){
-      localStorage.setItem("loggedUser", this.loggedUser);
-      localStorage.setItem("isloggedIn", String(this.isloggedIn));
-    }
-    
+    this.roles = user.roles;  
   }
   isAdmin(): Boolean {
-    return this.admin;
+   if(localStorage.getItem("loggedUser")==="admin@gmail.com"){
+     this.admin=true
+   }else{
+     this.admin=false
+   }
+   return this.admin
   }
 
   isValid(): Boolean {

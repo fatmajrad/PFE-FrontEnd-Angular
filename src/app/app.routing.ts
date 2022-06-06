@@ -1,3 +1,4 @@
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { ReclamationListComponent } from './components/reclamation-list/reclamation-list.component';
 import { LoginGuard } from './gards/login.guard';
 import { NgModule } from '@angular/core';
@@ -47,6 +48,7 @@ const routes: Routes =[
     { path: 'reclamation',          component: ReclamationListComponent},
     { path: 'sujet-questions-list/:id',          component: SujetQuestionsListComponent},
     { path: 'sujet-connaissance-list/:id',          component: SujetConnaissanceListComponent},
+    { path: 'reset-password',          component:ResetPasswordComponent},
 
 
 ];

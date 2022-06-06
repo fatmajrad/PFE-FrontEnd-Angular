@@ -46,6 +46,7 @@ import { UpdateProfileComponent } from './components/update-profile/update-profi
 import { ReclamationListComponent } from './components/reclamation-list/reclamation-list.component';
 import { SujetConnaissanceListComponent } from './components/sujet-connaissance-list/sujet-connaissance-list.component';
 import { SujetQuestionsListComponent } from './components/sujet-questions-list/sujet-questions-list.component';
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 
 
 
@@ -76,6 +77,7 @@ import { SujetQuestionsListComponent } from './components/sujet-questions-list/s
     ReclamationListComponent,
     SujetConnaissanceListComponent,
     SujetQuestionsListComponent,
+    ResetPasswordComponent,
  
     
   ],
